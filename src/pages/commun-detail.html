@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Commun — e-Sol</title>
+  <style>
+    .commun-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    .commun-detail-layout { gap: 48px; }
+
+    .commun-main { padding: 40px; }
+
+    .commun-section { margin-bottom: 36px; }
+    .commun-section:last-child { margin-bottom: 0; }
+
+    .commun-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .commun-section h3 i {
+      font-size: 16px;
+    }
+
+    .commun-section p {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 1rem;
+      max-width: 100%;
+    }
+
+    .commun-divider {
+      border: none;
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* Contributors list */
+    .contributor-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .contributor-chip .avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* Usage guide */
+    .usage-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .usage-step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      font-family: var(--font-display);
+      flex-shrink: 0;
+    }
+
+    .usage-step p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Sidebar */
+    .sidebar-info .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .sidebar-info .info-row:last-child { border-bottom: none; }
+    .sidebar-info .label { color: var(--text-muted); }
+    .sidebar-info .value { font-weight: 600; color: var(--text-main); }
+
+    /* License badge */
+    .license-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .license-badge i { font-size: 20px; color: var(--secondary); }
+    .license-badge .label { font-size: 12px; color: var(--text-subtle); }
+    .license-badge .value { font-size: 14px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero" id="commun-hero">
+    <div class="container">
+      <a href="communs.html" class="btn btn-ghost btn-sm mb-4" style="color: var(--text-subtle);"><i class="fas fa-arrow-left"></i> Tous les Communs</a>
+      <div id="hero-badge"></div>
+      <h1 id="commun-title">Chargement…</h1>
+      <p id="commun-desc"></p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid commun-detail-layout">
+
+        <!-- Main content -->
+        <div class="col-span-8">
+          <div class="glass-card commun-main no-hover" id="commun-main">
+
+            <div class="commun-section">
+              <h3 id="about-icon"><i class="fas fa-info-circle" style="color: var(--primary);"></i> À propos de ce Commun</h3>
+              <p id="commun-about"></p>
+            </div>
+
+            <hr class="commun-divider">
+
+            <div class="commun-section">
+              <h3><i class="fas fa-list-check" style="color: var(--secondary);"></i> Comment utiliser cette ressource</h3>
+              <div class="flex flex-col gap-5" id="usage-steps">
+                <div class="usage-step">
+                  <div class="usage-step-num">1</div>
+                  <div><p>Consultez la description et les objectifs du Commun ci-dessus pour voir s'il correspond à vos besoins.</p></div>
+                </div>
+                <div class="usage-step">
+                  <div class="usage-step-num">2</div>
+                  <div><p>Téléchargez ou accédez à la ressource via le bouton d'accès dans la colonne latérale.</p></div>
+                </div>
+                <div class="usage-step">
+                  <div class="usage-step-num">3</div>
+                  <div><p>Utilisez la ressource librement dans le respect de la licence indiquée. Citez la source e-Sol.</p></div>
+                </div>
+                <div class="usage-step">
+                  <div class="usage-step-num">4</div>
+                  <div><p>Proposez vos améliorations, corrections ou retours via le forum de la communauté associée.</p></div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="commun-divider">
+
+            <div class="commun-section">
+              <h3><i class="fas fa-users" style="color: var(--primary);"></i> Contributeurs</h3>
+              <div class="flex gap-2 flex-wrap" id="contributors-list"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-span-4">
+          <div class="flex flex-col gap-4">
+
+            <div class="glass-card no-hover" style="padding: 24px;">
+              <h4 style="font-size: 0.95rem; margin-bottom: 16px;"><i class="fas fa-circle-info text-sm" style="color: var(--primary);"></i> Fiche technique</h4>
+              <div class="sidebar-info">
+                <div class="info-row"><span class="label">Format</span><span class="value" id="info-format">—</span></div>
+                <div class="info-row"><span class="label">Contributeurs</span><span class="value" id="info-contributors">—</span></div>
+                <div class="info-row"><span class="label">Statut</span><span class="value" id="info-status">—</span></div>
+                <div class="info-row"><span class="label">Mis à jour</span><span class="value" id="info-updated">—</span></div>
+                <div class="info-row"><span class="label">Communauté</span><span class="value" id="info-community">—</span></div>
+              </div>
+            </div>
+
+            <div class="license-badge">
+              <i class="fab fa-creative-commons"></i>
+              <div>
+                <div class="label">Licence</div>
+                <div class="value">Creative Commons BY-SA 4.0</div>
+              </div>
+            </div>
+
+            <a href="#" class="btn btn-primary btn-lg w-full" style="justify-content: center;" id="access-btn">
+              <i class="fas fa-external-link-alt"></i> Accéder à la ressource
+            </a>
+
+            <div class="glass-card no-hover" style="padding: 20px; text-align: center; background: linear-gradient(135deg, var(--bg-elevated), var(--bg-warm)); border: 2px dashed var(--border);">
+              <i class="fas fa-hand-holding-heart" style="font-size: 24px; color: var(--primary); margin-bottom: 8px;"></i>
+              <h4 style="font-size: 0.95rem; margin-bottom: 4px;">Contribuer à ce Commun</h4>
+              <p class="text-muted text-sm" style="max-width: 100;">Ajoutez vos données, corrections ou retours d'expérience.</p>
+              <a href="participer.html" class="btn btn-outline btn-sm mt-3 w-full" style="justify-content: center;">Voir comment</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const communId = params.get('c');
+
+    fetch('data/communs.json')
+      .then(r => r.json())
+      .then(communs => {
+        const c = communs.find(x => x.id === communId) || communs[0];
+
+        // Title & description
+        document.title = c.title + ' — e-Sol';
+        document.getElementById('commun-title').textContent = c.title;
+        document.getElementById('commun-desc').textContent = c.description;
+
+        // Hero badge
+        document.getElementById('hero-badge').innerHTML = `
+          <span class="commun-hero-badge mb-4" style="background: ${c.categoryBg}; color: ${c.categoryColor};">
+            <i class="fas ${c.categoryIcon}"></i> ${c.category}
+          </span>`;
+
+        // About (extended)
+        const aboutTexts = {
+          'protocole-evaluation': 'Ce protocole a été développé collaborativement par les membres de la communauté ZAN pour répondre au besoin d\'un outil simple et reproductible d\'évaluation de la qualité des sols urbains. Il permet à tout technicien ou citoyen formé d\'effectuer un diagnostic rapide en observant la structure, la couleur, la porosité, la présence de faune et la couverture végétale d\'un sol.\n\nLe protocole est accompagné de fiches terrain imprimables et d\'une grille de notation standardisée. Les données collectées peuvent être partagées sur la plateforme pour alimenter la cartographie participative.',
+          'fresque-kit': 'La Fresque du Sol est un atelier pédagogique collaboratif qui permet de comprendre les enjeux liés aux sols en 3 heures. Ce kit open source contient l\'ensemble des éléments nécessaires pour animer un atelier : 42 cartes thématiques, un guide d\'animation détaillé, les références scientifiques associées, et des variantes pédagogiques.\n\nDéveloppé par plus de 40 contributeurs, le kit est disponible sous licence Creative Commons et peut être librement adapté pour différents publics (scolaires, professionnels, grand public).',
+          'carto-zan': 'Cette base de données collaborative recense l\'état d\'imperméabilisation et de renaturation des sols à l\'échelle communale. Alimentée par les contributions des membres de la communauté ZAN, elle permet de visualiser sur une carte interactive les zones à fort enjeu et les projets de désimperméabilisation en cours.\n\nLes données sont exportables en CSV et accessibles via une API REST pour faciliter leur intégration dans d\'autres outils d\'analyse territoriale.',
+          'default': c.description + '\n\nCe Commun est le fruit d\'un travail collaboratif au sein du réseau e-Sol. Il est maintenu et enrichi régulièrement par ses contributeurs. Toute personne inscrite au réseau peut proposer des améliorations ou de nouvelles contributions.'
+        };
+        document.getElementById('commun-about').innerHTML = (aboutTexts[c.id] || aboutTexts['default']).replace(/\n\n/g, '</p><p style="margin-top: 16px;">');
+
+        // Sidebar info
+        document.getElementById('info-format').textContent = c.format;
+        document.getElementById('info-contributors').textContent = c.contributors;
+        document.getElementById('info-updated').textContent = c.updatedAt;
+
+        const statusEl = document.getElementById('info-status');
+        const statusClass = c.status === 'Actif' ? 'color: var(--secondary)' : c.status === 'En révision' ? 'color: var(--primary)' : 'color: var(--text-subtle)';
+        statusEl.innerHTML = `<span style="${statusClass}; font-weight: 700;">${c.status}</span>`;
+
+        // Community link
+        const communityEl = document.getElementById('info-community');
+        if (c.communityId) {
+          communityEl.innerHTML = `<a href="communaute-detail.html?c=${c.communityId}" style="color: var(--primary); font-weight: 600;">${c.communityId}</a>`;
+        } else {
+          communityEl.textContent = 'Transversal';
+        }
+
+        // Contributors (generated from count)
+        const names = ['A. Martin', 'C. Dubois', 'M. Leroy', 'P. Bernard', 'S. Thomas', 'J. Robert', 'L. Moreau', 'N. Laurent', 'V. Petit', 'F. Garcia'];
+        const contributorsList = document.getElementById('contributors-list');
+        const shown = Math.min(c.contributors, 8);
+        for (let i = 0; i < shown; i++) {
+          const name = names[i % names.length];
+          const initials = name.split('. ')[0] + name.split('. ')[1][0];
+          contributorsList.innerHTML += `
+            <span class="contributor-chip">
+              <span class="avatar">${name[0]}${name.split(' ')[1][0]}</span>
+              ${name}
+            </span>`;
+        }
+        if (c.contributors > shown) {
+          contributorsList.innerHTML += `
+            <span class="contributor-chip" style="background: var(--primary-10); color: var(--primary); border-color: transparent;">
+              +${c.contributors - shown} autres
+            </span>`;
+        }
+
+        // About icon color
+        document.querySelector('#about-icon i').style.color = c.categoryColor;
+      });
+  </script>
+
+</body>
+</html>

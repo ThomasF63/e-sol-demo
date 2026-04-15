@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Annuaire des Membres — e-Sol</title>
+  <style>
+    /* View toggle */
+    .view-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .view-btn {
+      width: 38px; height: 38px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+
+    .view-btn:hover, .view-btn.active {
+      background: var(--primary-10);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Search */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 280px;
+      padding: 12px 20px 12px 44px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: 15px;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-wrapper i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      font-size: 14px;
+    }
+
+    .region-select {
+      padding: 12px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      outline: none;
+      min-width: 200px;
+    }
+
+    .region-select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Member grid card */
+    .member-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+
+    .member-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      border: 3px solid white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .member-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    .member-org {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .member-role {
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+
+    .member-region {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-subtle);
+      background: var(--bg-warm);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 16px;
+    }
+
+    .member-communities {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .member-comm-badge {
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 10px;
+      font-weight: 600;
+      background: var(--primary-10);
+      color: var(--primary);
+    }
+
+    /* Member list mode */
+    .member-list-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 24px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+
+    .member-list-item:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--primary-20);
+    }
+
+    .member-list-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .member-list-info { flex: 1; }
+    .member-list-info h4 { font-size: 0.95rem; margin-bottom: 2px; }
+    .member-list-info p { font-size: 0.85rem; color: var(--text-muted); max-width: 100%; }
+
+    /* Stats */
+    .annuaire-stats {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .annuaire-stat {
+      text-align: center;
+    }
+
+    .annuaire-stat .num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .annuaire-stat .label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .member-card-wrapper.hidden,
+    .member-list-wrapper.hidden { display: none; }
+
+    #list-view { display: none; }
+    #list-view.active { display: flex; }
+    #grid-view.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Le Réseau</span>
+      <h1>Annuaire des Membres</h1>
+      <p>Retrouvez les experts, chercheurs et praticiens qui composent le réseau e-Sol à travers la France.</p>
+
+      <div class="annuaire-stats mt-6">
+        <div class="annuaire-stat">
+          <div class="num">238</div>
+          <div class="label">Membres inscrits</div>
+        </div>
+        <div class="annuaire-stat">
+          <div class="num">12</div>
+          <div class="label">Régions</div>
+        </div>
+        <div class="annuaire-stat">
+          <div class="num">85+</div>
+          <div class="label">Organisations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="search-bar">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" class="search-input" id="search-input" placeholder="Rechercher un membre, une organisation…">
+        </div>
+        <select class="region-select" id="region-select">
+          <option value="all">Toutes les régions</option>
+        </select>
+        <div class="view-controls">
+          <button class="view-btn active" id="btn-grid" title="Grille"><i class="fas fa-grid-2"></i></button>
+          <button class="view-btn" id="btn-list" title="Liste"><i class="fas fa-list"></i></button>
+        </div>
+      </div>
+
+      <div class="bento-grid" id="grid-view"></div>
+      <div class="flex flex-col gap-3" id="list-view"></div>
+
+      <!-- More members note -->
+      <div class="text-center mt-8">
+        <div class="glass-card no-hover" style="display: inline-block; padding: 20px 40px;">
+          <p class="text-muted" style="max-width: 100%;"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Cet aperçu présente 20 membres sur les 238 inscrits. L'annuaire complet est disponible sur <a href="https://e-sol.fr/?Annuaire" target="_blank">e-sol.fr</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    fetch('data/members-sample.json')
+      .then(r => r.json())
+      .then(members => {
+        // Regions
+        const regions = [...new Set(members.map(m => m.region))].sort();
+        const regionSelect = document.getElementById('region-select');
+        regions.forEach(r => {
+          const opt = document.createElement('option');
+          opt.value = r; opt.textContent = r;
+          regionSelect.appendChild(opt);
+        });
+
+        renderGrid(members);
+        renderList(members);
+
+        // Search & filter
+        const searchInput = document.getElementById('search-input');
+
+        function filterMembers() {
+          const q = searchInput.value.toLowerCase();
+          const region = regionSelect.value;
+
+          const filtered = members.filter(m => {
+            const matchQ = !q || `${m.firstName} ${m.lastName} ${m.organization} ${m.role}`.toLowerCase().includes(q);
+            const matchR = region === 'all' || m.region === region;
+            return matchQ && matchR;
+          });
+
+          // Grid
+          document.querySelectorAll('.member-card-wrapper').forEach(el => {
+            const id = el.dataset.id;
+            el.classList.toggle('hidden', !filtered.find(m => m.id === id));
+          });
+
+          // List
+          document.querySelectorAll('.member-list-wrapper').forEach(el => {
+            const id = el.dataset.id;
+            el.classList.toggle('hidden', !filtered.find(m => m.id === id));
+          });
+        }
+
+        searchInput.addEventListener('input', filterMembers);
+        regionSelect.addEventListener('change', filterMembers);
+
+        // View toggle
+        document.getElementById('btn-grid').addEventListener('click', () => {
+          document.getElementById('grid-view').classList.remove('hidden');
+          document.getElementById('list-view').classList.remove('active');
+          document.getElementById('btn-grid').classList.add('active');
+          document.getElementById('btn-list').classList.remove('active');
+        });
+
+        document.getElementById('btn-list').addEventListener('click', () => {
+          document.getElementById('grid-view').classList.add('hidden');
+          document.getElementById('list-view').classList.add('active');
+          document.getElementById('btn-list').classList.add('active');
+          document.getElementById('btn-grid').classList.remove('active');
+        });
+
+        function renderGrid(members) {
+          document.getElementById('grid-view').innerHTML = members.map(m => `
+            <div class="col-span-3 member-card-wrapper" data-id="${m.id}">
+              <div class="glass-card member-card">
+                <div class="member-avatar">${m.firstName[0]}${m.lastName[0]}</div>
+                <div class="member-name">${m.firstName} ${m.lastName}</div>
+                <div class="member-org">${m.organization}</div>
+                <div class="member-role">${m.role}</div>
+                <div class="member-region"><i class="fas fa-location-dot"></i> ${m.region}</div>
+                <div class="member-communities">
+                  ${m.communities.slice(0, 2).map(c => `<span class="member-comm-badge">${c}</span>`).join('')}
+                  ${m.communities.length > 2 ? `<span class="member-comm-badge" style="background: var(--bg-warm); color: var(--text-subtle);">+${m.communities.length - 2}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function renderList(members) {
+          document.getElementById('list-view').innerHTML = members.map(m => `
+            <div class="member-list-wrapper" data-id="${m.id}">
+              <div class="member-list-item">
+                <div class="member-list-avatar">${m.firstName[0]}${m.lastName[0]}</div>
+                <div class="member-list-info">
+                  <h4>${m.firstName} ${m.lastName}</h4>
+                  <p>${m.role} — ${m.organization}</p>
+                </div>
+                <div class="member-region" style="margin-bottom: 0;"><i class="fas fa-location-dot"></i> ${m.region}</div>
+                <div class="member-communities" style="justify-content: flex-end;">
+                  ${m.communities.slice(0, 2).map(c => `<span class="member-comm-badge">${c}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      });
+  </script>
+
+</body>
+</html>

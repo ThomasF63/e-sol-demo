@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <style>
+    .detail-hero {
+      padding: calc(var(--header-height) + 48px) 0 0;
+      position: relative;
+    }
+
+    .detail-hero-bg {
+      height: 200px;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.1) 100%);
+    }
+
+    .detail-profile {
+      margin-top: -48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .detail-avatar {
+      width: 80px; height: 80px;
+      border-radius: var(--radius-md);
+      background: white;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      border: 4px solid white;
+    }
+
+    .detail-title {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      margin: 16px 0 8px;
+    }
+
+    .detail-meta-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .detail-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Content tabs ---- */
+    .detail-tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .detail-tab {
+      padding: 12px 20px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .detail-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform 0.25s var(--ease-out);
+    }
+
+    .detail-tab:hover { color: var(--text-main); }
+
+    .detail-tab.active {
+      color: var(--primary);
+    }
+    .detail-tab.active::after {
+      transform: scaleX(1);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ---- Mock content blocks ---- */
+    .about-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      max-width: 720px;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .activity-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .activity-item h4 { font-size: 1rem; margin-bottom: 4px; }
+    .activity-item p { font-size: 0.9rem; color: var(--text-muted); }
+
+    .member-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px 8px 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .member-pill .avatar-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .resource-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+
+    .resource-item:hover {
+      border-color: var(--primary-20);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .resource-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ---- Sidebar ---- */
+    .sidebar-card {
+      padding: 24px;
+    }
+
+    .sidebar-card h4 {
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .detail-hero-bg { border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="detail-hero" id="detail-hero">
+    <div class="container">
+      <div class="detail-hero-bg" id="hero-bg" style="background: linear-gradient(135deg, rgba(156,63,0,0.12), rgba(88,99,48,0.08));"></div>
+
+      <div class="detail-profile">
+        <div class="detail-avatar" id="detail-avatar">
+          <i class="fas fa-users"></i>
+        </div>
+        <h1 class="detail-title" id="detail-title">Communauté</h1>
+        <div class="detail-meta-row" id="detail-meta">
+          <div class="detail-meta-item"><i class="fas fa-tag"></i> <span id="detail-category">Catégorie</span></div>
+          <div class="detail-meta-item"><i class="fas fa-users"></i> <span id="detail-members">0</span> membres</div>
+          <div class="detail-meta-item"><i class="fas fa-folder-open"></i> <span id="detail-resources">0</span> ressources</div>
+        </div>
+        <div class="detail-actions">
+          <a href="#" class="btn btn-primary" id="detail-join-btn">Rejoindre cette communauté</a>
+          <a href="https://forum.e-sol.fr/" target="_blank" class="btn btn-outline"><i class="fas fa-comments"></i> Forum</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid">
+        <!-- Main content -->
+        <div class="col-span-8">
+          <div class="detail-tabs">
+            <button class="detail-tab active" data-tab="about">À propos</button>
+            <button class="detail-tab" data-tab="activity">Activité</button>
+            <button class="detail-tab" data-tab="members">Membres</button>
+            <button class="detail-tab" data-tab="resources">Ressources</button>
+          </div>
+
+          <!-- About tab -->
+          <div class="tab-panel active" id="tab-about">
+            <p class="about-text" id="detail-description">Chargement…</p>
+
+            <h3 class="mt-8 mb-4" style="font-size: 1.3rem;">Objectifs</h3>
+            <div class="flex flex-col gap-3" id="detail-objectives">
+              <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1" style="color: var(--secondary); font-size: 14px;"></i>
+                <p class="text-muted" style="max-width: 100%;">Partager les connaissances et retours d'expérience entre les membres</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1" style="color: var(--secondary); font-size: 14px;"></i>
+                <p class="text-muted" style="max-width: 100%;">Créer et maintenir des ressources collaboratives ouvertes</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1" style="color: var(--secondary); font-size: 14px;"></i>
+                <p class="text-muted" style="max-width: 100%;">Organiser des événements de networking et de co-construction</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity tab -->
+          <div class="tab-panel" id="tab-activity">
+            <div class="activity-item">
+              <div class="activity-dot" style="background: var(--secondary);"></div>
+              <div>
+                <h4>Nouvelle ressource ajoutée</h4>
+                <p>Un guide de terrain mis à jour a été partagé par un membre</p>
+                <span class="text-subtle text-xs mt-1" style="display: block;">Il y a 3 jours</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background: var(--primary);"></div>
+              <div>
+                <h4>Discussion ouverte sur le forum</h4>
+                <p>Proposition de webinaire sur les dernières avancées de la thématique</p>
+                <span class="text-subtle text-xs mt-1" style="display: block;">Il y a 1 semaine</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background: var(--cat-politique);"></div>
+              <div>
+                <h4>Nouveau membre</h4>
+                <p>Un chercheur de l'INRAE a rejoint la communauté</p>
+                <span class="text-subtle text-xs mt-1" style="display: block;">Il y a 2 semaines</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Members tab -->
+          <div class="tab-panel" id="tab-members">
+            <p class="text-muted mb-6">Membres de cette communauté :</p>
+            <div class="flex flex-wrap gap-3" id="detail-members-list">
+              <!-- Sample members -->
+            </div>
+          </div>
+
+          <!-- Resources tab -->
+          <div class="tab-panel" id="tab-resources">
+            <div class="flex flex-col gap-3" id="detail-resources-list">
+              <div class="resource-item">
+                <div class="resource-icon" style="background: var(--primary-10); color: var(--primary);">
+                  <i class="fas fa-file-pdf"></i>
+                </div>
+                <div style="flex-grow: 1;">
+                  <h4 style="font-size: 0.95rem;">Guide de référence</h4>
+                  <p class="text-xs text-muted">Document PDF · Mis à jour Mars 2026</p>
+                </div>
+                <a href="#" class="btn btn-ghost btn-sm"><i class="fas fa-download"></i></a>
+              </div>
+              <div class="resource-item">
+                <div class="resource-icon" style="background: var(--secondary-10); color: var(--secondary);">
+                  <i class="fas fa-link"></i>
+                </div>
+                <div style="flex-grow: 1;">
+                  <h4 style="font-size: 0.95rem;">Lien vers la page AFES</h4>
+                  <p class="text-xs text-muted">Lien externe</p>
+                </div>
+                <a href="#" class="btn btn-ghost btn-sm"><i class="fas fa-external-link"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-span-4">
+          <div class="glass-card sidebar-card no-hover mb-4">
+            <h4><i class="fas fa-link text-sm"></i> Liens Utiles</h4>
+            <div class="flex flex-col gap-3">
+              <a href="#" id="link-live" class="flex items-center gap-3 text-sm" style="color: var(--text-muted); font-weight: 500;">
+                <i class="fas fa-globe" style="width: 16px; text-align: center;"></i> Page sur e-sol.fr
+              </a>
+              <a href="https://forum.e-sol.fr/" target="_blank" class="flex items-center gap-3 text-sm" style="color: var(--text-muted); font-weight: 500;">
+                <i class="fas fa-comments" style="width: 16px; text-align: center;"></i> Forum de discussion
+              </a>
+            </div>
+          </div>
+
+          <div class="glass-card sidebar-card no-hover mb-4" style="background: linear-gradient(135deg, var(--bg-elevated), var(--bg-warm));">
+            <h4><i class="fas fa-chart-pie text-sm"></i> En bref</h4>
+            <div class="flex flex-col gap-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Créée en</span>
+                <span class="text-sm font-semibold">2025</span>
+              </div>
+              <hr class="divider" style="margin: 0;">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Statut</span>
+                <span class="badge badge-olive" style="font-size: 10px;">Actif</span>
+              </div>
+              <hr class="divider" style="margin: 0;">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-muted">Forum</span>
+                <span class="text-sm font-semibold">forum.e-sol.fr</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card sidebar-card no-hover" style="border: 2px dashed var(--border-strong); background: transparent;">
+            <div class="text-center">
+              <i class="fas fa-hand-holding-heart" style="font-size: 28px; color: var(--primary); margin-bottom: 12px;"></i>
+              <h4>Envie de contribuer ?</h4>
+              <p class="text-muted text-sm mb-4" style="max-width: 100%;">Proposez un document, un retour d'expérience ou une idée de projet.</p>
+              <a href="participer.html" class="btn btn-outline btn-sm w-full" style="justify-content: center;">Voir comment</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.detail-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Load community data from URL param
+    const params = new URLSearchParams(window.location.search);
+    const communityId = params.get('c') || 'fresque-sol';
+
+    fetch('data/communities.json')
+      .then(r => r.json())
+      .then(communities => {
+        const c = communities.find(x => x.id === communityId) || communities[0];
+
+        // Update page content
+        document.title = c.name + ' — e-Sol';
+        document.getElementById('detail-title').textContent = c.name;
+        document.getElementById('detail-description').textContent = c.description;
+        document.getElementById('detail-category').textContent = c.category;
+        document.getElementById('detail-members').textContent = c.members;
+        document.getElementById('detail-resources').textContent = c.resources;
+
+        // Update avatar
+        const avatar = document.getElementById('detail-avatar');
+        avatar.innerHTML = '<i class="fas ' + c.icon + '"></i>';
+        avatar.style.color = c.categoryColor;
+
+        // Update hero background
+        document.getElementById('hero-bg').style.background =
+          'linear-gradient(135deg, ' + c.categoryColor + '15, ' + c.categoryColor + '05)';
+
+        // Update link
+        document.getElementById('link-live').href = c.liveUrl;
+
+        // Sample members
+        const sampleNames = ['A. Martin', 'C. Dubois', 'M. Leroy', 'P. Bernard', 'S. Thomas', 'J. Robert', 'L. Moreau', 'N. Laurent'];
+        const membersList = document.getElementById('detail-members-list');
+        const count = Math.min(c.members, 8);
+        membersList.innerHTML = sampleNames.slice(0, count).map(name => `
+          <div class="member-pill">
+            <div class="avatar-circle">${name.charAt(0)}</div>
+            ${name}
+          </div>
+        `).join('') + (c.members > 8 ? `<div class="member-pill" style="background: var(--primary-10); color: var(--primary); border-color: var(--primary-20);">+${c.members - 8} autres</div>` : '');
+      });
+  </script>
+
+</body>
+</html>

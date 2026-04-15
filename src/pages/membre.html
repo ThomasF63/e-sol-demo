@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Profil Membre — e-Sol</title>
+  <style>
+    .profile-hero {
+      padding: calc(var(--header-height) + 48px) 0 0;
+    }
+
+    .profile-banner {
+      height: 160px;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      background: linear-gradient(135deg, rgba(156,63,0,0.08), rgba(88,99,48,0.06));
+    }
+
+    .profile-info {
+      margin-top: -48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 800;
+      border: 4px solid white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-name {
+      font-size: 1.8rem;
+      margin: 16px 0 4px;
+    }
+
+    .profile-role {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .profile-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    /* Profile sections */
+    .profile-section {
+      margin-bottom: 32px;
+    }
+
+    .profile-section h3 {
+      font-size: 1.15rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile-section h3 i {
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .bio-text {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .community-link-card {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+
+    .community-link-card:hover {
+      border-color: var(--primary-20);
+      box-shadow: var(--shadow-sm);
+      color: var(--primary);
+    }
+
+    .community-link-card i {
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    /* Sidebar info */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-row .label { color: var(--text-muted); }
+    .info-row .value { font-weight: 600; color: var(--text-main); }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="profile-hero">
+    <div class="container">
+      <div class="profile-banner"></div>
+      <div class="profile-info" id="profile-info">
+        <div class="profile-avatar" id="profile-avatar">TF</div>
+        <h1 class="profile-name" id="profile-name">Thomas Fungenzi</h1>
+        <p class="profile-role" id="profile-role">Consultant environnement — Ekodama / AFES</p>
+        <div class="profile-tags" id="profile-tags">
+          <span class="badge badge-terra">afes-comm</span>
+          <span class="badge badge-olive">srp-sols</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid" style="gap: 48px;">
+        <!-- Main -->
+        <div class="col-span-8">
+          <div class="glass-card no-hover" style="padding: 40px;">
+            <div class="profile-section">
+              <h3><i class="fas fa-user"></i> À propos</h3>
+              <p class="bio-text">Pédologue de formation, passionné par la science du sol et l'écologie des systèmes agroforestiers. Fondateur d'Ekodama, un cabinet de conseil spécialisé dans l'évaluation environnementale et la modélisation des services écosystémiques. Engagé dans le réseau e-Sol pour contribuer à la diffusion des connaissances et à la valorisation de la recherche participative.</p>
+            </div>
+
+            <hr class="divider">
+
+            <div class="profile-section">
+              <h3><i class="fas fa-users-viewfinder"></i> Communautés</h3>
+              <div class="flex flex-col gap-3" id="profile-communities">
+                <a href="communaute-detail.html?c=afes-comm" class="community-link-card">
+                  <i class="fas fa-bullhorn"></i>
+                  <div>
+                    <div class="font-semibold text-sm">AFES – GT Communication</div>
+                    <div class="text-xs text-muted">Stratégie de diffusion et communication numérique</div>
+                  </div>
+                </a>
+                <a href="communaute-detail.html?c=srp-sols" class="community-link-card">
+                  <i class="fas fa-flask"></i>
+                  <div>
+                    <div class="font-semibold text-sm">SRP Sols</div>
+                    <div class="text-xs text-muted">Sciences et Recherches Participatives sur les Sols</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="profile-section" style="margin-bottom: 0;">
+              <h3><i class="fas fa-clock-rotate-left"></i> Activité récente</h3>
+              <div class="flex flex-col gap-4">
+                <div class="flex items-start gap-4">
+                  <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--secondary); margin-top: 7px; flex-shrink: 0;"></div>
+                  <div>
+                    <p class="text-sm font-semibold">Contribution au Guide des Sols Forestiers</p>
+                    <p class="text-xs text-muted">Il y a 2 semaines</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); margin-top: 7px; flex-shrink: 0;"></div>
+                  <div>
+                    <p class="text-sm font-semibold">A rejoint la communauté SRP Sols</p>
+                    <p class="text-xs text-muted">Il y a 1 mois</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-span-4">
+          <div class="flex flex-col gap-4">
+            <div class="glass-card no-hover" style="padding: 24px;">
+              <h4 style="font-size: 0.95rem; margin-bottom: 16px;"><i class="fas fa-id-card text-sm" style="color: var(--primary);"></i> Informations</h4>
+              <div class="info-row"><span class="label">Organisation</span><span class="value">Ekodama / AFES</span></div>
+              <div class="info-row"><span class="label">Région</span><span class="value">Nouvelle-Aquitaine</span></div>
+              <div class="info-row"><span class="label">Membre depuis</span><span class="value">2025</span></div>
+              <div class="info-row"><span class="label">Communautés</span><span class="value">2</span></div>
+            </div>
+
+            <div class="glass-card no-hover" style="padding: 24px;">
+              <h4 style="font-size: 0.95rem; margin-bottom: 16px;"><i class="fas fa-link text-sm" style="color: var(--secondary);"></i> Liens</h4>
+              <div class="flex flex-col gap-3">
+                <a href="https://e-sol.fr/?FungenziThomas" target="_blank" class="flex items-center gap-3 text-sm" style="color: var(--text-muted); font-weight: 500;">
+                  <i class="fas fa-globe" style="width: 16px; text-align: center;"></i> Profil sur e-sol.fr
+                </a>
+                <a href="#" class="flex items-center gap-3 text-sm" style="color: var(--text-muted); font-weight: 500;">
+                  <i class="fas fa-envelope" style="width: 16px; text-align: center;"></i> Contacter
+                </a>
+              </div>
+            </div>
+
+            <a href="annuaire.html" class="btn btn-outline w-full" style="justify-content: center;">
+              <i class="fas fa-arrow-left"></i> Retour à l'annuaire
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Load member data from URL param  
+    const params = new URLSearchParams(window.location.search);
+    const memberId = params.get('m') || 'fungenzi-thomas';
+
+    fetch('data/members-sample.json')
+      .then(r => r.json())
+      .then(members => {
+        const m = members.find(x => x.id === memberId);
+        if (m) {
+          document.title = m.firstName + ' ' + m.lastName + ' — e-Sol';
+          document.getElementById('profile-avatar').textContent = m.firstName[0] + m.lastName[0];
+          document.getElementById('profile-name').textContent = m.firstName + ' ' + m.lastName;
+          document.getElementById('profile-role').textContent = m.role + ' — ' + m.organization;
+        }
+      });
+  </script>
+
+</body>
+</html>

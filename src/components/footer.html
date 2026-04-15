@@ -1,0 +1,238 @@
+<style>
+  .v3-footer {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 80px 0 0;
+    margin-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .v3-footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+  }
+
+  /* Decorative background blobs */
+  .v3-footer::after {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(156, 63, 0, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .v3-footer-main {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 56px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-footer-brand p {
+    color: rgba(253, 251, 249, 0.6);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 320px;
+    margin-top: 16px;
+  }
+
+  .v3-footer-brand img {
+    height: 42px;
+    opacity: 0.9;
+    filter: brightness(1.2);
+  }
+
+  .v3-footer h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(253, 251, 249, 0.4);
+    margin-bottom: 24px;
+  }
+
+  .v3-footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .v3-footer-links a {
+    color: rgba(253, 251, 249, 0.7);
+    font-size: 14.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .v3-footer-links a:hover {
+    color: white;
+    transform: translateX(4px);
+  }
+
+  .v3-footer-links a i {
+    font-size: 11px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    color: var(--primary-light);
+  }
+  .v3-footer-links a:hover i {
+    opacity: 1;
+  }
+
+  /* Partners */
+  .v3-footer-partners {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 32px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-footer-partners span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(253, 251, 249, 0.3);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .partner-logo {
+    height: 28px;
+    opacity: 0.3;
+    filter: brightness(2) saturate(0);
+    transition: opacity 0.3s ease;
+  }
+
+  .partner-logo:hover {
+    opacity: 0.6;
+  }
+
+  /* Bottom bar */
+  .v3-footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: rgba(253, 251, 249, 0.35);
+    position: relative;
+    z-index: 1;
+  }
+
+  .v3-footer-bottom a {
+    color: rgba(253, 251, 249, 0.35);
+  }
+  .v3-footer-bottom a:hover {
+    color: rgba(253, 251, 249, 0.7);
+  }
+
+  .v3-footer-social {
+    display: flex;
+    gap: 16px;
+  }
+
+  .v3-footer-social a {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(253, 251, 249, 0.5);
+    font-size: 15px;
+    transition: all 0.2s ease;
+  }
+  .v3-footer-social a:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 768px) {
+    .v3-footer-main {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .v3-footer-brand { grid-column: span 2; }
+  }
+
+  @media (max-width: 480px) {
+    .v3-footer-main { grid-template-columns: 1fr; }
+    .v3-footer-brand { grid-column: span 1; }
+    .v3-footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+
+<footer class="v3-footer">
+  <div class="container">
+    <div class="v3-footer-main">
+      <div class="v3-footer-brand">
+        <img src="https://e-sol.fr/files/PageTitre_bandeau_logo_eSol_20250124094548_20250328114026.png" alt="e-Sol">
+        <p>Plateforme collaborative pour la connaissance, la préservation et la régénération des sols en France. Un réseau ouvert porté par l'AFES.</p>
+      </div>
+
+      <div>
+        <h5>Le Réseau</h5>
+        <ul class="v3-footer-links">
+          <li><a href="charte.html"><i class="fas fa-arrow-right"></i> La Charte</a></li>
+          <li><a href="communs.html"><i class="fas fa-arrow-right"></i> Les Communs</a></li>
+          <li><a href="annuaire.html"><i class="fas fa-arrow-right"></i> Annuaire</a></li>
+          <li><a href="tutoriels.html"><i class="fas fa-arrow-right"></i> Ressources</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Communautés</h5>
+        <ul class="v3-footer-links">
+          <li><a href="communautes.html"><i class="fas fa-arrow-right"></i> Toutes</a></li>
+          <li><a href="communaute-detail.html?c=fresque-sol"><i class="fas fa-arrow-right"></i> Fresque du Sol</a></li>
+          <li><a href="communaute-detail.html?c=zan"><i class="fas fa-arrow-right"></i> ZAN</a></li>
+          <li><a href="communaute-detail.html?c=iprsol"><i class="fas fa-arrow-right"></i> Sols Forestiers</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Participer</h5>
+        <ul class="v3-footer-links">
+          <li><a href="participer.html"><i class="fas fa-arrow-right"></i> Espace Actions</a></li>
+          <li><a href="annonces.html"><i class="fas fa-arrow-right"></i> Petites Annonces</a></li>
+          <li><a href="https://forum.e-sol.fr/" target="_blank"><i class="fas fa-arrow-right"></i> Forum</a></li>
+          <li><a href="contact.html"><i class="fas fa-arrow-right"></i> Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="v3-footer-partners">
+      <span>Réseau porté par</span>
+      <a href="https://www.afes.fr" target="_blank" rel="noopener" title="AFES">
+        <img src="https://www.afes.fr/wp-content/themes/flavor-developer/assets/images/logo.png" alt="AFES" class="partner-logo" style="height: 36px;">
+      </a>
+    </div>
+
+    <div class="v3-footer-bottom">
+      <p>&copy; 2026 Réseau e-Sol · AFES. <a href="#">Mentions légales</a> · <a href="#">Politique de confidentialité</a></p>
+      <div class="v3-footer-social">
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://forum.e-sol.fr/" aria-label="Forum"><i class="fas fa-comments"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>

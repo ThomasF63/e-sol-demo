@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>La Charte e-Sol — Plateforme Collaborative pour les Sols</title>
+  <style>
+    .charte-layout {
+      gap: 48px;
+    }
+
+    .charte-content {
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+
+    .charte-content p {
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      max-width: 100%;
+    }
+
+    .charte-content h3 {
+      color: var(--text-main);
+      margin-top: 48px;
+      margin-bottom: 16px;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .charte-content h3 .section-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .charte-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .charte-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .charte-list li i {
+      color: var(--secondary);
+      font-size: 13px;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    /* Sidebar nav */
+    .sidebar-nav {
+      position: sticky;
+      top: calc(var(--header-height) + 24px);
+    }
+
+    .sidebar-nav-list {
+      list-style: none;
+      border-left: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-nav-list a {
+      display: block;
+      padding: 10px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      border-left: 2px solid transparent;
+      margin-left: -2px;
+      transition: all 0.2s ease;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .sidebar-nav-list a:hover,
+    .sidebar-nav-list a.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-left-color: var(--primary);
+      background: var(--primary-10);
+    }
+
+    /* Quote block */
+    .charte-quote {
+      background: linear-gradient(135deg, var(--bg-warm), var(--bg-warm-deep));
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .charte-quote p {
+      font-style: italic;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Valeurs Communes</span>
+      <h1>La Charte e-Sol</h1>
+      <p>Les principes fondamentaux qui lient tous les acteurs de notre réseau pour la connaissance et la préservation des sols.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid charte-layout">
+        <!-- Sidebar -->
+        <div class="col-span-3">
+          <nav class="sidebar-nav">
+            <ul class="sidebar-nav-list">
+              <li><a href="#vision" class="active">1. Notre Vision</a></li>
+              <li><a href="#engagements">2. Nos Engagements</a></li>
+              <li><a href="#gouvernance">3. Gouvernance Ouverte</a></li>
+              <li><a href="#donnees">4. Partage des Données</a></li>
+              <li><a href="#membres">5. Droits & Devoirs</a></li>
+              <li><a href="#evolution">6. Évolution</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Content -->
+        <div class="col-span-9">
+          <div class="glass-card no-hover charte-content" style="padding: 48px;">
+            <div class="charte-quote">
+              <p>« Le sol est une ressource vivante, non renouvelable à l'échelle humaine, essentielle au maintien de la vie sur Terre. »</p>
+            </div>
+
+            <p>Le réseau e-Sol est un collectif ouvert d'individus et d'organisations engagés dans la transition vers une gestion durable et régénérative des sols. Cette charte définit les valeurs et les principes qui nous unissent.</p>
+
+            <h3 id="vision"><span class="section-num">1</span> Notre Vision</h3>
+            <p>Nous considérons le sol comme une ressource vivante, non renouvelable à l'échelle de temps humaine, et essentielle au maintien de la vie sur Terre. La santé des sols est la clé de la sécurité alimentaire, de la lutte contre le changement climatique et de la préservation de la biodiversité.</p>
+            <p>Le réseau e-Sol porte la conviction que la connaissance partagée et l'action collective sont les leviers les plus puissants pour préserver cette ressource.</p>
+
+            <h3 id="engagements"><span class="section-num">2</span> Nos Engagements</h3>
+            <ul class="charte-list">
+              <li><i class="fas fa-check-circle"></i> Promouvoir les pratiques agroécologiques et la gestion durable des sols à toutes les échelles.</li>
+              <li><i class="fas fa-check-circle"></i> Lutter contre l'artificialisation des sols (objectif Zéro Artificialisation Nette).</li>
+              <li><i class="fas fa-check-circle"></i> Sensibiliser le grand public et les jeunes générations à l'importance des sols vivants.</li>
+              <li><i class="fas fa-check-circle"></i> Soutenir la recherche participative et la science ouverte sur les sols.</li>
+              <li><i class="fas fa-check-circle"></i> Faciliter le dialogue entre disciplines (pédologie, écologie, agronomie, urbanisme).</li>
+            </ul>
+
+            <h3 id="gouvernance"><span class="section-num">3</span> Gouvernance Ouverte</h3>
+            <p>Le réseau fonctionne selon des principes d'intelligence collective. Les décisions sont prises de manière transparente, en privilégiant le consensus et la participation de tous les membres actifs. Chaque voix compte dans l'évolution de la plateforme.</p>
+            <p>Les communautés thématiques jouissent d'une large autonomie dans leur fonctionnement interne, dans le respect de la présente charte et des valeurs du réseau.</p>
+
+            <h3 id="donnees"><span class="section-num">4</span> Partage des Données — Les Communs</h3>
+            <p>Nous favorisons la création de communs numériques. Les données transmises, validées et produites collectivement ont vocation à être partagées en open source, toujours dans le respect du consentement et de la vie privée, pour l'intérêt général et le progrès scientifique.</p>
+            <p>Chaque « Commun » est placé sous une licence ouverte (Creative Commons ou équivalent) sauf mention contraire explicite de ses contributeurs.</p>
+
+            <h3 id="membres"><span class="section-num">5</span> Droits & Devoirs des Membres</h3>
+            <ul class="charte-list">
+              <li><i class="fas fa-check-circle"></i> Respecter les contributions et opinions de chacun, dans un esprit de bienveillance.</li>
+              <li><i class="fas fa-check-circle"></i> Citer les sources et reconnaître le travail des autres contributeurs.</li>
+              <li><i class="fas fa-check-circle"></i> Ne pas utiliser la plateforme à des fins commerciales sans accord préalable.</li>
+              <li><i class="fas fa-check-circle"></i> Contribuer activement à la vie du réseau dans la mesure de ses disponibilités.</li>
+            </ul>
+
+            <h3 id="evolution"><span class="section-num">6</span> Évolution de la Charte</h3>
+            <p>Cette charte est un document vivant. Elle peut être amendée sur proposition de tout membre, après discussion collective et validation par le comité de pilotage du réseau. Les modifications sont documentées et rendues publiques.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Highlight active sidebar link on scroll
+    const sections = document.querySelectorAll('h3[id]');
+    const navLinks = document.querySelectorAll('.sidebar-nav-list a');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          const activeLink = document.querySelector(`.sidebar-nav-list a[href="#${entry.target.id}"]`);
+          if (activeLink) activeLink.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+
+</body>
+</html>

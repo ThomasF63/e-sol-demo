@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <style>
+    .step-card {
+      display: flex;
+      gap: 28px;
+      padding: 36px;
+    }
+
+    .step-number {
+      flex: 0 0 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(156,63,0,0.25);
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+
+    /* Connecting line */
+    .steps-wrapper {
+      position: relative;
+    }
+
+    .steps-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 56px;
+      left: calc(36px + 28px);
+      bottom: 56px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--primary-20), var(--border));
+    }
+
+    .steps-wrapper .glass-card {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Sidebar action cards */
+    .action-card {
+      padding: 28px;
+      text-align: center;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .action-card-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .action-card h4 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .action-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      flex-grow: 1;
+      margin-bottom: 20px;
+      max-width: 100%;
+      line-height: 1.6;
+    }
+
+    /* Values section */
+    .value-card {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 24px 28px;
+    }
+
+    .value-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .value-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .value-card p { font-size: 0.9rem; color: var(--text-muted); max-width: 100%; line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .steps-wrapper::before { display: none; }
+      .step-card { flex-direction: column; gap: 16px; }
+      .step-number { width: 48px; height: 48px; font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Rejoindre l'Aventure</span>
+      <h1>Comment Participer ?</h1>
+      <p>Le réseau e-Sol est un bien commun qui s'enrichit des contributions de chacun. Voici comment vous impliquer concrètement.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid">
+
+        <!-- Main: Steps -->
+        <div class="col-span-8">
+          <div class="steps-wrapper flex flex-col gap-4">
+
+            <div class="glass-card step-card no-hover animate-in">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>Créer un compte et rejoindre le Forum</h3>
+                <p>L'inscription est gratuite, ouverte à tous, et constitue la première porte d'entrée. Une fois inscrit, présentez-vous sur le Forum pour trouver des synergies avec les autres membres.</p>
+                <div class="flex gap-3 flex-wrap">
+                  <a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire à la plateforme</a>
+                  <a href="https://forum.e-sol.fr/" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-comments"></i> Accéder au Forum</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card step-card no-hover animate-in delay-1">
+              <div class="step-number" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d);">2</div>
+              <div class="step-content">
+                <h3>Intégrer une Communauté</h3>
+                <p>Explorez les 12 groupes de travail existants selon vos compétences, votre région ou vos intérêts. Les communautés disposent d'espaces dédiés pour le partage de documents et la messagerie.</p>
+                <a href="communautes.html" class="btn btn-secondary btn-sm">Voir les 12 Communautés</a>
+              </div>
+            </div>
+
+            <div class="glass-card step-card no-hover animate-in delay-2">
+              <div class="step-number" style="background: linear-gradient(135deg, var(--cat-politique), #6262b0);">3</div>
+              <div class="step-content">
+                <h3>Contribuer ou Créer un Commun</h3>
+                <p>Proposez des données, des articles, des retours d'expérience, ou initiez un nouveau « Commun » (outil, carte, base de données) bénéfique pour le reste du réseau.</p>
+                <a href="communs.html" class="btn btn-outline btn-sm" style="border-color: var(--cat-politique-bg); color: var(--cat-politique);">Explorer les Communs</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-span-4">
+          <div class="flex flex-col gap-4">
+            <div class="glass-card action-card no-hover" style="background: linear-gradient(135deg, var(--bg-elevated), #fffcf7);">
+              <div class="action-card-icon" style="background: var(--primary-10); color: var(--primary);">
+                <i class="fas fa-bullhorn"></i>
+              </div>
+              <h4>Petites Annonces</h4>
+              <p>Vous cherchez un stage, vous partagez du matériel de carottage ou vous offrez une formation ?</p>
+              <a href="annonces.html" class="btn btn-outline btn-sm w-full" style="justify-content: center;">Déposer une annonce</a>
+            </div>
+
+            <div class="glass-card action-card no-hover" style="background: linear-gradient(135deg, var(--bg-elevated), #f6f6f9);">
+              <div class="action-card-icon" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
+                <i class="fas fa-envelope-open-text"></i>
+              </div>
+              <h4>Laisser un retour</h4>
+              <p>La plateforme e-Sol est en amélioration continue. Remontez-nous vos bugs, vos idées et vos envies.</p>
+              <a href="retour.html" class="btn btn-outline btn-sm w-full" style="justify-content: center; border-color: var(--cat-politique-bg); color: var(--cat-politique);">Formulaire de feedback</a>
+            </div>
+
+            <div class="glass-card action-card no-hover" style="background: linear-gradient(135deg, var(--bg-elevated), #f4f7f5);">
+              <div class="action-card-icon" style="background: var(--secondary-10); color: var(--secondary);">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <h4>Nous contacter</h4>
+              <p>Une question, une proposition de partenariat ou un besoin particulier ?</p>
+              <a href="contact.html" class="btn btn-outline btn-sm w-full" style="justify-content: center; border-color: rgba(88,99,48,0.2); color: var(--secondary);">Écrire au réseau</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Nos Valeurs</span>
+        <h2>Pourquoi rejoindre e-Sol ?</h2>
+        <p>Le réseau est construit sur des principes d'ouverture, de collaboration et de science citoyenne.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-4">
+          <div class="glass-card value-card no-hover">
+            <div class="value-icon" style="background: var(--primary-10); color: var(--primary);">
+              <i class="fas fa-globe"></i>
+            </div>
+            <div>
+              <h4>Ouvert à tous</h4>
+              <p>Chercheurs, praticiens, citoyens, étudiants : chaque voix compte dans la construction du réseau.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card value-card no-hover">
+            <div class="value-icon" style="background: var(--secondary-10); color: var(--secondary);">
+              <i class="fas fa-code-branch"></i>
+            </div>
+            <div>
+              <h4>Biens communs</h4>
+              <p>Les ressources créées collectivement sont partagées en open source pour l'intérêt général.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card value-card no-hover">
+            <div class="value-icon" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <div>
+              <h4>Gouvernance partagée</h4>
+              <p>Décisions transparentes, consensus et participation de tous les membres actifs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Rejoindre e-Sol — Inscription</title>
+  <style>
+    .inscription-layout {
+      gap: 48px;
+    }
+
+    /* Form card */
+    .form-card {
+      padding: 48px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .form-label .required {
+      color: var(--primary);
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-main);
+      background: var(--bg-surface);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin-top: 6px;
+    }
+
+    .form-divider {
+      border: none;
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    .form-section-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-section-title i {
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    /* Checkbox */
+    .form-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .form-checkbox input[type="checkbox"] {
+      width: 20px; height: 20px;
+      border-radius: 4px;
+      border: 2px solid var(--border-strong);
+      margin-top: 2px;
+      flex-shrink: 0;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .form-checkbox span {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Sidebar benefits */
+    .benefit-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .benefit-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .benefit-item h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .benefit-item p { font-size: 0.85rem; color: var(--text-muted); max-width: 100%; line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Bienvenue</span>
+      <h1>Rejoindre le réseau e-Sol</h1>
+      <p>L'inscription est gratuite et ouverte à tous les acteurs intéressés par la connaissance, la préservation et la régénération des sols.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid inscription-layout">
+
+        <!-- Form -->
+        <div class="col-span-8">
+          <div class="glass-card form-card no-hover">
+
+            <div class="form-section-title"><i class="fas fa-user"></i> Informations personnelles</div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Prénom <span class="required">*</span></label>
+                <input type="text" class="form-input" placeholder="Votre prénom">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom <span class="required">*</span></label>
+                <input type="text" class="form-input" placeholder="Votre nom de famille">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email <span class="required">*</span></label>
+              <input type="email" class="form-input" placeholder="votre@email.fr">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Organisation / Structure</label>
+                <input type="text" class="form-input" placeholder="Université, laboratoire, bureau d'études…">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Fonction / Rôle</label>
+                <input type="text" class="form-input" placeholder="Chercheur, étudiant, ingénieur…">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Région</label>
+              <select class="form-select">
+                <option value="">Sélectionnez votre région</option>
+                <option>Auvergne-Rhône-Alpes</option>
+                <option>Bourgogne-Franche-Comté</option>
+                <option>Bretagne</option>
+                <option>Centre-Val de Loire</option>
+                <option>Corse</option>
+                <option>Grand Est</option>
+                <option>Hauts-de-France</option>
+                <option>Île-de-France</option>
+                <option>Normandie</option>
+                <option>Nouvelle-Aquitaine</option>
+                <option>Occitanie</option>
+                <option>Pays de la Loire</option>
+                <option>Provence-Alpes-Côte d'Azur</option>
+                <option>Outre-mer</option>
+                <option>International</option>
+              </select>
+            </div>
+
+            <hr class="form-divider">
+
+            <div class="form-section-title"><i class="fas fa-users-viewfinder"></i> Centres d'intérêt</div>
+
+            <div class="form-group">
+              <label class="form-label">Quelles communautés vous intéressent ?</label>
+              <p class="form-hint mb-3" style="margin-top: 0;">Vous pourrez en rejoindre d'autres plus tard.</p>
+              <div class="flex flex-col gap-3">
+                <label class="form-checkbox"><input type="checkbox"> <span>Animateurs Fresque du Sol</span></label>
+                <label class="form-checkbox"><input type="checkbox"> <span>Sols Forestiers (IPRSol)</span></label>
+                <label class="form-checkbox"><input type="checkbox"> <span>Zéro Artificialisation Nette (ZAN)</span></label>
+                <label class="form-checkbox"><input type="checkbox"> <span>Sciences et Recherches Participatives (SRP Sols)</span></label>
+                <label class="form-checkbox"><input type="checkbox"> <span>Pédologie de Terrain</span></label>
+                <label class="form-checkbox"><input type="checkbox"> <span>Refersols</span></label>
+                <label class="form-checkbox"><input type="checkbox"> <span>Autre / Je ne sais pas encore</span></label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Présentez-vous en quelques mots</label>
+              <textarea class="form-textarea" placeholder="Votre parcours, vos intérêts pour les sols, ce que vous espérez trouver dans le réseau…"></textarea>
+            </div>
+
+            <hr class="form-divider">
+
+            <div class="form-group">
+              <label class="form-checkbox">
+                <input type="checkbox">
+                <span>J'ai lu et j'accepte la <a href="charte.html" style="font-weight: 600;">Charte e-Sol</a> et la politique de confidentialité. <span class="required">*</span></span>
+              </label>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <button class="btn btn-primary btn-lg w-full" style="justify-content: center;" onclick="alert('Ceci est une démonstration. L\'inscription réelle se fait sur e-sol.fr')">
+                <i class="fas fa-rocket"></i> Créer mon compte
+              </button>
+              <p class="form-hint text-center mt-3">Vous recevrez un email de confirmation à l'adresse indiquée.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-span-4">
+          <div class="flex flex-col gap-4">
+            <div class="glass-card no-hover" style="padding: 28px;">
+              <h3 style="font-size: 1.2rem; margin-bottom: 24px;">Pourquoi rejoindre e-Sol ?</h3>
+              <div class="flex flex-col gap-6">
+                <div class="benefit-item">
+                  <div class="benefit-icon" style="background: var(--primary-10); color: var(--primary);">
+                    <i class="fas fa-users"></i>
+                  </div>
+                  <div>
+                    <h4>Réseau d'experts</h4>
+                    <p>Connectez-vous avec 238 professionnels du sol en France.</p>
+                  </div>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon" style="background: var(--secondary-10); color: var(--secondary);">
+                    <i class="fas fa-folder-open"></i>
+                  </div>
+                  <div>
+                    <h4>Ressources exclusives</h4>
+                    <p>Accédez aux Communs : guides, données, outils partagés.</p>
+                  </div>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
+                    <i class="fas fa-comments"></i>
+                  </div>
+                  <div>
+                    <h4>Forum collaboratif</h4>
+                    <p>Échangez et co-construisez sur des sujets techniques.</p>
+                  </div>
+                </div>
+                <div class="benefit-item">
+                  <div class="benefit-icon" style="background: var(--cat-education-bg); color: var(--cat-education);">
+                    <i class="fas fa-globe"></i>
+                  </div>
+                  <div>
+                    <h4>Impact</h4>
+                    <p>Contribuez à la préservation des sols en France.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card no-hover" style="padding: 20px; text-align: center; background: linear-gradient(135deg, var(--bg-elevated), var(--bg-warm));">
+              <p class="text-muted text-sm" style="max-width: 100%;">Déjà inscrit ?</p>
+              <a href="https://e-sol.fr" target="_blank" class="btn btn-outline btn-sm mt-3" style="width: 100%; justify-content: center;">Se connecter sur e-sol.fr</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+</body>
+</html>

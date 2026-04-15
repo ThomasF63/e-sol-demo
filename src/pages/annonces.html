@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Petites Annonces — e-Sol</title>
+  <style>
+    .annonce-card {
+      padding: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .annonce-type-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .annonce-body { flex: 1; }
+    .annonce-title { font-size: 1.1rem; margin-bottom: 6px; }
+    .annonce-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 14px; max-width: 100%; }
+
+    .annonce-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .annonce-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--text-subtle);
+      font-weight: 500;
+    }
+
+    .type-offre { background: var(--secondary-10); color: var(--secondary); }
+    .type-demande { background: var(--primary-10); color: var(--primary); }
+    .type-info { background: var(--cat-politique-bg); color: var(--cat-politique); }
+
+    .type-filter {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .type-filter-btn {
+      padding: 9px 20px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+    }
+
+    .type-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .type-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .annonce-wrapper.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Échanges</span>
+      <h1>Petites Annonces</h1>
+      <p>Proposez, cherchez, partagez : formations, matériel, stages, collaborations et événements autour des sols.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container container-narrow">
+
+      <div class="type-filter">
+        <button class="type-filter-btn active" data-type="all">Toutes</button>
+        <button class="type-filter-btn" data-type="offre">Offres</button>
+        <button class="type-filter-btn" data-type="demande">Demandes</button>
+        <button class="type-filter-btn" data-type="info">Infos</button>
+      </div>
+
+      <div class="flex flex-col gap-4" id="annonces-list">
+
+        <div class="glass-card annonce-card annonce-wrapper" data-type="offre">
+          <div class="annonce-type-icon type-offre"><i class="fas fa-chalkboard-user"></i></div>
+          <div class="annonce-body">
+            <span class="badge badge-olive mb-2" style="font-size: 10px;">Offre</span>
+            <h3 class="annonce-title">Formation Fresque du Sol — Session Février 2026</h3>
+            <p class="annonce-desc">Formation d'une journée pour devenir animateur de la Fresque du Sol. Prochaine session à Lyon les 15 et 16 février. Places limitées.</p>
+            <div class="annonce-meta">
+              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Lyon</div>
+              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> 15-16 Fév. 2026</div>
+              <div class="annonce-meta-item"><i class="fas fa-user"></i> G. Domenech</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card annonce-card annonce-wrapper" data-type="demande">
+          <div class="annonce-type-icon type-demande"><i class="fas fa-microscope"></i></div>
+          <div class="annonce-body">
+            <span class="badge badge-terra mb-2" style="font-size: 10px;">Demande</span>
+            <h3 class="annonce-title">Recherche tarière à vis pour échantillonnage</h3>
+            <p class="annonce-desc">Laboratoire basé à Rennes cherche à emprunter une tarière à vis (Ø8cm) pour une campagne de prélèvement de 2 semaines en mars. Frais de transport pris en charge.</p>
+            <div class="annonce-meta">
+              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Rennes</div>
+              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Mars 2026</div>
+              <div class="annonce-meta-item"><i class="fas fa-user"></i> B. Lemercier</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card annonce-card annonce-wrapper" data-type="offre">
+          <div class="annonce-type-icon type-offre"><i class="fas fa-graduation-cap"></i></div>
+          <div class="annonce-body">
+            <span class="badge badge-olive mb-2" style="font-size: 10px;">Offre</span>
+            <h3 class="annonce-title">Stage M2 — Indicateurs biologiques des sols en vignoble</h3>
+            <p class="annonce-desc">L'INRAE Dijon propose un stage de 6 mois (indemnisé) portant sur l'évaluation de la macrofaune du sol comme indicateur de santé dans les vignobles bourguignons.</p>
+            <div class="annonce-meta">
+              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Dijon</div>
+              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Fév.–Juil. 2026</div>
+              <div class="annonce-meta-item"><i class="fas fa-user"></i> P. Chéry</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card annonce-card annonce-wrapper" data-type="info">
+          <div class="annonce-type-icon type-info"><i class="fas fa-calendar-days"></i></div>
+          <div class="annonce-body">
+            <span class="badge" style="font-size: 10px; background: var(--cat-politique-bg); color: var(--cat-politique); border: 1px solid rgba(78,78,136,0.15);">Info</span>
+            <h3 class="annonce-title" style="margin-top: 8px;">Journée Mondiale des Sols — 5 Décembre</h3>
+            <p class="annonce-desc">L'AFES organise une journée nationale d'événements autour du thème « Sols et eau » pour l'édition 2026. Appel à contribution ouvert jusqu'au 15 octobre.</p>
+            <div class="annonce-meta">
+              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> France entière</div>
+              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> 5 Déc. 2026</div>
+              <div class="annonce-meta-item"><i class="fas fa-user"></i> AFES</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card annonce-card annonce-wrapper" data-type="demande">
+          <div class="annonce-type-icon type-demande"><i class="fas fa-handshake"></i></div>
+          <div class="annonce-body">
+            <span class="badge badge-terra mb-2" style="font-size: 10px;">Demande</span>
+            <h3 class="annonce-title">Co-encadrement thèse sur la séquestration carbone</h3>
+            <p class="annonce-desc">Équipe IRD Montpellier cherche un co-directeur de thèse en pédologie pour un projet sur la modélisation de la séquestration carbone dans les sols tropicaux.</p>
+            <div class="annonce-meta">
+              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Montpellier</div>
+              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Rentrée 2026</div>
+              <div class="annonce-meta-item"><i class="fas fa-user"></i> A. Brauman</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card annonce-card annonce-wrapper" data-type="offre">
+          <div class="annonce-type-icon type-offre"><i class="fas fa-book"></i></div>
+          <div class="annonce-body">
+            <span class="badge badge-olive mb-2" style="font-size: 10px;">Offre</span>
+            <h3 class="annonce-title">Don de collection de guides AFES (vieux numéros EGS)</h3>
+            <p class="annonce-desc">Pédologue en retraite propose une collection complète des numéros 1 à 25 de la revue Étude et Gestion des Sols. Retrait sur place uniquement.</p>
+            <div class="annonce-meta">
+              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Orléans</div>
+              <div class="annonce-meta-item"><i class="fas fa-user"></i> D. Baize</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Post CTA -->
+      <div class="text-center mt-8">
+        <div class="glass-card no-hover" style="display: inline-block; padding: 24px 48px; border: 2px dashed var(--border-strong); background: transparent;">
+          <i class="fas fa-plus-circle" style="font-size: 28px; color: var(--primary); margin-bottom: 12px;"></i>
+          <h4>Déposer une annonce</h4>
+          <p class="text-muted text-sm mb-4" style="max-width: 100%;">Connectez-vous sur e-sol.fr pour publier votre propre annonce.</p>
+          <a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    const filterBtns = document.querySelectorAll('.type-filter-btn');
+    const annonces = document.querySelectorAll('.annonce-wrapper');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const type = btn.dataset.type;
+        annonces.forEach(a => {
+          a.classList.toggle('hidden', type !== 'all' && a.dataset.type !== type);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

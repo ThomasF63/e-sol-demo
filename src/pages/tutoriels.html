@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Ressources & Tutoriels — e-Sol</title>
+  <style>
+    .tuto-card {
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .tuto-thumb {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .tuto-thumb i {
+      font-size: 48px;
+      opacity: 0.7;
+    }
+
+    .tuto-thumb .tuto-level {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+    }
+
+    .tuto-body {
+      padding: 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tuto-body h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .tuto-body p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      flex-grow: 1;
+      margin-bottom: 16px;
+      max-width: 100%;
+    }
+
+    .tuto-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .tuto-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .level-debutant { background: rgba(88,99,48,0.1); color: var(--secondary); }
+    .level-intermediaire { background: rgba(156,63,0,0.1); color: var(--primary); }
+    .level-avance { background: rgba(78,78,136,0.1); color: var(--cat-politique); }
+
+    /* FAQ section */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-main);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .faq-question:hover { color: var(--primary); }
+
+    .faq-question i {
+      transition: transform 0.3s var(--ease-out);
+      font-size: 14px;
+      color: var(--text-subtle);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease-out), padding 0.35s ease;
+      padding: 0;
+    }
+
+    .faq-answer.open {
+      max-height: 500px;
+      padding-bottom: 20px;
+    }
+
+    .faq-answer p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 100%;
+    }
+
+    .faq-item.open .faq-question i { transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-olive mb-4">Apprendre</span>
+      <h1>Ressources & Tutoriels</h1>
+      <p>Guides pas-à-pas pour maîtriser la plateforme e-Sol et tirer le meilleur parti du réseau.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid">
+
+        <div class="col-span-4">
+          <div class="glass-card tuto-card">
+            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));">
+              <i class="fas fa-user-plus" style="color: var(--primary);"></i>
+              <span class="badge level-debutant tuto-level" style="font-size: 10px;">Débutant</span>
+            </div>
+            <div class="tuto-body">
+              <h3>Créer un compte et compléter son profil</h3>
+              <p>Comment s'inscrire sur e-Sol, remplir son profil, et se présenter à la communauté pour être visible dans l'annuaire.</p>
+              <div class="tuto-meta">
+                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 5 min</div>
+                <div class="tuto-meta-item"><i class="fas fa-video"></i> Vidéo + Texte</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="glass-card tuto-card">
+            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--secondary-10), rgba(88,99,48,0.05));">
+              <i class="fas fa-users-viewfinder" style="color: var(--secondary);"></i>
+              <span class="badge level-debutant tuto-level" style="font-size: 10px;">Débutant</span>
+            </div>
+            <div class="tuto-body">
+              <h3>Rejoindre une communauté thématique</h3>
+              <p>Découvrez les 12 communautés existantes et apprenez comment devenir membre actif de celle qui correspond à vos intérêts.</p>
+              <div class="tuto-meta">
+                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 3 min</div>
+                <div class="tuto-meta-item"><i class="fas fa-file-lines"></i> Texte</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="glass-card tuto-card">
+            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--cat-politique-bg), rgba(78,78,136,0.05));">
+              <i class="fas fa-comments" style="color: var(--cat-politique);"></i>
+              <span class="badge level-debutant tuto-level" style="font-size: 10px;">Débutant</span>
+            </div>
+            <div class="tuto-body">
+              <h3>Utiliser le Forum e-Sol</h3>
+              <p>Comment naviguer dans le forum, ouvrir une nouvelle discussion, répondre aux sujets et suivre les conversations.</p>
+              <div class="tuto-meta">
+                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 5 min</div>
+                <div class="tuto-meta-item"><i class="fas fa-video"></i> Vidéo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="glass-card tuto-card">
+            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--cat-education-bg), rgba(112,87,64,0.05));">
+              <i class="fas fa-file-circle-plus" style="color: var(--cat-education);"></i>
+              <span class="badge level-intermediaire tuto-level" style="font-size: 10px;">Intermédiaire</span>
+            </div>
+            <div class="tuto-body">
+              <h3>Partager un document ou une ressource</h3>
+              <p>Publiez un guide, un jeu de données, un retour d'expérience et créez un nouveau Commun pour le réseau.</p>
+              <div class="tuto-meta">
+                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 8 min</div>
+                <div class="tuto-meta-item"><i class="fas fa-file-lines"></i> Texte</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="glass-card tuto-card">
+            <div class="tuto-thumb" style="background: linear-gradient(135deg, rgba(136,80,96,0.1), rgba(136,80,96,0.03));">
+              <i class="fas fa-bullhorn" style="color: var(--cat-culture);"></i>
+              <span class="badge level-intermediaire tuto-level" style="font-size: 10px;">Intermédiaire</span>
+            </div>
+            <div class="tuto-body">
+              <h3>Déposer une petite annonce</h3>
+              <p>Comment publier une offre de stage, une demande de matériel ou un événement via le système d'annonces e-Sol.</p>
+              <div class="tuto-meta">
+                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 4 min</div>
+                <div class="tuto-meta-item"><i class="fas fa-file-lines"></i> Texte</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="glass-card tuto-card">
+            <div class="tuto-thumb" style="background: linear-gradient(135deg, rgba(140,113,102,0.12), rgba(140,113,102,0.04));">
+              <i class="fas fa-gear" style="color: var(--cat-institutionnel);"></i>
+              <span class="badge level-avance tuto-level" style="font-size: 10px;">Avancé</span>
+            </div>
+            <div class="tuto-body">
+              <h3>Administrer une communauté</h3>
+              <p>Guide pour les animateurs : gérer les membres, modérer le contenu, configurer les outils et les espaces de la communauté.</p>
+              <div class="tuto-meta">
+                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 15 min</div>
+                <div class="tuto-meta-item"><i class="fas fa-video"></i> Vidéo + Texte</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-alt">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">FAQ</span>
+        <h2>Questions Fréquentes</h2>
+      </div>
+
+      <div class="glass-card no-hover" style="padding: 8px 32px;">
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Qui peut s'inscrire sur e-Sol ?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Toute personne intéressée par les sols est la bienvenue : chercheurs, étudiants, ingénieurs, consultants, agriculteurs, naturalistes, enseignants, citoyens engagés. L'inscription est gratuite et ouverte.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Comment rejoindre une communauté ?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Une fois inscrit, rendez-vous sur la page de la communauté qui vous intéresse et cliquez sur « Rejoindre ». Vous aurez alors accès aux documents partagés et aux discussions du groupe.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Qu'est-ce qu'un « Commun » e-Sol ?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Un Commun est une ressource créée collectivement et partagée librement : base de données, protocole de terrain, kit pédagogique, carte collaborative. Chaque membre peut proposer et contribuer à un Commun.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            La plateforme est-elle liée à l'AFES ?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Oui, e-Sol est porté par l'AFES (Association Française pour l'Étude du Sol). Le réseau bénéficie de l'expertise et du réseau institutionnel de l'AFES tout en restant un espace ouvert et indépendant.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Comment proposer une nouvelle communauté ?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Utilisez le formulaire de contact ou ouvrez une discussion sur le forum. Tout membre peut proposer une nouvelle thématique. La création est soumise à la validation du comité de pilotage pour s'assurer de la cohérence avec les objectifs du réseau.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+</body>
+</html>

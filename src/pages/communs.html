@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Les Communs e-Sol — Ressources Partagées</title>
+  <style>
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 9px 20px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-10);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(156, 63, 0, 0.2);
+    }
+
+    .commun-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .commun-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .commun-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .commun-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .commun-card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.65;
+      flex-grow: 1;
+      margin-bottom: 24px;
+      max-width: 100%;
+    }
+
+    .commun-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .commun-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .commun-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .status-badge {
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-display);
+    }
+
+    .status-actif {
+      background: rgba(88, 99, 48, 0.1);
+      color: var(--secondary);
+    }
+
+    .status-revision {
+      background: rgba(156, 63, 0, 0.1);
+      color: var(--primary);
+    }
+
+    .status-brouillon {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text-subtle);
+    }
+
+    .commun-card-wrapper.hidden { display: none; }
+
+    .results-count {
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 14px;
+      color: var(--text-subtle);
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-olive mb-4">Ressources Partagées</span>
+      <h1>Les Communs e-Sol</h1>
+      <p>Outils, bases de données, guides et ressources créés collectivement par la communauté. Tout est en accès libre.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="filter-bar" id="filter-bar"></div>
+      <div class="results-count" id="results-count"></div>
+      <div class="bento-grid" id="communs-grid"></div>
+    </div>
+  </section>
+
+  <!-- Propose CTA -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="glass-card no-hover flex items-center justify-between gap-8" style="border: 2px dashed var(--border-strong); padding: 32px 40px; flex-wrap: wrap;">
+        <div class="flex items-center gap-6">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--secondary-10); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 4px;">Proposer un nouveau Commun</h3>
+            <p class="text-muted" style="font-size: 0.95rem; max-width: 500px;">Vous avez un outil, un jeu de données, un guide à partager ? Créez un nouveau Commun pour le réseau.</p>
+          </div>
+        </div>
+        <a href="participer.html" class="btn btn-secondary">Contribuer <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    fetch('data/communs.json')
+      .then(r => r.json())
+      .then(communs => {
+        const categories = [...new Set(communs.map(c => c.category))];
+
+        // Filters
+        const filterBar = document.getElementById('filter-bar');
+        filterBar.innerHTML = `
+          <button class="filter-btn active" data-cat="all">Tous</button>
+          ${categories.map(cat => `<button class="filter-btn" data-cat="${cat}">${cat}</button>`).join('')}
+        `;
+
+        // Cards
+        const grid = document.getElementById('communs-grid');
+        grid.innerHTML = communs.map(c => {
+          const statusClass = c.status === 'Actif' ? 'status-actif' : c.status === 'En révision' ? 'status-revision' : 'status-brouillon';
+          return `
+          <div class="col-span-4 commun-card-wrapper" data-category="${c.category}">
+            <div class="glass-card commun-card">
+              <div class="commun-card-header">
+                <div class="commun-icon" style="background: ${c.categoryBg}; color: ${c.categoryColor};">
+                  <i class="fas ${c.categoryIcon}"></i>
+                </div>
+                <span class="badge" style="background: ${c.categoryBg}; color: ${c.categoryColor}; border: 1px solid ${c.categoryColor}25; font-size: 10px;">
+                  ${c.category}
+                </span>
+              </div>
+              <h3>${c.title}</h3>
+              <p>${c.description}</p>
+              <div class="commun-footer">
+                <div class="commun-meta">
+                  <div class="commun-meta-item">
+                    <i class="fas fa-users" style="color: ${c.categoryColor};"></i>
+                    ${c.contributors} contrib.
+                  </div>
+                  <span class="status-badge ${statusClass}">${c.status}</span>
+                </div>
+                <a href="commun-detail.html?c=${c.id}" class="btn btn-ghost btn-sm" style="color: ${c.categoryColor};">
+                  Accéder <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+
+        updateCount(communs.length);
+
+        // Filter logic
+        filterBar.addEventListener('click', e => {
+          const btn = e.target.closest('.filter-btn');
+          if (!btn) return;
+          filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const cat = btn.dataset.cat;
+          let visible = 0;
+          grid.querySelectorAll('.commun-card-wrapper').forEach(card => {
+            const show = cat === 'all' || card.dataset.category === cat;
+            card.classList.toggle('hidden', !show);
+            if (show) visible++;
+          });
+          updateCount(visible);
+        });
+
+        function updateCount(n) {
+          document.getElementById('results-count').textContent =
+            n === communs.length ? `${n} communs disponibles` : `${n} commun${n > 1 ? 's' : ''} dans cette catégorie`;
+        }
+      });
+  </script>
+
+</body>
+</html>
