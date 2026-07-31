@@ -21,7 +21,10 @@ function build() {
   console.log(`Loaded ${Object.keys(components).length} components: ${Object.keys(components).join(', ')}`);
 
   // Process pages
-  if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, { recursive: true });
+  // On repart d'un dist/ vide : sinon les fichiers supprimés des sources
+  // (ex. un .png remplacé par un .webp) y subsistent et faussent le manifeste.
+  if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true, force: true });
+  fs.mkdirSync(distDir, { recursive: true });
 
   for (const file of fs.readdirSync(srcPages)) {
     if (!file.endsWith('.html')) continue;
