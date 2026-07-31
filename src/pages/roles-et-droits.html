@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Rôles et droits · e-Sol</title>
+
+  <!-- Mermaid for the role diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+  <style>
+    /* ---- Illustration frame (same spirit as maison-esol) ---- */
+    .roles-illustration {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+      background: linear-gradient(180deg, #fffcf7 0%, var(--bg-surface) 100%);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+    }
+
+    .roles-illustration svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .illustration-note {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      text-align: center;
+      margin-top: 14px;
+      font-style: italic;
+    }
+
+    /* ---- Status callout ---- */
+    .status-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-strong);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .status-note i { color: var(--primary); }
+
+    /* ---- Five levels strip ---- */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 1080px) { .levels-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px)  { .levels-grid { grid-template-columns: 1fr; } }
+
+    .level-card {
+      padding: 22px 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .level-chip {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      color: #fdfbf9;
+      flex-shrink: 0;
+    }
+
+    .level-card h3 {
+      font-size: 1.02rem;
+      line-height: 1.25;
+    }
+
+    .level-card p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      max-width: 100%;
+      flex-grow: 1;
+    }
+
+    .level-card .level-access {
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+
+    .level-card .level-access strong {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .level-1 { border-top: 3px solid #8c7166; }
+    .level-2 { border-top: 3px solid #4e4e88; }
+    .level-3 { border-top: 3px solid #9c3f00; }
+    .level-4 { border-top: 3px solid #586330; }
+    .level-5 { border-top: 3px solid #7a3000; }
+
+    .footnote {
+      font-size: 0.82rem;
+      color: var(--text-subtle);
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    /* ---- Mermaid frames ---- */
+    .gov-frame {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+
+    .gov-frame .mermaid {
+      display: flex;
+      justify-content: center;
+      min-width: 600px;
+    }
+
+    .gov-note {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      text-align: center;
+      margin-top: 16px;
+      font-style: italic;
+    }
+
+    /* ---- Curseur cards ---- */
+    .curseur-card {
+      padding: 26px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .curseur-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .curseur-card h4 { font-size: 1.05rem; }
+
+    .curseur-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    .curseur-card .curseur-options {
+      font-size: 0.82rem;
+      color: var(--text-subtle);
+    }
+
+    /* ---- Pending list ---- */
+    .pending-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .pending-card li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .pending-card li i {
+      color: var(--primary);
+      margin-top: 4px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 700px) {
+      .gov-frame { padding: 24px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <!-- ============== HERO ============== -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Comprendre e-Sol</span>
+      <h1>Rôles et droits : qui peut faire quoi ?</h1>
+      <p>Cinq niveaux de participation, des droits qui s'additionnent, et des communautés qui gardent la main sur leur fonctionnement interne.</p>
+      <div class="status-note">
+        <i class="fas fa-circle-info"></i>
+        <span>Référentiel proposé le 30/07/2026, en cours de validation par l'équipe d'animation. Les points marqués * restent à trancher.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== INFOGRAPHIE ============== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="roles-illustration">
+        {{> illustration-roles }}
+      </div>
+      <p class="illustration-note">L'escalier des rôles : on monte marche par marche, sans jamais perdre les droits des marches précédentes. Sur e-sol.fr, ce visuel sera publié en image (export PNG depuis le dépôt).</p>
+    </div>
+  </section>
+
+  <!-- ============== LES 5 NIVEAUX EN BREF ============== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Les cinq niveaux</span>
+        <h2>De la simple visite à l'administration</h2>
+        <p>Chaque niveau conserve tout ce que permet le précédent, et ajoute ses propres possibilités.</p>
+      </div>
+
+      <div class="levels-grid">
+
+        <div class="glass-card level-card level-1 no-hover">
+          <div class="level-chip" style="background: #8c7166;">1</div>
+          <h3>Visiteur·euse non inscrit·e</h3>
+          <p>Consulte tout ce qui est public : pages, annuaire, communautés, Espace Actions, forum en lecture.</p>
+          <div class="level-access"><strong>Accès :</strong> aucun compte requis.</div>
+        </div>
+
+        <div class="glass-card level-card level-2 no-hover">
+          <div class="level-chip" style="background: #4e4e88;">2</div>
+          <h3>Membre inscrit·e</h3>
+          <p>A sa fiche dans l'annuaire, commente, crée des fiches action, dépose des annonces, rejoint des communautés.</p>
+          <div class="level-access"><strong>Accès :</strong> formulaire d'inscription, gratuit et immédiat.</div>
+        </div>
+
+        <div class="glass-card level-card level-3 no-hover">
+          <div class="level-chip" style="background: #9c3f00;">3</div>
+          <h3>Membre d'une communauté</h3>
+          <p>Participe aux espaces de ses communautés : documents partagés, discussions, sous-pages, cercle restreint s'il est activé *.</p>
+          <div class="level-access"><strong>Accès :</strong> bouton « Rejoindre » ou demande à l'animateur·rice, selon la communauté.</div>
+        </div>
+
+        <div class="glass-card level-card level-4 no-hover">
+          <div class="level-chip" style="background: #586330;">4</div>
+          <h3>Animateur·rice de communauté</h3>
+          <p>Accueille les nouveaux, valide les adhésions, édite les pages de sa communauté, modère son périmètre.</p>
+          <div class="level-access"><strong>Accès :</strong> désigné·e par sa communauté (cadre à préciser *).</div>
+        </div>
+
+        <div class="glass-card level-card level-5 no-hover">
+          <div class="level-chip" style="background: #7a3000;">5</div>
+          <h3>Administrateur·rice de la plateforme</h3>
+          <p>Gère les comptes, les groupes, les droits d'accès et les formulaires. Dernier recours technique du site.</p>
+          <div class="level-access"><strong>Accès :</strong> groupe @admins, sur décision AFES / COPIL *.</div>
+        </div>
+
+      </div>
+
+      <p class="footnote">* proposition, à valider · le détail droit par droit (avec la faisabilité YesWiki) est dans le référentiel des rôles et droits.</p>
+    </div>
+  </section>
+
+  <!-- ============== DANS UNE COMMUNAUTÉ ============== -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Dans une communauté</span>
+        <h2>Trois positions, réglables par chaque communauté</h2>
+        <p>Membre, membre du cercle restreint, animateur·rice : un modèle paramétrable, pensé comme un outil de décision pour les animateur·rices, pas comme une règle imposée.</p>
+      </div>
+
+      <div class="gov-frame">
+        <div class="mermaid">
+flowchart LR
+    M(["Membre de la&lt;br/&gt;communauté"])
+    CR(["Membre du&lt;br/&gt;cercle restreint*"])
+    AN(["Animateur·rice"])
+
+    subgraph PARTAGE["ESPACES PARTAGÉS · tous les membres de la communauté"]
+      direction LR
+      E1["Pages et documents&lt;br/&gt;de la communauté"]
+      E2["Discussions ·&lt;br/&gt;catégorie de forum"]
+    end
+    subgraph CERCLE["CERCLE RESTREINT · seulement si la communauté l'active*"]
+      direction LR
+      R1["Pages réservées ·&lt;br/&gt;documents de travail"]
+    end
+    subgraph ANIM["ANIMATION · réservé aux animateur·rices"]
+      direction LR
+      G1["Adhésions · réglages ·&lt;br/&gt;modération du périmètre"]
+    end
+
+    M --&gt; PARTAGE
+    CR --&gt; PARTAGE
+    CR --&gt; CERCLE
+    AN --&gt; PARTAGE
+    AN --&gt; CERCLE
+    AN ==&gt; ANIM
+
+    classDef people fill:#eeeef8,stroke:#4e4e88,color:#3d3d5c
+    classDef espace fill:#fdfbf9,stroke:#b09570,color:#1a1512
+
+    class M,CR,AN people
+    class E1,E2,R1,G1 espace
+
+    style PARTAGE fill:#f6faea,stroke:#586330,stroke-width:1.2px,color:#3d4d1f
+    style CERCLE fill:#f5edf2,stroke:#885060,stroke-width:1.2px,stroke-dasharray:6 4,color:#5a3038
+    style ANIM fill:#ffdbcc,stroke:#9c3f00,stroke-width:1.2px,color:#7a3000
+        </div>
+        <p class="gov-note">Les trois cadres sont l'intérieur d'une même communauté ; une flèche se lit « a accès à ». Le cadre en pointillés est optionnel : une communauté sans cercle restreint fonctionne très bien avec deux positions seulement.</p>
+      </div>
+
+      <div class="bento-grid mt-6">
+        <div class="col-span-4">
+          <div class="glass-card curseur-card no-hover">
+            <div class="curseur-icon" style="background: var(--primary-10); color: var(--primary);">
+              <i class="fas fa-door-open"></i>
+            </div>
+            <h4>Curseur 1 · Régime d'adhésion</h4>
+            <p>Qui entre, et comment ?</p>
+            <div class="curseur-options">Ouvert (« Rejoindre » immédiat) ou sur validation (demande à l'animateur·rice).</div>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card curseur-card no-hover">
+            <div class="curseur-icon" style="background: var(--cat-culture-bg); color: var(--cat-culture);">
+              <i class="fas fa-circle-half-stroke"></i>
+            </div>
+            <h4>Curseur 2 · Cercle restreint</h4>
+            <p>Un espace de travail réservé, en plus des espaces partagés ?</p>
+            <div class="curseur-options">Activé (pages et documents réservés à un groupe) ou non activé.</div>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card curseur-card no-hover">
+            <div class="curseur-icon" style="background: var(--secondary-10); color: var(--secondary);">
+              <i class="fas fa-pen-to-square"></i>
+            </div>
+            <h4>Curseur 3 · Écriture des pages</h4>
+            <p>Qui peut modifier les pages de la communauté ?</p>
+            <div class="curseur-options">Animateur·rices seulement, ou tous les membres de la communauté.</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="footnote">Ces réglages reposent sur des groupes et des droits d'accès natifs YesWiki. Leur mise en place passe aujourd'hui par un·e admin de la plateforme.</p>
+    </div>
+  </section>
+
+  <!-- ============== SCHÉMA D'ENSEMBLE (EXPORTABLE) ============== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Version schéma</span>
+        <h2>Les cinq niveaux, en un seul emboîtement</h2>
+        <p>La même information que l'escalier, en cadres emboîtés : chaque niveau contient le précédent. C'est la version exportée en image pour le wiki.</p>
+      </div>
+
+      <div class="gov-frame">
+        <div class="mermaid">
+%%{init: {"flowchart": {"rankSpacing": 26, "nodeSpacing": 30, "padding": 8}}}%%
+flowchart TB
+    subgraph NIV5["5 · ADMINISTRATEUR·RICE DE LA PLATEFORME"]
+      direction TB
+      D5["+ comptes, groupes et droits d'accès&lt;br/&gt;+ formulaires et statuts reconnus&lt;br/&gt;+ peut tout éditer ou supprimer (dernier recours)"]
+      subgraph NIV4["4 · ANIMATEUR·RICE DE COMMUNAUTÉ"]
+        direction TB
+        D4["+ accueille et valide les adhésions&lt;br/&gt;+ édite les pages de sa communauté&lt;br/&gt;+ active ou non le cercle restreint*&lt;br/&gt;+ modère son périmètre"]
+        subgraph NIV3["3 · MEMBRE D'UNE COMMUNAUTÉ"]
+          direction TB
+          D3["+ espaces de ses communautés :&lt;br/&gt;documents, discussions, sous-pages&lt;br/&gt;+ cercle restreint si activé*"]
+          subgraph NIV2["2 · MEMBRE INSCRIT·E"]
+            direction TB
+            D2["+ sa fiche annuaire, commentaires&lt;br/&gt;+ fiches action, petites annonces&lt;br/&gt;+ rejoint des communautés"]
+            subgraph NIV1["1 · VISITEUR·EUSE NON INSCRIT·E"]
+              D1["consulte les pages publiques et l'annuaire&lt;br/&gt;lit le forum · peut s'inscrire"]
+            end
+          end
+        end
+      end
+    end
+
+    D5 ~~~ NIV4
+    D4 ~~~ NIV3
+    D3 ~~~ NIV2
+    D2 ~~~ NIV1
+
+    classDef droits fill:#fdfbf9,stroke:#b09570,color:#1a1512,stroke-width:1px
+    class D1,D2,D3,D4,D5 droits
+
+    style NIV1 fill:#fdfbf9,stroke:#8c7166,stroke-width:1.5px,color:#1a1512
+    style NIV2 fill:#eeeef8,stroke:#4e4e88,stroke-width:1.5px,color:#3d3d5c
+    style NIV3 fill:#ffdbcc,stroke:#9c3f00,stroke-width:1.5px,color:#7a3000
+    style NIV4 fill:#dbe9a9,stroke:#586330,stroke-width:1.5px,color:#3d4d1f
+    style NIV5 fill:#9c3f00,stroke:#7a3000,stroke-width:2px,color:#fdfbf9
+        </div>
+        <p class="gov-note">Schéma versionné dans le dépôt (source Mermaid éditable) ; sur e-sol.fr il sera téléversé en PNG, comme le schéma de gouvernance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== POINTS EN ATTENTE ============== -->
+  <section class="section section-alt">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="badge badge-neutral mb-4">Transparence</span>
+        <h2>Ce qui reste à trancher</h2>
+        <p>Ce référentiel est une proposition. Les principaux points encore ouverts :</p>
+      </div>
+
+      <div class="glass-card pending-card no-hover">
+        <ul>
+          <li><i class="fas fa-comment-dots"></i><span><strong>Le mot pour le rôle d'animation</strong> : animateur·rice, référent·e ou coordinateur·rice ? Un seul terme, partout.</span></li>
+          <li><i class="fas fa-eye"></i><span><strong>La visibilité de l'annuaire et des fiches</strong> : aujourd'hui tout est public ; faut-il réserver certains détails aux inscrit·es ?</span></li>
+          <li><i class="fas fa-door-open"></i><span><strong>Le régime d'adhésion par défaut</strong> des communautés : ouvert ou sur validation ?</span></li>
+          <li><i class="fas fa-certificate"></i><span><strong>Les statuts reconnus</strong> : passer de l'auto-déclaration à une attribution attestée, et confirmer les deux nouveaux statuts demandés.</span></li>
+          <li><i class="fas fa-users-gear"></i><span><strong>La gestion déléguée des groupes</strong> : permettre aux animateur·rices de tenir la liste de leur communauté sans être admin du site (question technique clef).</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CTA ============== -->
+  <section class="section-sm">
+    <div class="container text-center">
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="maison-esol.html" class="btn btn-outline"><i class="fas fa-house-chimney"></i> La maison e-Sol</a>
+        <a href="communautes.html" class="btn btn-secondary"><i class="fas fa-people-roof"></i> Voir les communautés</a>
+        <a href="inscription.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> S'inscrire</a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        fontFamily: 'Outfit, sans-serif',
+        fontSize: '14px',
+        primaryColor: '#fdfbf9',
+        primaryTextColor: '#1a1512',
+        primaryBorderColor: '#9c3f00',
+        lineColor: '#9c3f00',
+        secondaryColor: '#dbe9a9',
+        tertiaryColor: '#f5edf2'
+      },
+      flowchart: {
+        curve: 'basis',
+        nodeSpacing: 35,
+        rankSpacing: 60,
+        padding: 12
+      }
+    });
+  </script>
+
+</body>
+</html>

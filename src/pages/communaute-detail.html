@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   {{> head }}
+  <title>Communauté · e-Sol</title>
   <style>
     .detail-hero {
       padding: calc(var(--header-height) + 48px) 0 0;
@@ -404,9 +405,13 @@
         avatar.innerHTML = '<i class="fas ' + c.icon + '"></i>';
         avatar.style.color = c.categoryColor;
 
-        // Update hero background
-        document.getElementById('hero-bg').style.background =
-          'linear-gradient(135deg, ' + c.categoryColor + '15, ' + c.categoryColor + '05)';
+        // Update hero background — community image with subtle bottom gradient for legibility
+        const heroBg = document.getElementById('hero-bg');
+        heroBg.style.backgroundImage =
+          "linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.35) 100%), url('img/communities/" + c.id + ".png')";
+        heroBg.style.backgroundSize = 'cover, cover';
+        heroBg.style.backgroundPosition = 'center, center';
+        heroBg.style.backgroundRepeat = 'no-repeat, no-repeat';
 
         // Update link
         document.getElementById('link-live').href = c.liveUrl;

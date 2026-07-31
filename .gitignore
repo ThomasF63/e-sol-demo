@@ -13,3 +13,10 @@ dist/
 
 # Logs
 *.log
+
+# Secrets
+.env
+.env.local
+
+# Réglages locaux Claude Code
+.claude/settings.local.json

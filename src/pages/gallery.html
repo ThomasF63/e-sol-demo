@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>e-Sol — Galerie d'images (revue de pack)</title>
+  <style>
+    body { background: var(--bg-warm); }
+
+    .gallery-shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .gallery-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .gallery-header h1 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      margin-bottom: 8px;
+    }
+
+    .gallery-header .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 60ch;
+    }
+
+    .gallery-header .meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-weight: 600;
+    }
+
+    .meta-pill strong {
+      color: var(--primary);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .reload-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+    }
+    .reload-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(156, 63, 0, 0.25); }
+    .reload-btn:active { transform: translateY(0); }
+    .reload-btn i { font-size: 11px; }
+
+    .category-section { margin-bottom: 56px; }
+
+    .category-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border-strong);
+    }
+
+    .category-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--text-main);
+      text-transform: capitalize;
+    }
+
+    .category-count {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .category-desc {
+      font-size: 13px;
+      color: var(--text-subtle);
+      margin-left: auto;
+      max-width: 50%;
+      text-align: right;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .image-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: zoom-in;
+      transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+      display: flex;
+      flex-direction: column;
+    }
+    .image-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .image-thumb {
+      aspect-ratio: 1 / 1;
+      background: var(--bg-warm-deep) center/cover no-repeat;
+      position: relative;
+    }
+    .image-thumb.is-hero { aspect-ratio: 16 / 9; }
+    .image-thumb.is-texture { aspect-ratio: 4 / 3; }
+
+    .image-meta {
+      padding: 10px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .image-id {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-main);
+      word-break: break-word;
+      line-height: 1.3;
+    }
+
+    .image-sub {
+      font-size: 11px;
+      color: var(--text-subtle);
+    }
+
+    .empty-state {
+      padding: 60px;
+      text-align: center;
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+    }
+    .empty-state code {
+      background: var(--bg-warm-deep);
+      padding: 2px 8px;
+      border-radius: var(--radius-xs);
+      font-size: 12px;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed; inset: 0;
+      background: rgba(20, 16, 14, 0.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .lightbox.open { opacity: 1; pointer-events: auto; }
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 80vh;
+      border-radius: var(--radius-md);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .lightbox-info {
+      position: absolute;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-family: var(--font-display);
+      font-size: 14px;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 24px; right: 24px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+  </style>
+</head>
+<body>
+
+  <div class="gallery-shell">
+
+    <header class="gallery-header">
+      <div>
+        <h1>Galerie d'images <span style="color: var(--text-subtle); font-weight: 400; font-size: 0.7em;">— revue de pack</span></h1>
+        <p class="subtitle">Vue d'ensemble de toutes les images générées (échantillons, pack complet, communautés). Cliquez pour zoomer. Cette page est locale, jamais déployée.</p>
+      </div>
+      <div class="meta">
+        <span class="meta-pill" id="meta-total"><strong>—</strong> images</span>
+        <span class="meta-pill" id="meta-generated">généré : —</span>
+        <button class="reload-btn" id="btn-reload"><i class="fas fa-rotate"></i> Recharger</button>
+      </div>
+    </header>
+
+    <main id="gallery-main">
+      <div class="empty-state">Chargement du manifest…</div>
+    </main>
+
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Fermer">×</button>
+    <img id="lightbox-img" alt="">
+    <div class="lightbox-info" id="lightbox-info"></div>
+  </div>
+
+  <script>
+    const CATEGORY_LABELS = {
+      samples:     { title: 'Échantillons (Phase 1)',       desc: '3 images pour verrouiller le style graphique avant le pack complet.' },
+      heroes:      { title: 'Héros / bannières',            desc: 'Compositions 16:9 pour le haut des pages principales du site.' },
+      sections:    { title: 'Illustrations thématiques',    desc: 'Pour les sections de contenu : éducation, recherche, charte, forum, partenariats…' },
+      textures:    { title: 'Textures / fonds',             desc: 'Motifs subtils à utiliser en background derrière les sections de texte.' },
+      hero:        { title: 'Anciens fonds de hero (démo)', desc: 'Backgrounds générés pour le hero de la démo — peuvent ou non être conservés.' },
+      communities: { title: 'Communautés (existantes)',     desc: 'Les 12 illustrations thématiques de communautés générées lors de la démo.' },
+    };
+
+    const CATEGORY_ORDER = ['samples', 'heroes', 'sections', 'textures', 'communities', 'hero'];
+
+    function thumbClassFor(category) {
+      if (category === 'heroes' || category === 'hero') return 'is-hero';
+      if (category === 'textures') return 'is-texture';
+      return '';
+    }
+
+    function buildCard(item) {
+      const card = document.createElement('div');
+      card.className = 'image-card';
+      card.dataset.url = item.url;
+      card.dataset.id = item.id;
+      card.innerHTML = `
+        <div class="image-thumb ${thumbClassFor(item.category)}" style="background-image: url('${item.url}?v=${item.mtime}');"></div>
+        <div class="image-meta">
+          <div class="image-id">${item.id}</div>
+          <div class="image-sub">${item.category} · ${item.sizeKB} KB</div>
+        </div>
+      `;
+      card.addEventListener('click', () => openLightbox(item));
+      return card;
+    }
+
+    function renderGallery(manifest) {
+      const main = document.getElementById('gallery-main');
+      main.innerHTML = '';
+
+      const presentCategories = CATEGORY_ORDER.filter(c => manifest.byCategory[c]?.length);
+      const extra = Object.keys(manifest.byCategory).filter(c => !CATEGORY_ORDER.includes(c));
+      const all = [...presentCategories, ...extra];
+
+      if (!all.length) {
+        main.innerHTML = `
+          <div class="empty-state">
+            Aucune image trouvée dans <code>dist/img/</code>.<br>
+            Lancez par exemple : <code>node scripts/generate-images.js sample</code> puis <code>node build.js</code>.
+          </div>`;
+        return;
+      }
+
+      for (const cat of all) {
+        const items = manifest.byCategory[cat] || [];
+        if (!items.length) continue;
+        const label = CATEGORY_LABELS[cat] || { title: cat, desc: '' };
+
+        const section = document.createElement('section');
+        section.className = 'category-section';
+        section.innerHTML = `
+          <header class="category-header">
+            <span class="category-title">${label.title}</span>
+            <span class="category-count">${items.length} image${items.length > 1 ? 's' : ''}</span>
+            <span class="category-desc">${label.desc}</span>
+          </header>
+          <div class="image-grid"></div>
+        `;
+        const grid = section.querySelector('.image-grid');
+        items.forEach(it => grid.appendChild(buildCard(it)));
+        main.appendChild(section);
+      }
+    }
+
+    function openLightbox(item) {
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = item.url + '?v=' + item.mtime;
+      document.getElementById('lightbox-info').textContent = `${item.id} — ${item.category} — ${item.sizeKB} KB`;
+      lb.classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+    async function loadManifest() {
+      try {
+        const res = await fetch('img/manifest.json?v=' + Date.now());
+        if (!res.ok) throw new Error('manifest.json absent (HTTP ' + res.status + ')');
+        const manifest = await res.json();
+        document.getElementById('meta-total').innerHTML = `<strong>${manifest.total}</strong> images`;
+        const d = new Date(manifest.generatedAt);
+        document.getElementById('meta-generated').textContent = 'généré : ' + d.toLocaleString('fr-FR');
+        renderGallery(manifest);
+      } catch (e) {
+        document.getElementById('gallery-main').innerHTML = `
+          <div class="empty-state">
+            Impossible de charger le manifest : ${e.message}<br>
+            Lancez <code>node build.js</code> pour le générer.
+          </div>`;
+      }
+    }
+
+    document.getElementById('btn-reload').addEventListener('click', loadManifest);
+    loadManifest();
+  </script>
+</body>
+</html>

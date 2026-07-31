@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   {{> head }}
+  <title>Les Communautés · e-Sol</title>
   <style>
     /* ---- Filter bar ---- */
     .filter-bar {
@@ -146,7 +147,12 @@
       <span class="badge badge-terra mb-4">S'impliquer</span>
       <h1>Les Communautés e-Sol</h1>
       <p>12 groupes thématiques pour échanger, partager et construire des projets autour de la connaissance et de la préservation des sols.</p>
+      <a href="qu-est-ce-qu-une-communaute.html" class="btn btn-outline btn-sm" style="margin-top: 24px;"><i class="fas fa-circle-question"></i> Qu'est-ce qu'une communauté&nbsp;?</a>
     </div>
+  </div>
+
+  <div class="container" style="max-width: 720px; margin: 0 auto 32px; padding: 0 24px;">
+    {{> illustration-communities }}
   </div>
 
   <section class="section-sm">
@@ -176,7 +182,10 @@
             <p class="text-muted" style="font-size: 0.95rem; max-width: 500px;">Vous avez une idée de thématique qui manque ? Proposez la création d'une nouvelle communauté e-Sol.</p>
           </div>
         </div>
-        <a href="contact.html" class="btn btn-primary">Nous écrire <i class="fas fa-arrow-right"></i></a>
+        <div class="flex gap-3 flex-wrap">
+          <a href="qu-est-ce-qu-une-communaute.html#proposer" class="btn btn-outline">Comment ça marche</a>
+          <a href="contact.html" class="btn btn-primary">Nous écrire <i class="fas fa-arrow-right"></i></a>
+        </div>
       </div>
     </div>
   </section>
@@ -203,7 +212,7 @@
           <div class="col-span-4 community-card-wrapper" data-category="${c.category}">
             <a href="communaute-detail.html?c=${c.id}" style="color: inherit; text-decoration: none;">
               <div class="glass-card community-card">
-                <div class="community-header" style="background: linear-gradient(135deg, ${c.categoryColor}18, ${c.categoryColor}05);">
+                <div class="community-header" style="background-image: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 100%), url('img/communities/${c.id}.png'); background-size: cover, cover; background-position: center, center; background-repeat: no-repeat, no-repeat; height: 160px;">
                   <div class="community-avatar" style="color: ${c.categoryColor};">
                     <i class="fas ${c.icon}"></i>
                   </div>

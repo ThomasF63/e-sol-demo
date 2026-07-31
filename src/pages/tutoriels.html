@@ -2,8 +2,143 @@
 <html lang="fr">
 <head>
   {{> head }}
-  <title>Ressources & Tutoriels — e-Sol</title>
+  <title>Centre de ressources · e-Sol</title>
   <style>
+    /* ============ Barre de recherche + filtres ============ */
+    .rc-toolbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .rc-search {
+      position: relative;
+      flex: 1 1 260px;
+      min-width: 220px;
+    }
+
+    .rc-search i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      font-size: 14px;
+    }
+
+    .rc-search input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .rc-search input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+
+    .rc-select {
+      padding: 11px 36px 11px 16px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 13.5px;
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239a8a82' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      transition: border 0.2s ease;
+    }
+
+    .rc-select:focus, .rc-select:hover { border-color: var(--primary); }
+    .rc-select.rc-active { border-color: var(--primary); color: var(--primary); background-color: var(--primary-10); }
+
+    .rc-results {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      min-height: 30px;
+    }
+
+    .rc-count {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .rc-reset {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--primary);
+      padding: 4px 8px;
+      border-radius: var(--radius-xs);
+    }
+
+    .rc-reset:hover { background: var(--primary-10); }
+    .rc-reset.visible { display: inline-flex; }
+
+    /* ============ Bandeau je débute ============ */
+    .rc-debut {
+      padding: 40px;
+      background: linear-gradient(135deg, #fffcf7 0%, var(--bg-elevated) 100%);
+      border: 1.5px solid var(--primary-20);
+    }
+
+    /* ============ Sections ============ */
+    .rc-section { margin-bottom: 44px; }
+    .rc-section.hidden { display: none; }
+
+    .rc-section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .rc-section-head h2 { font-size: 1.6rem; }
+
+    .rc-section-head .rc-section-count {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-subtle);
+    }
+
+    .rc-section-sub {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      margin-bottom: 22px;
+      max-width: 640px;
+    }
+
+    /* ============ Cartes ressources ============ */
+    .rc-card-link { text-decoration: none; display: block; height: 100%; }
+
     .tuto-card {
       padding: 0;
       overflow: hidden;
@@ -13,51 +148,68 @@
     }
 
     .tuto-thumb {
-      height: 180px;
+      height: 128px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
+      flex-shrink: 0;
     }
 
-    .tuto-thumb i {
-      font-size: 48px;
-      opacity: 0.7;
-    }
+    .tuto-thumb i { font-size: 40px; opacity: 0.75; }
 
     .tuto-thumb .tuto-level {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      top: 12px;
+      right: 12px;
+      font-size: 10px;
+    }
+
+    .tuto-thumb .tuto-serie {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-size: 10px;
     }
 
     .tuto-body {
-      padding: 24px;
+      padding: 20px 22px;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
     }
 
     .tuto-body h3 {
-      font-size: 1.15rem;
+      font-size: 1.08rem;
       margin-bottom: 8px;
+      color: var(--text-main);
     }
 
     .tuto-body p {
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.89rem;
       line-height: 1.6;
       flex-grow: 1;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       max-width: 100%;
+    }
+
+    .tuto-attente {
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .tuto-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
       border-top: 1px solid var(--border);
-      padding-top: 14px;
+      padding-top: 12px;
     }
 
     .tuto-meta-item {
@@ -72,15 +224,28 @@
     .level-intermediaire { background: rgba(156,63,0,0.1); color: var(--primary); }
     .level-avance { background: rgba(78,78,136,0.1); color: var(--cat-politique); }
 
-    /* FAQ section */
-    .faq-item {
-      border-bottom: 1px solid var(--border);
+    .rc-upcoming { opacity: 0.78; }
+    .rc-upcoming .tuto-thumb i { opacity: 0.45; }
+
+    /* ============ État vide ============ */
+    .rc-empty {
+      text-align: center;
+      padding: 70px 20px;
+      color: var(--text-subtle);
+      display: none;
     }
+    .rc-empty.visible { display: block; }
+    .rc-empty i { font-size: 36px; margin-bottom: 16px; opacity: 0.4; }
+
+    /* ============ FAQ ============ */
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
 
     .faq-question {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
       padding: 20px 0;
       cursor: pointer;
       font-family: var(--font-display);
@@ -121,6 +286,13 @@
     }
 
     .faq-item.open .faq-question i { transform: rotate(180deg); }
+
+    @media (max-width: 768px) {
+      .rc-toolbar { flex-direction: column; align-items: stretch; }
+      .rc-search { min-width: 100%; }
+      .rc-select { width: 100%; }
+      .rc-debut { padding: 28px; }
+    }
   </style>
 </head>
 <body>
@@ -130,127 +302,133 @@
   <div class="page-hero">
     <div class="container">
       <span class="badge badge-olive mb-4">Apprendre</span>
-      <h1>Ressources & Tutoriels</h1>
-      <p>Guides pas-à-pas pour maîtriser la plateforme e-Sol et tirer le meilleur parti du réseau.</p>
+      <h1>Centre de ressources</h1>
+      <p>Tutoriels, guides et repères pour la plateforme, le forum et les communs. Filtrez selon votre situation, ou cherchez directement.</p>
     </div>
   </div>
 
-  <section class="section-sm">
+  <!-- ============== RECHERCHE + FILTRES ============== -->
+  <section class="section-sm" style="padding-bottom: 0;">
     <div class="container">
-      <div class="bento-grid">
-
-        <div class="col-span-4">
-          <div class="glass-card tuto-card">
-            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));">
-              <i class="fas fa-user-plus" style="color: var(--primary);"></i>
-              <span class="badge level-debutant tuto-level" style="font-size: 10px;">Débutant</span>
-            </div>
-            <div class="tuto-body">
-              <h3>Créer un compte et compléter son profil</h3>
-              <p>Comment s'inscrire sur e-Sol, remplir son profil, et se présenter à la communauté pour être visible dans l'annuaire.</p>
-              <div class="tuto-meta">
-                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 5 min</div>
-                <div class="tuto-meta-item"><i class="fas fa-video"></i> Vidéo + Texte</div>
-              </div>
-            </div>
-          </div>
+      <div class="rc-toolbar">
+        <div class="rc-search">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="search" id="rc-search" placeholder="Chercher une ressource (ex. forum, profil, commun…)" aria-label="Chercher une ressource">
         </div>
-
-        <div class="col-span-4">
-          <div class="glass-card tuto-card">
-            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--secondary-10), rgba(88,99,48,0.05));">
-              <i class="fas fa-users-viewfinder" style="color: var(--secondary);"></i>
-              <span class="badge level-debutant tuto-level" style="font-size: 10px;">Débutant</span>
-            </div>
-            <div class="tuto-body">
-              <h3>Rejoindre une communauté thématique</h3>
-              <p>Découvrez les 12 communautés existantes et apprenez comment devenir membre actif de celle qui correspond à vos intérêts.</p>
-              <div class="tuto-meta">
-                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 3 min</div>
-                <div class="tuto-meta-item"><i class="fas fa-file-lines"></i> Texte</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-span-4">
-          <div class="glass-card tuto-card">
-            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--cat-politique-bg), rgba(78,78,136,0.05));">
-              <i class="fas fa-comments" style="color: var(--cat-politique);"></i>
-              <span class="badge level-debutant tuto-level" style="font-size: 10px;">Débutant</span>
-            </div>
-            <div class="tuto-body">
-              <h3>Utiliser le Forum e-Sol</h3>
-              <p>Comment naviguer dans le forum, ouvrir une nouvelle discussion, répondre aux sujets et suivre les conversations.</p>
-              <div class="tuto-meta">
-                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 5 min</div>
-                <div class="tuto-meta-item"><i class="fas fa-video"></i> Vidéo</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-span-4">
-          <div class="glass-card tuto-card">
-            <div class="tuto-thumb" style="background: linear-gradient(135deg, var(--cat-education-bg), rgba(112,87,64,0.05));">
-              <i class="fas fa-file-circle-plus" style="color: var(--cat-education);"></i>
-              <span class="badge level-intermediaire tuto-level" style="font-size: 10px;">Intermédiaire</span>
-            </div>
-            <div class="tuto-body">
-              <h3>Partager un document ou une ressource</h3>
-              <p>Publiez un guide, un jeu de données, un retour d'expérience et créez un nouveau Commun pour le réseau.</p>
-              <div class="tuto-meta">
-                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 8 min</div>
-                <div class="tuto-meta-item"><i class="fas fa-file-lines"></i> Texte</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-span-4">
-          <div class="glass-card tuto-card">
-            <div class="tuto-thumb" style="background: linear-gradient(135deg, rgba(136,80,96,0.1), rgba(136,80,96,0.03));">
-              <i class="fas fa-bullhorn" style="color: var(--cat-culture);"></i>
-              <span class="badge level-intermediaire tuto-level" style="font-size: 10px;">Intermédiaire</span>
-            </div>
-            <div class="tuto-body">
-              <h3>Déposer une petite annonce</h3>
-              <p>Comment publier une offre de stage, une demande de matériel ou un événement via le système d'annonces e-Sol.</p>
-              <div class="tuto-meta">
-                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 4 min</div>
-                <div class="tuto-meta-item"><i class="fas fa-file-lines"></i> Texte</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-span-4">
-          <div class="glass-card tuto-card">
-            <div class="tuto-thumb" style="background: linear-gradient(135deg, rgba(140,113,102,0.12), rgba(140,113,102,0.04));">
-              <i class="fas fa-gear" style="color: var(--cat-institutionnel);"></i>
-              <span class="badge level-avance tuto-level" style="font-size: 10px;">Avancé</span>
-            </div>
-            <div class="tuto-body">
-              <h3>Administrer une communauté</h3>
-              <p>Guide pour les animateurs : gérer les membres, modérer le contenu, configurer les outils et les espaces de la communauté.</p>
-              <div class="tuto-meta">
-                <div class="tuto-meta-item"><i class="fas fa-clock"></i> 15 min</div>
-                <div class="tuto-meta-item"><i class="fas fa-video"></i> Vidéo + Texte</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <select class="rc-select" id="rc-public" aria-label="Filtrer par public">
+          <option value="all">Tous publics</option>
+          <option value="nouveau">Je débute</option>
+          <option value="membre">Membre actif·ve</option>
+          <option value="animateur">Animateur·rice</option>
+        </select>
+        <select class="rc-select" id="rc-outil" aria-label="Filtrer par outil">
+          <option value="all">Tous les outils</option>
+          <option value="plateforme">Plateforme</option>
+          <option value="forum">Forum</option>
+          <option value="communs">Communs</option>
+          <option value="reseau">Le réseau</option>
+        </select>
+        <select class="rc-select" id="rc-niveau" aria-label="Filtrer par niveau">
+          <option value="all">Tous niveaux</option>
+          <option value="debutant">Débutant</option>
+          <option value="intermediaire">Intermédiaire</option>
+          <option value="avance">Avancé</option>
+        </select>
+        <select class="rc-select" id="rc-duree" aria-label="Filtrer par durée">
+          <option value="all">Toutes durées</option>
+          <option value="courte">5 min ou moins</option>
+          <option value="moyenne">6 à 10 min</option>
+          <option value="longue">Plus de 10 min</option>
+        </select>
+      </div>
+      <div class="rc-results">
+        <span class="rc-count" id="rc-count"></span>
+        <button class="rc-reset" id="rc-reset"><i class="fas fa-xmark"></i> Tout réafficher</button>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
+  <!-- ============== JE DÉBUTE, MIS EN AVANT ============== -->
+  <section class="section-sm" style="padding-top: 0;" id="rc-debut-wrap">
+    <div class="container">
+      <div class="glass-card no-hover rc-debut">
+        <div class="bento-grid" style="align-items: center;">
+          <div class="col-span-7">
+            <span class="badge badge-terra mb-3">Je débute</span>
+            <h2 style="margin-bottom: 12px;">Nouveau·elle sur e-Sol ? Commencez ici.</h2>
+            <p class="text-muted" style="font-size: 1.05rem; margin-bottom: 24px;">
+              Le guide <strong>Premiers pas</strong> vous installe en 5 étapes : profil, communautés, forum, charte, premier commun. Comptez 40 minutes, à étaler sans précipitation. Et pour situer qui fait quoi, visitez la maison e-Sol.
+            </p>
+            <div class="flex gap-3 flex-wrap">
+              <a href="premiers-pas.html" class="btn btn-primary"><i class="fas fa-shoe-prints"></i> Suivre les premiers pas</a>
+              <a href="maison-esol.html" class="btn btn-outline"><i class="fas fa-house-chimney"></i> Visiter la maison e-Sol</a>
+            </div>
+          </div>
+          <div class="col-span-5" style="display: flex; justify-content: center;">
+            <div style="max-width: 340px; width: 100%;">
+              {{> illustration-maison }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SECTIONS PAR SITUATION (rendues depuis data/ressources.json) ============== -->
+  <section class="section-sm" style="padding-top: 12px;">
+    <div class="container">
+
+      <div class="rc-section" id="section-nouveau">
+        <div class="rc-section-head">
+          <h2>Je débute</h2>
+          <span class="rc-section-count"></span>
+        </div>
+        <p class="rc-section-sub">Les premiers gestes, à la carte : créer son compte, rejoindre une communauté, entrer sur le forum.</p>
+        <div class="bento-grid rc-grid"></div>
+      </div>
+
+      <div class="rc-section" id="section-membre">
+        <div class="rc-section-head">
+          <h2>J'utilise au quotidien</h2>
+          <span class="rc-section-count"></span>
+        </div>
+        <p class="rc-section-sub">Participer aux conversations, partager des ressources, régler la plateforme à sa main.</p>
+        <div class="bento-grid rc-grid"></div>
+      </div>
+
+      <div class="rc-section" id="section-animateur">
+        <div class="rc-section-head">
+          <h2>J'anime</h2>
+          <span class="rc-section-count"></span>
+        </div>
+        <p class="rc-section-sub">Faire vivre sa communauté : animer son espace, accueillir, modérer, ouvrir de nouveaux chantiers.</p>
+        <div class="bento-grid rc-grid"></div>
+      </div>
+
+      <div class="rc-section" id="section-tous">
+        <div class="rc-section-head">
+          <h2>Comprendre e-Sol</h2>
+          <span class="rc-section-count"></span>
+        </div>
+        <p class="rc-section-sub">Les repères de fond, utiles à tout le monde : la maison, la charte, les rôles, le vocabulaire.</p>
+        <div class="bento-grid rc-grid"></div>
+      </div>
+
+      <div class="rc-empty" id="rc-empty">
+        <i class="fas fa-magnifying-glass"></i>
+        <h3>Aucune ressource ne correspond</h3>
+        <p class="text-muted">Essayez un autre mot-clef, élargissez les filtres, ou <a href="contact.html">dites-nous ce qui vous manque</a>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== FAQ ============== -->
   <section class="section section-alt">
     <div class="container container-narrow">
       <div class="section-header">
         <span class="badge badge-terra mb-4">FAQ</span>
-        <h2>Questions Fréquentes</h2>
+        <h2>Questions fréquentes</h2>
       </div>
 
       <div class="glass-card no-hover" style="padding: 8px 32px;">
@@ -270,7 +448,7 @@
             <i class="fas fa-chevron-down"></i>
           </button>
           <div class="faq-answer">
-            <p>Une fois inscrit, rendez-vous sur la page de la communauté qui vous intéresse et cliquez sur « Rejoindre ». Vous aurez alors accès aux documents partagés et aux discussions du groupe.</p>
+            <p>Une fois inscrit, rendez-vous sur la page de la communauté qui vous intéresse et cliquez sur « Rejoindre ». Vous aurez alors accès aux documents partagés et aux discussions du groupe. Le détail pas à pas est dans <a href="qu-est-ce-qu-une-communaute.html#rejoindre">Qu'est-ce qu'une communauté ?</a></p>
           </div>
         </div>
 
@@ -307,7 +485,176 @@
     </div>
   </section>
 
+  <!-- ============== SANS CUL-DE-SAC ============== -->
+  <section class="section">
+    <div class="container container-narrow text-center">
+      <span class="badge badge-olive mb-4">Et ensuite ?</span>
+      <h2 style="margin-bottom: 24px;">Vous ne trouvez pas votre bonheur ?</h2>
+      <p class="text-muted" style="margin: 0 auto 32px; font-size: 1.05rem;">Un mot vous échappe : direction le glossaire. Une manipulation manque à l'appel : dites-le nous, le centre s'enrichit au fil des besoins.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="glossaire.html" class="btn btn-outline"><i class="fas fa-book"></i> Ouvrir le glossaire</a>
+        <a href="retour.html" class="btn btn-primary"><i class="fas fa-message"></i> Proposer une ressource</a>
+        <a href="contact.html" class="btn btn-ghost">Nous contacter</a>
+      </div>
+    </div>
+  </section>
+
   {{> footer }}
+
+  <script>
+    (function() {
+      // ---- Apparence par outil (gradient de vignette + couleur d'icône) ----
+      const OUTILS = {
+        plateforme: { grad: 'linear-gradient(135deg, var(--primary-10), var(--secondary-10))', color: 'var(--primary)', label: 'Plateforme' },
+        forum:      { grad: 'linear-gradient(135deg, var(--cat-politique-bg), rgba(78,78,136,0.05))', color: 'var(--cat-politique)', label: 'Forum' },
+        communs:    { grad: 'linear-gradient(135deg, var(--secondary-10), rgba(88,99,48,0.05))', color: 'var(--secondary)', label: 'Communs' },
+        reseau:     { grad: 'linear-gradient(135deg, var(--cat-education-bg), rgba(112,87,64,0.05))', color: 'var(--cat-education)', label: 'Le réseau' }
+      };
+      const NIVEAUX = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };
+      const SECTIONS = ['nouveau', 'membre', 'animateur', 'tous'];
+
+      const els = {
+        search: document.getElementById('rc-search'),
+        public: document.getElementById('rc-public'),
+        outil: document.getElementById('rc-outil'),
+        niveau: document.getElementById('rc-niveau'),
+        duree: document.getElementById('rc-duree'),
+        count: document.getElementById('rc-count'),
+        reset: document.getElementById('rc-reset'),
+        empty: document.getElementById('rc-empty'),
+        debut: document.getElementById('rc-debut-wrap')
+      };
+
+      let fiches = [];
+
+      function normalize(s) {
+        return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+      }
+
+      function dureeBucket(min) {
+        if (min == null) return 'reference';
+        if (min <= 5) return 'courte';
+        if (min <= 10) return 'moyenne';
+        return 'longue';
+      }
+
+      function dureeLabel(f) {
+        return f.duree_min == null ? 'Référence' : f.duree_min + ' min';
+      }
+
+      function matches(f) {
+        const pub = els.public.value;
+        if (pub !== 'all' && f.public !== pub && f.public !== 'tous') return false;
+        if (els.outil.value !== 'all' && f.outil !== els.outil.value) return false;
+        if (els.niveau.value !== 'all' && f.niveau !== els.niveau.value) return false;
+        if (els.duree.value !== 'all' && dureeBucket(f.duree_min) !== els.duree.value) return false;
+        const q = normalize(els.search.value.trim());
+        if (q) {
+          const hay = normalize(f.titre + ' ' + f.description + ' ' + (f.motscles || '') + ' ' + (f.serie || ''));
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      }
+
+      function cardHTML(f) {
+        const look = OUTILS[f.outil] || OUTILS.plateforme;
+        const upcoming = f.statut === 'a-venir';
+        const seriePart = f.serie ? (f.serie.split('·')[1] || f.serie).trim() : '';
+        const serieBadge = seriePart ? '<span class="badge badge-neutral tuto-serie">' + seriePart + '</span>' : '';
+        const levelBadge = '<span class="badge level-' + f.niveau + ' tuto-level">' + NIVEAUX[f.niveau] + '</span>';
+        const attente = upcoming && f.en_attendant
+          ? '<a class="tuto-attente" href="' + f.en_attendant.lien + '"><i class="fas fa-arrow-turn-down" style="transform: rotate(-90deg);"></i>' + f.en_attendant.libelle + '</a>'
+          : '';
+        const metaRight = upcoming
+          ? '<span class="badge badge-neutral" style="font-size: 10px;">À venir</span>'
+          : '<div class="tuto-meta-item"><i class="fas fa-' + (f.type === 'guide' ? 'compass' : 'list-ol') + '"></i> ' + (f.type === 'guide' ? 'Guide' : 'Tutoriel') + '</div>';
+
+        const inner =
+          '<div class="glass-card tuto-card' + (upcoming ? ' no-hover rc-upcoming' : '') + '">' +
+            '<div class="tuto-thumb" style="background: ' + look.grad + ';">' +
+              '<i class="fas ' + f.icone + '" style="color: ' + look.color + ';"></i>' +
+              serieBadge + levelBadge +
+            '</div>' +
+            '<div class="tuto-body">' +
+              '<h3>' + f.titre + '</h3>' +
+              '<p>' + f.description + '</p>' +
+              attente +
+              '<div class="tuto-meta">' +
+                '<div class="tuto-meta-item"><i class="fas fa-clock"></i> ' + dureeLabel(f) + ' · ' + look.label + '</div>' +
+                metaRight +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        if (upcoming || !f.lien) return '<div class="col-span-4">' + inner + '</div>';
+        return '<a href="' + f.lien + '" class="col-span-4 rc-card-link" aria-label="' + f.titre + '">' + inner + '</a>';
+      }
+
+      function render() {
+        let total = 0;
+        SECTIONS.forEach(key => {
+          const section = document.getElementById('section-' + key);
+          const grid = section.querySelector('.rc-grid');
+          const countEl = section.querySelector('.rc-section-count');
+          const list = fiches
+            .filter(f => f.public === key)
+            .filter(matches)
+            .sort((a, b) => (a.ordre || 99) - (b.ordre || 99));
+          grid.innerHTML = list.map(cardHTML).join('');
+          countEl.textContent = list.length ? list.length + (list.length > 1 ? ' ressources' : ' ressource') : '';
+          section.classList.toggle('hidden', list.length === 0);
+          total += list.length;
+        });
+
+        const filtered = isFiltered();
+        els.count.textContent = total + (total > 1 ? ' ressources affichées' : ' ressource affichée');
+        els.reset.classList.toggle('visible', filtered);
+        els.empty.classList.toggle('visible', total === 0);
+        els.debut.style.display = filtered ? 'none' : '';
+
+        [els.public, els.outil, els.niveau, els.duree].forEach(sel => {
+          sel.classList.toggle('rc-active', sel.value !== 'all');
+        });
+      }
+
+      function isFiltered() {
+        return els.search.value.trim() !== '' ||
+          els.public.value !== 'all' || els.outil.value !== 'all' ||
+          els.niveau.value !== 'all' || els.duree.value !== 'all';
+      }
+
+      function resetAll() {
+        els.search.value = '';
+        [els.public, els.outil, els.niveau, els.duree].forEach(sel => sel.value = 'all');
+        render();
+      }
+
+      // ---- Pré-filtrage par paramètres d'URL (ex. tutoriels.html?outil=forum) ----
+      function applyUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        ['public', 'outil', 'niveau', 'duree'].forEach(key => {
+          const val = params.get(key);
+          if (val && els[key].querySelector('option[value="' + val + '"]')) els[key].value = val;
+        });
+        if (params.get('q')) els.search.value = params.get('q');
+      }
+
+      fetch('data/ressources.json')
+        .then(r => r.json())
+        .then(data => {
+          fiches = data;
+          applyUrlParams();
+          render();
+        })
+        .catch(() => {
+          els.count.textContent = 'Impossible de charger les ressources.';
+        });
+
+      els.search.addEventListener('input', render);
+      [els.public, els.outil, els.niveau, els.duree].forEach(sel => sel.addEventListener('change', render));
+      els.reset.addEventListener('click', resetAll);
+    })();
+  </script>
 
 </body>
 </html>

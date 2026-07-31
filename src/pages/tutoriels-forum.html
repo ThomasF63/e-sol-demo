@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Le forum, pas à pas · e-Sol</title>
+
+  <style>
+    /* ---- Layout fiches + sommaire ---- */
+    .tf-layout { align-items: start; }
+
+    .tf-toc {
+      position: sticky;
+      top: calc(var(--header-height) + 24px);
+      padding: 20px;
+    }
+
+    .tf-toc h4 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-subtle);
+      margin-bottom: 12px;
+    }
+
+    .tf-toc ul { list-style: none; margin: 0; padding: 0; }
+
+    .tf-toc li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-xs);
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      line-height: 1.35;
+    }
+
+    .tf-toc li a .tf-toc-letter {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .tf-toc li a:hover { background: var(--primary-10); color: var(--primary); }
+
+    .tf-toc li a.active {
+      background: var(--primary-10);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tf-toc .tf-toc-back {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ---- Notice certificat ---- */
+    .tf-notice {
+      background: rgba(156, 63, 0, 0.06);
+      border: 1.5px solid var(--primary-20);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .tf-notice i {
+      color: var(--primary);
+      font-size: 20px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .tf-notice p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .tf-notice strong { color: var(--primary); }
+
+    /* ---- Fiche ---- */
+    .tf-fiche {
+      padding: 36px;
+      margin-bottom: 28px;
+      scroll-margin-top: calc(var(--header-height) + 20px);
+    }
+
+    .tf-fiche-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .tf-fiche h2 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .tf-objectif {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      max-width: 100%;
+    }
+
+    .tf-objectif strong { color: var(--text-main); }
+
+    .tf-meta {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 22px;
+    }
+
+    .tf-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .tf-meta-item i { color: var(--primary); font-size: 12px; }
+
+    .tf-fiche h3 {
+      font-size: 1.05rem;
+      margin: 24px 0 12px;
+    }
+
+    /* ---- Étapes numérotées ---- */
+    .tf-steps {
+      list-style: none;
+      counter-reset: tfstep;
+      margin: 0 0 8px;
+      padding: 0;
+    }
+
+    .tf-steps li {
+      counter-increment: tfstep;
+      position: relative;
+      padding: 7px 0 7px 44px;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .tf-steps li::before {
+      content: counter(tfstep);
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---- Liste à puces simple ---- */
+    .tf-liste {
+      list-style: none;
+      margin: 0 0 8px;
+      padding: 0;
+    }
+
+    .tf-liste li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 5px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .tf-liste li i {
+      flex-shrink: 0;
+      margin-top: 5px;
+      color: var(--secondary);
+      font-size: 12px;
+    }
+
+    /* ---- Encarts ---- */
+    .tf-astuce {
+      background: rgba(88, 99, 48, 0.07);
+      border-left: 3px solid var(--secondary);
+      padding: 14px 18px;
+      border-radius: var(--radius-xs);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: 18px;
+    }
+
+    .tf-astuce strong { color: var(--secondary); font-family: var(--font-display); }
+
+    .tf-savoir {
+      background: rgba(192, 88, 20, 0.06);
+      border-left: 3px solid var(--primary-light);
+      padding: 14px 18px;
+      border-radius: var(--radius-xs);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .tf-savoir strong { color: var(--primary); font-family: var(--font-display); }
+
+    /* ---- Placeholder capture ---- */
+    .tf-capture {
+      border: 1.5px dashed var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 16px 0;
+      background: var(--bg-warm);
+    }
+
+    .tf-capture i { color: var(--text-subtle); font-size: 18px; flex-shrink: 0; }
+
+    .tf-capture span {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      line-height: 1.5;
+    }
+
+    /* ---- Et après ---- */
+    .tf-suite {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: var(--bg-warm);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+    }
+
+    .tf-suite .tf-suite-label {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .tf-suite a { font-weight: 600; }
+
+    @media (max-width: 900px) {
+      .tf-toc { position: static; margin-bottom: 8px; }
+      .tf-fiche { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Série tutoriels</span>
+      <h1>Le forum, pas à pas</h1>
+      <p>Huit fiches courtes, une par geste : du premier compte à l'animation d'une catégorie. À prendre dans l'ordre ou à la carte.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="tf-notice">
+        <i class="fas fa-triangle-exclamation"></i>
+        <p><strong>Le forum est temporairement inaccessible</strong> (certificat de sécurité expiré le 19/07/2026, renouvellement en cours). Les fiches se lisent très bien sans le forum ; les liens vers forum.e-sol.fr fonctionneront de nouveau dès la réparation, et les captures d'écran seront ajoutées à ce moment-là.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm" style="padding-top: 0;">
+    <div class="container">
+      <div class="bento-grid tf-layout">
+
+        <!-- ===== Sommaire ===== -->
+        <div class="col-span-3">
+          <nav class="glass-card tf-toc no-hover" aria-label="Sommaire de la série">
+            <h4>Les 8 fiches</h4>
+            <ul id="tf-toc-list">
+              <li><a href="#fiche-a"><span class="tf-toc-letter">A</span> Rejoindre le forum</a></li>
+              <li><a href="#fiche-b"><span class="tf-toc-letter">B</span> Comprendre l'organisation</a></li>
+              <li><a href="#fiche-c"><span class="tf-toc-letter">C</span> Suivre une catégorie</a></li>
+              <li><a href="#fiche-d"><span class="tf-toc-letter">D</span> Poster un nouveau sujet</a></li>
+              <li><a href="#fiche-e"><span class="tf-toc-letter">E</span> Répondre, citer, mentionner</a></li>
+              <li><a href="#fiche-f"><span class="tf-toc-letter">F</span> Message direct</a></li>
+              <li><a href="#fiche-g"><span class="tf-toc-letter">G</span> Notifications et résumé</a></li>
+              <li><a href="#fiche-h"><span class="tf-toc-letter">H</span> Animer sa catégorie</a></li>
+            </ul>
+            <div class="tf-toc-back">
+              <a href="tutoriels.html" style="font-size: 13px; font-weight: 600;"><i class="fas fa-arrow-left text-xs"></i> Centre de ressources</a>
+            </div>
+          </nav>
+        </div>
+
+        <!-- ===== Fiches ===== -->
+        <div class="col-span-9">
+
+          <!-- ============ FICHE A ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-a">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche A</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Rejoindre le forum et se connecter</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> créer votre compte sur le forum et savoir vous reconnecter ensuite.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 5 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : une adresse e-mail, rien d'autre</div>
+            </div>
+
+            <div class="tf-savoir">
+              <strong>Bon à savoir :</strong> le forum a son propre compte, distinct de votre compte e-sol.fr. Même si vous êtes déjà inscrit·e sur la plateforme, il faut créer un compte forum la première fois. C'est une limite connue, qui pourrait évoluer.
+            </div>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Capture à venir : la page d'accueil du forum, avec les boutons S'inscrire et Se connecter.</span>
+            </div>
+
+            <h3>Créer votre compte</h3>
+            <ol class="tf-steps">
+              <li>Ouvrez <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum.e-sol.fr</a> dans votre navigateur.</li>
+              <li>Cliquez sur <strong>S'inscrire</strong>, en haut à droite.</li>
+              <li>Renseignez votre <strong>adresse e-mail</strong>.</li>
+              <li>Choisissez votre <strong>nom d'utilisateur</strong> : court, sans espaces, reconnaissable (par exemple <code>CecileChanteloup</code>). C'est le nom que les autres verront et utiliseront pour s'adresser à vous.</li>
+              <li>Renseignez votre <strong>nom</strong> complet, puis choisissez un <strong>mot de passe</strong>.</li>
+              <li>Cliquez sur le bouton de création du compte.</li>
+              <li>Ouvrez votre boîte mail, puis cliquez sur le <strong>lien de confirmation</strong> reçu (regardez dans les indésirables s'il n'arrive pas).</li>
+            </ol>
+
+            <h3>Vous reconnecter plus tard</h3>
+            <ol class="tf-steps">
+              <li>Ouvrez <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum.e-sol.fr</a>.</li>
+              <li>Cliquez sur <strong>Se connecter</strong>, en haut à droite.</li>
+              <li>Saisissez votre nom d'utilisateur (ou votre e-mail) et votre mot de passe.</li>
+            </ol>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> une fois connecté·e, lisez le sujet épinglé « Bienvenue sur Forum e-Sol ! » et présentez-vous en quelques lignes : qui vous êtes, ce qui vous amène. C'est la meilleure première contribution possible.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Repérez-vous dans les lieux : <a href="#fiche-b">B. Comprendre l'organisation du forum</a></span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE B ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-b">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche B</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Comprendre l'organisation : catégories, sujets, réponses, étiquettes</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> savoir ce qu'est une catégorie, un sujet, une réponse, une étiquette, et ne plus vous perdre.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 5 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : aucun, tout se visite sans compte</div>
+            </div>
+
+            <p style="max-width: 100%; margin-bottom: 12px;">Le forum est rangé comme une maison :</p>
+            <ul class="tf-liste">
+              <li><i class="fas fa-circle"></i> une <strong>catégorie</strong> est une salle, consacrée à un thème (une communauté, les questions scientifiques, les retours sur le site…) ;</li>
+              <li><i class="fas fa-circle"></i> une <strong>sous-catégorie</strong> est un coin de cette salle, pour un chantier précis ;</li>
+              <li><i class="fas fa-circle"></i> un <strong>sujet</strong> est une conversation : quelqu'un l'ouvre avec un premier message, les autres y répondent à la suite ;</li>
+              <li><i class="fas fa-circle"></i> une <strong>réponse</strong> est un message ajouté à un sujet existant ;</li>
+              <li><i class="fas fa-circle"></i> une <strong>étiquette</strong> est un mot-clef que l'on peut accrocher à un sujet pour le retrouver (encore peu utilisées sur notre forum, ne vous en souciez pas au début).</li>
+            </ul>
+
+            <h3>Visite guidée</h3>
+            <ol class="tf-steps">
+              <li>Ouvrez <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum.e-sol.fr</a> : la page d'accueil liste les sujets récents, toutes catégories confondues.</li>
+              <li>Cliquez sur <strong>Catégories</strong> (bandeau de navigation) pour voir toutes les salles.</li>
+              <li>Parcourez la liste : chaque catégorie affiche sa description et ses derniers sujets.</li>
+              <li>Entrez dans <strong>Sols Forestiers (IPRSol)</strong>, une des plus actives.</li>
+              <li>Remarquez sa sous-catégorie <strong>Biodiversité des sols forestiers</strong>.</li>
+              <li>Ouvrez un sujet et observez : le <strong>titre</strong> en haut, la catégorie juste dessous, puis les messages du plus ancien au plus récent.</li>
+              <li>Cliquez sur le logo e-Sol (en haut à gauche) pour revenir à l'accueil. Réflexe à retenir : le logo ramène toujours au point de départ.</li>
+            </ol>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Capture à venir : la page Catégories, où chaque ligne est une salle du forum.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> la loupe (en haut à droite) cherche dans tout le forum. Avant d'ouvrir un sujet, cherchez si la question a déjà été posée.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Choisissez votre salle préférée : <a href="#fiche-c">C. Suivre une catégorie qui m'intéresse</a></span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE C ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-c">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche C</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Suivre une catégorie qui m'intéresse</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> être prévenu·e de ce qui se passe dans les salles qui comptent pour vous, sans surveiller le forum tous les jours.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 3 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : avoir un compte (<a href="#fiche-a">fiche A</a>) et être connecté·e</div>
+            </div>
+
+            <ol class="tf-steps">
+              <li>Ouvrez la catégorie qui vous intéresse, par exemple celle de votre communauté.</li>
+              <li>Repérez la <strong>cloche</strong> à droite, au niveau du titre de la catégorie.</li>
+              <li>Cliquez dessus : une liste de niveaux d'attention s'ouvre.</li>
+              <li>Choisissez votre niveau (détail ci-dessous).</li>
+              <li>C'est tout : le réglage s'applique immédiatement, il n'y a rien à enregistrer.</li>
+            </ol>
+
+            <h3>Les niveaux d'attention</h3>
+            <ul class="tf-liste">
+              <li><i class="fas fa-circle"></i> <strong>Surveillé</strong> : vous êtes averti·e de chaque nouveau sujet et de chaque réponse. Pour la ou les catégories qui comptent vraiment pour vous.</li>
+              <li><i class="fas fa-circle"></i> <strong>Suivi</strong> : les nouveaux sujets sont mis en avant, sans notification à chaque réponse. Bon réglage par défaut pour votre communauté.</li>
+              <li><i class="fas fa-circle"></i> <strong>Normal</strong> : vous n'êtes averti·e que si quelqu'un s'adresse à vous.</li>
+              <li><i class="fas fa-circle"></i> <strong>Silencieux</strong> : la catégorie disparaît de vos listes. Pour ce qui ne vous concerne pas du tout.</li>
+            </ul>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Capture à venir : le menu de la cloche ouvert, avec les niveaux d'attention.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> commencez modeste (« Suivi » sur une ou deux catégories). Vous pourrez toujours monter d'un cran si vous voulez ne rien manquer, ou redescendre si cela fait trop de notifications.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Lancez votre première conversation : <a href="#fiche-d">D. Poster un nouveau sujet</a></span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE D ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-d">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche D</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Poster un nouveau sujet : où, et comment le titrer</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> ouvrir une conversation au bon endroit, avec un titre qui donne envie de répondre.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 5 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : être connecté·e (<a href="#fiche-a">fiche A</a>)</div>
+            </div>
+
+            <h3>Choisir la salle avant de parler</h3>
+            <ul class="tf-liste">
+              <li><i class="fas fa-circle"></i> Question ou discussion liée à <strong>votre communauté</strong> : postez dans sa catégorie.</li>
+              <li><i class="fas fa-circle"></i> <strong>Question scientifique</strong> ouverte à tou·tes : catégorie <em>Questions Scientifiques</em>.</li>
+              <li><i class="fas fa-circle"></i> Remarque sur <strong>le site ou le forum</strong> : catégorie <em>Commentaires sur le site</em>.</li>
+              <li><i class="fas fa-circle"></i> Rien de tout cela : catégorie <em>Général</em>.</li>
+            </ul>
+            <p class="text-muted" style="max-width: 100%; font-size: 0.92rem;">En cas de doute, ne vous bloquez pas : postez dans <em>Général</em>, un sujet peut être déplacé ensuite sans rien perdre.</p>
+
+            <h3>Ouvrir le sujet</h3>
+            <ol class="tf-steps">
+              <li>Cliquez sur <strong>Nouveau sujet</strong> (bouton en haut à droite des listes de sujets).</li>
+              <li>Écrivez le <strong>titre</strong> : résumez votre question ou votre proposition en une phrase. Plutôt « Quel protocole simple pour un inventaire de vers de terre avec des scolaires ? » que « Besoin d'aide ». Plutôt « Retour sur la formation tarière d'août : ce qui a marché » que « Formation ».</li>
+              <li>Vérifiez la <strong>catégorie</strong> proposée sous le titre, changez-la si besoin.</li>
+              <li>Écrivez votre message : une idée par sujet, des paragraphes courts, et terminez par une question si vous attendez des réponses.</li>
+              <li>Cliquez sur <strong>Créer le sujet</strong>.</li>
+            </ol>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Capture à venir : la fenêtre de rédaction d'un nouveau sujet.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> si vous quittez la page en cours de route, votre brouillon est conservé automatiquement ; vous le retrouverez en recliquant sur Nouveau sujet.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Faites vivre les conversations des autres : <a href="#fiche-e">E. Répondre, citer, mentionner</a></span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE E ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-e">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche E</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Répondre à un sujet, citer, mentionner quelqu'un</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> répondre au bon endroit, citer un passage précis, et attirer l'attention de la bonne personne.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 5 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : être connecté·e (<a href="#fiche-a">fiche A</a>)</div>
+            </div>
+
+            <h3>Répondre</h3>
+            <ol class="tf-steps">
+              <li>Ouvrez le sujet, lisez-le jusqu'au bout (la réponse attendue y est peut-être déjà).</li>
+              <li>Cliquez sur <strong>Répondre</strong> : celui en bas du sujet répond à la conversation ; celui sous un message précis répond à ce message.</li>
+              <li>Écrivez, puis cliquez sur <strong>Répondre</strong> dans la fenêtre de rédaction.</li>
+            </ol>
+
+            <h3>Citer un passage</h3>
+            <ol class="tf-steps">
+              <li>Dans un message existant, <strong>sélectionnez à la souris</strong> le passage qui vous intéresse.</li>
+              <li>Un petit bouton <strong>Citation</strong> apparaît au-dessus de la sélection : cliquez dessus.</li>
+              <li>La fenêtre de rédaction s'ouvre avec le passage cité ; écrivez votre réponse en dessous. La personne citée est automatiquement prévenue.</li>
+            </ol>
+
+            <h3>Mentionner quelqu'un</h3>
+            <ol class="tf-steps">
+              <li>Dans votre message, tapez le caractère <strong>@</strong>.</li>
+              <li>Commencez à taper le nom : une liste apparaît, par exemple <code>@CecileChanteloup</code>.</li>
+              <li>Choisissez la bonne personne : elle recevra une notification.</li>
+            </ol>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Captures à venir : les deux boutons Répondre, et le bouton Citation sur une sélection.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> mentionnez avec parcimonie. Une mention est un petit coup de coude ; trois mentions dans un message, c'est trois personnes dérangées.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Pour les échanges qui ne regardent que vous deux : <a href="#fiche-f">F. Envoyer un message direct</a></span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE F ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-f">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche F</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Envoyer un message direct</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> écrire en privé à un·e membre quand la conversation publique n'est pas le bon canal.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 3 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : être connecté·e (<a href="#fiche-a">fiche A</a>)</div>
+            </div>
+
+            <div class="tf-savoir">
+              <strong>D'abord, le bon réflexe :</strong> par défaut, préférez le message public. Une question posée en public profite à tou·tes ceux et celles qui se la poseront après vous. Le message direct sert aux cas particuliers : coordonner un rendez-vous, transmettre une information personnelle, signaler quelque chose avec délicatesse.
+            </div>
+
+            <ol class="tf-steps">
+              <li>Cliquez sur l'<strong>avatar</strong> (la vignette) de la personne, dans un de ses messages ou dans sa fiche.</li>
+              <li>Sa carte de profil s'ouvre : cliquez sur le bouton <strong>Message</strong>.</li>
+              <li>Donnez un <strong>titre</strong> court à votre message, comme pour un e-mail.</li>
+              <li>Écrivez, puis envoyez.</li>
+              <li>Pour retrouver vos conversations privées : cliquez sur votre avatar en haut à droite, puis sur l'icône <strong>enveloppe</strong> (vos messages).</li>
+            </ol>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Capture à venir : la carte de profil d'un membre, avec le bouton Message.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> un message direct peut inclure plusieurs personnes, comme un e-mail à plusieurs destinataires. Ajoutez-les au champ destinataires à la création.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Réglez la machine à votre main : <a href="#fiche-g">G. Régler mes notifications et mon résumé par e-mail</a></span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE G ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-g">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche G</span>
+              <span class="badge badge-olive">Débutant</span>
+            </div>
+            <h2>Régler mes notifications et mon résumé par e-mail</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> recevoir ce qui vous intéresse, rien de plus.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 5 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : être connecté·e (<a href="#fiche-a">fiche A</a>)</div>
+            </div>
+
+            <p style="max-width: 100%; margin-bottom: 14px;">Le forum vous prévient de deux façons : des <strong>notifications</strong> sur le site (le compteur près de votre avatar) et des <strong>e-mails</strong>. Tout se règle au même endroit.</p>
+
+            <ol class="tf-steps">
+              <li>Cliquez sur votre <strong>avatar</strong>, en haut à droite.</li>
+              <li>Ouvrez vos <strong>préférences</strong> (icône en forme de personne, puis le bouton d'engrenage ou le lien Préférences, selon l'affichage).</li>
+              <li>Ouvrez l'onglet <strong>Notifications</strong> : vous y choisissez quand le forum vous signale quelque chose (mentions, citations, réponses…). Les réglages par défaut conviennent à la plupart des gens.</li>
+              <li>Ouvrez l'onglet <strong>E-mails</strong> : vous y réglez le <strong>résumé d'activités</strong>, cet e-mail périodique qui récapitule ce que vous avez manqué. Choisissez sa fréquence (hebdomadaire est un bon point de départ) ou décochez-le.</li>
+              <li>Ouvrez l'onglet <strong>Suivi</strong> : vous y retrouvez, catégorie par catégorie, les niveaux d'attention de la <a href="#fiche-c">fiche C</a>.</li>
+              <li>Cliquez sur <strong>Enregistrer les modifications</strong> en bas de page.</li>
+            </ol>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Captures à venir : les onglets Notifications et E-mails des préférences.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> trop d'e-mails ? Ne vous désabonnez pas de tout : passez d'abord le résumé en hebdomadaire et repassez une ou deux catégories de « Surveillé » à « Suivi ». On garde le contact, sans le bruit.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Vous animez une communauté ? <a href="#fiche-h">H. Animer sa catégorie</a>. Sinon, retour au <a href="tutoriels.html">centre de ressources</a>.</span>
+            </div>
+          </article>
+
+          <!-- ============ FICHE H ============ -->
+          <article class="glass-card tf-fiche no-hover" id="fiche-h">
+            <div class="tf-fiche-header">
+              <span class="badge badge-neutral">Fiche H</span>
+              <span class="badge badge-terra">Animateur·rice</span>
+            </div>
+            <h2>Animer sa catégorie (fiche animateur·rice)</h2>
+            <p class="tf-objectif"><strong>Objectif :</strong> les cinq gestes qui font vivre la catégorie de votre communauté.</p>
+            <div class="tf-meta">
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 10 minutes de lecture, puis au fil de l'eau</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : être animateur·rice d'une communauté</div>
+            </div>
+
+            <div class="tf-savoir">
+              <strong>Avant de commencer :</strong> certains gestes demandent des droits de modération sur votre catégorie. S'ils vous manquent, demandez-les à l'équipe d'animation de la plateforme (<a href="contact.html">contact</a>).
+            </div>
+
+            <h3>1. Poser un sujet d'accueil</h3>
+            <p style="max-width: 100%; font-size: 0.96rem;">Chaque catégorie possède un sujet de présentation (« À propos de la catégorie… »), affiché en tête. Rédigez-le, ou complétez-le : à quoi sert cette salle, pour qui, et comment y démarrer. C'est la première chose qu'un nouveau membre lit.</p>
+
+            <h3>2. Épingler ce qui doit rester visible</h3>
+            <p style="max-width: 100%; font-size: 0.96rem; margin-bottom: 10px;">Un sujet épinglé reste en haut de la liste. Épinglez peu : le sujet d'accueil, un événement à venir, une ressource de référence.</p>
+            <ol class="tf-steps">
+              <li>Ouvrez le sujet, puis le menu <strong>clef à molette</strong> (actions d'administration).</li>
+              <li>Choisissez <strong>Épingler le sujet</strong> et sa portée (dans la catégorie).</li>
+              <li>Pensez à désépingler quand l'actualité est passée.</li>
+            </ol>
+
+            <h3>3. Accueillir celles et ceux qui arrivent</h3>
+            <p style="max-width: 100%; font-size: 0.96rem;">Quand quelqu'un poste pour la première fois dans votre catégorie, répondez-lui dans les jours qui suivent, même brièvement : un bonjour, une piste, un lien vers une ressource. Un premier message resté sans réponse est souvent un dernier message.</p>
+
+            <h3>4. Relancer un fil qui s'endort</h3>
+            <p style="max-width: 100%; font-size: 0.96rem;">Une conversation utile s'est arrêtée ? Relancez-la avec de la matière : une nouvelle information, un retour d'expérience, une question ouverte à la cantonade. Évitez le simple « des nouvelles ? », qui relance rarement.</p>
+
+            <h3>5. Modérer, avec la charte comme boussole</h3>
+            <ul class="tf-liste">
+              <li><i class="fas fa-circle"></i> Un message hors sujet : déplacez-le vers la bonne catégorie (menu clef à molette du sujet) en le signalant à son auteur·rice.</li>
+              <li><i class="fas fa-circle"></i> Un échange qui chauffe : intervenez tôt, avec courtoisie, au nom de la <a href="charte.html">charte</a> (« la modération peut intervenir en cas de non-respect »).</li>
+              <li><i class="fas fa-circle"></i> Un contenu problématique (spam, attaque personnelle) : utilisez <strong>Signaler</strong> sous le message, et prévenez les administrateur·rices pour les suites.</li>
+            </ul>
+
+            <div class="tf-capture">
+              <i class="fas fa-camera"></i>
+              <span>Capture à venir : le menu clef à molette d'un sujet, vu avec des droits de modération.</span>
+            </div>
+
+            <div class="tf-astuce">
+              <strong>Astuce :</strong> dix minutes par semaine suffisent souvent : un tour des nouveaux sujets, une réponse d'accueil, une relance. La régularité compte plus que le temps passé.
+            </div>
+
+            <div class="tf-suite">
+              <span class="tf-suite-label">Et après ?</span>
+              <span>Pour le cadre général du rôle d'animateur·rice, voir <a href="roles-et-droits.html">le référentiel des rôles</a>. Retour au <a href="tutoriels.html">centre de ressources</a>.</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SUITE DU PARCOURS ============== -->
+  <section class="section section-alt">
+    <div class="container container-narrow text-center">
+      <span class="badge badge-olive mb-4">Continuer</span>
+      <h2 style="margin-bottom: 24px;">La suite du parcours</h2>
+      <p class="text-muted" style="margin: 0 auto 32px; font-size: 1.05rem;">Ces huit fiches existent aussi en version wiki, prêtes à être portées sur e-sol.fr après relecture. Un mot vous échappe ? Le glossaire est là pour ça.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="tutoriels.html" class="btn btn-primary"><i class="fas fa-book-open-reader"></i> Centre de ressources</a>
+        <a href="premiers-pas.html" class="btn btn-outline"><i class="fas fa-shoe-prints"></i> Premiers pas</a>
+        <a href="glossaire.html" class="btn btn-outline"><i class="fas fa-book"></i> Glossaire</a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Positionnement sur l'ancre (#fiche-x) et sommaire actif au fil du défilement.
+    // Défilement calculé plutôt que saut natif : fiable même quand le navigateur
+    // n'applique pas le saut d'ancre au chargement.
+    (function() {
+      const HEADER_OFFSET = 92;
+      const links = document.querySelectorAll('#tf-toc-list a');
+      const fiches = Array.from(document.querySelectorAll('.tf-fiche'));
+      if (!fiches.length) return;
+
+      const byId = {};
+      links.forEach(a => { byId[a.getAttribute('href').slice(1)] = a; });
+
+      function scrollToHash() {
+        const cible = location.hash && document.querySelector(location.hash);
+        if (!cible) return;
+        const top = cible.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+        window.scrollTo({ top: top, behavior: 'instant' });
+      }
+
+      function updateSpy() {
+        let actif = fiches[0];
+        fiches.forEach(f => {
+          if (f.getBoundingClientRect().top <= HEADER_OFFSET + 120) actif = f;
+        });
+        links.forEach(a => a.classList.remove('active'));
+        if (actif && byId[actif.id]) byId[actif.id].classList.add('active');
+      }
+
+      window.addEventListener('load', function() { scrollToHash(); updateSpy(); });
+      window.addEventListener('hashchange', function() { scrollToHash(); updateSpy(); });
+      window.addEventListener('scroll', updateSpy, { passive: true });
+      updateSpy();
+    })();
+  </script>
+
+</body>
+</html>

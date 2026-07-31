@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Premiers pas dans e-Sol — Guide du nouveau membre</title>
+
+  <style>
+    /* ---- Hero illustration frame ---- */
+    .pp-illustration {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px 24px;
+    }
+    .pp-illustration svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ---- Step cards (checklist) ---- */
+    .pp-step {
+      display: flex;
+      gap: 28px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .pp-step-num {
+      flex: 0 0 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 4px 16px rgba(156,63,0,0.2);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pp-step-1 .pp-step-num { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+    .pp-step-2 .pp-step-num { background: linear-gradient(135deg, #b04510, var(--primary)); }
+    .pp-step-3 .pp-step-num { background: linear-gradient(135deg, var(--primary-light), #d56a26); }
+    .pp-step-4 .pp-step-num { background: linear-gradient(135deg, #6b5c54, #8c7166); box-shadow: 0 4px 16px rgba(107,92,84,0.2); }
+    .pp-step-5 .pp-step-num { background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 16px rgba(88,99,48,0.2); }
+
+    .pp-step-body { flex-grow: 1; }
+
+    .pp-step-tag {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-subtle);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .pp-step-body h3 {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+
+    .pp-step-body > p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 18px;
+      max-width: 100%;
+    }
+
+    .pp-checklist {
+      list-style: none;
+      margin: 0 0 20px;
+      padding: 0;
+    }
+
+    .pp-checklist li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 6px 0;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.55;
+    }
+
+    .pp-checklist li i {
+      flex-shrink: 0;
+      margin-top: 4px;
+      color: var(--secondary);
+      font-size: 13px;
+    }
+
+    .pp-step-tip {
+      background: rgba(192,88,20,0.06);
+      border-left: 3px solid var(--primary-light);
+      padding: 14px 18px;
+      border-radius: var(--radius-xs);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    .pp-step-tip strong {
+      color: var(--primary);
+      font-family: var(--font-display);
+    }
+
+    /* Vertical connector */
+    .pp-steps-wrapper { position: relative; }
+    .pp-steps-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 88px;
+      bottom: 88px;
+      left: 64px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--primary-20) 0%, var(--secondary-10) 100%);
+      z-index: 0;
+    }
+
+    .pp-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ---- New member FAQ ---- */
+    .pp-faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 4px 0;
+    }
+    .pp-faq-item:last-child { border-bottom: none; }
+
+    .pp-faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 0;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-main);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .pp-faq-question:hover { color: var(--primary); }
+    .pp-faq-question i {
+      transition: transform 0.3s var(--ease-out);
+      font-size: 13px;
+      color: var(--text-subtle);
+    }
+    .pp-faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease-out), padding 0.35s ease;
+      padding: 0;
+    }
+    .pp-faq-answer.open {
+      max-height: 600px;
+      padding-bottom: 18px;
+    }
+    .pp-faq-answer p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 100%;
+    }
+    .pp-faq-item.open .pp-faq-question i { transform: rotate(180deg); }
+
+    /* ---- Sidebar callout ---- */
+    .pp-sidebar {
+      position: sticky;
+      top: calc(var(--header-height) + 24px);
+    }
+
+    .pp-sidebar-card {
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .pp-sidebar-card h4 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pp-sidebar-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      max-width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .pp-steps-wrapper::before { display: none; }
+      .pp-step { flex-direction: column; padding: 24px; gap: 16px; }
+      .pp-step-num { width: 52px; height: 52px; flex-basis: 52px; font-size: 22px; }
+      .pp-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <!-- ============== HERO ============== -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-olive mb-4">Nouveau dans la maison</span>
+      <h1>Premiers pas dans e-Sol</h1>
+      <p>Vous venez de vous inscrire ? Voici les cinq gestes simples pour vous installer dans la maison et commencer à contribuer.</p>
+    </div>
+  </div>
+
+  <!-- ============== ILLUSTRATION ============== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="pp-illustration">
+        {{> illustration-premiers-pas }}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== STEPS + SIDEBAR ============== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid">
+
+        <!-- ===== Main: steps ===== -->
+        <div class="col-span-8">
+          <div class="pp-steps-wrapper flex flex-col gap-4">
+
+            <!-- Step 1 -->
+            <div class="glass-card pp-step pp-step-1 no-hover animate-in">
+              <div class="pp-step-num">1</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">5 min · le profil</span>
+                <h3>Je complète ma fiche personnelle</h3>
+                <p>L'inscription crée votre clef. Compléter le profil vous rend visible dans l'annuaire et permet aux autres membres de comprendre ce que vous apportez à la maison.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> Photo ou avatar (optionnel mais aide à l'humanisation)</li>
+                  <li><i class="fas fa-check-circle"></i> Structure d'appartenance (laboratoire, asso, entreprise, indépendant·e)</li>
+                  <li><i class="fas fa-check-circle"></i> Spécialités &amp; mots-clés (pédologie, télédétection, agroécologie, médiation…)</li>
+                  <li><i class="fas fa-check-circle"></i> Ce que vous cherchez et ce que vous pouvez apporter</li>
+                </ul>
+                <div class="pp-buttons">
+                  <a href="inscription.html" class="btn btn-primary btn-sm"><i class="fas fa-user-pen"></i> Compléter mon profil</a>
+                  <a href="annuaire.html" class="btn btn-outline btn-sm">Voir l'annuaire</a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Astuce</strong> — pas besoin d'écrire un CV. Trois lignes claires sur ce qui vous anime suffisent largement à amorcer les premières rencontres.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="glass-card pp-step pp-step-2 no-hover animate-in delay-1">
+              <div class="pp-step-num">2</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">10 min · les pièces</span>
+                <h3>Je choisis 1 ou 2 communautés</h3>
+                <p>Chaque communauté est une pièce de la maison. Ne cherchez pas à être partout : choisir une ou deux pièces où vous serez régulièrement actif·ve vaut mieux qu'en effleurer dix.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> Je lis la présentation de la communauté qui m'intéresse</li>
+                  <li><i class="fas fa-check-circle"></i> Je repère le ou la référent·e et les habitué·e·s</li>
+                  <li><i class="fas fa-check-circle"></i> Je rejoins (bouton « rejoindre » ou demande à l'animateur·rice)</li>
+                </ul>
+                <div class="pp-buttons">
+                  <a href="communautes.html" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #b04510, var(--primary));"><i class="fas fa-people-roof"></i> Parcourir les pièces</a>
+                  <a href="maison-esol.html" class="btn btn-outline btn-sm">Revoir la maison</a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Astuce</strong> — vous ne savez pas par où commencer&nbsp;? La <a href="communaute-detail.html?c=fresque-sol">Fresque du Sol</a> est une excellente porte d'entrée transverse, surtout si vous découvrez le réseau.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="glass-card pp-step pp-step-3 no-hover animate-in delay-2">
+              <div class="pp-step-num">3</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">5 min · le forum</span>
+                <h3>Je dis bonjour sur le forum</h3>
+                <p>Le forum, c'est le hall où tout le monde passe. Y poster un mot de présentation, c'est ouvrir la première conversation et rendre tangible votre arrivée dans la maison.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> Je crée mon compte forum (compte distinct de la plateforme, 2 minutes : voir la <a href="tutoriels-forum.html#fiche-a">fiche A</a>)</li>
+                  <li><i class="fas fa-check-circle"></i> J'ouvre un message « Bonjour, je suis… »</li>
+                  <li><i class="fas fa-check-circle"></i> Je lis quelques fils récents pour sentir la dynamique en cours</li>
+                </ul>
+                <div class="pp-buttons">
+                  <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);"><i class="fas fa-comments"></i> Aller au forum</a>
+                  <a href="tutoriels-forum.html" class="btn btn-outline btn-sm">Le forum, pas à pas</a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Astuce</strong> — 3 ou 4 lignes suffisent. Évoquez votre activité, ce qui vous a amené ici, et une question ou une envie. Ça donne tout de suite des points d'accroche aux autres.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="glass-card pp-step pp-step-4 no-hover animate-in delay-3">
+              <div class="pp-step-num">4</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">10 min · les fondations</span>
+                <h3>Je lis la charte</h3>
+                <p>La charte, ce sont les règles de la maison. La lire une fois calmement vous évite de devoir y revenir dans la précipitation plus tard, et clarifie d'emblée la place de l'AFES, du COPIL et la nature des communs.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> Les 4 principes (transparence, biens communs, évolutivité, robustesse)</li>
+                  <li><i class="fas fa-check-circle"></i> Les statuts de membre et la gouvernance par COPIL</li>
+                  <li><i class="fas fa-check-circle"></i> Les licences (CC BY-SA) qui s'appliquent à vos contributions</li>
+                </ul>
+                <div class="pp-buttons">
+                  <a href="charte.html" class="btn btn-outline btn-sm"><i class="fas fa-scroll"></i> Lire la charte (démo)</a>
+                  <a href="https://e-sol.fr/?Charte" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Charte officielle <i class="fas fa-arrow-up-right-from-square text-xs"></i></a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Pas envie de tout retenir&nbsp;?</strong> Le <a href="glossaire.html">glossaire</a> liste les termes-clefs (COPIL, communs, ZAN, Refersols…) si un mot vous échappe.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="glass-card pp-step pp-step-5 no-hover animate-in delay-4">
+              <div class="pp-step-num">5</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">10 min · les outils partagés</span>
+                <h3>Je repère un commun à suivre</h3>
+                <p>Les communs sont la finalité du réseau. Repérer dès maintenant un outil partagé qui vous intéresse — pour le suivre, le tester, ou y contribuer plus tard — pose la première graine de votre engagement.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> Je parcours la liste des communs existants ou en projet</li>
+                  <li><i class="fas fa-check-circle"></i> J'en choisis un qui résonne avec mes intérêts</li>
+                  <li><i class="fas fa-check-circle"></i> Je note son statut (brouillon / révision / actif) et son·sa porteur·euse</li>
+                </ul>
+                <div class="pp-buttons">
+                  <a href="communs.html" class="btn btn-secondary btn-sm"><i class="fas fa-hand-holding-heart"></i> Voir les communs</a>
+                  <a href="https://e-sol.fr/?Idees-de-communs" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Idées en cours <i class="fas fa-arrow-up-right-from-square text-xs"></i></a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Et après&nbsp;?</strong> Un guide complet sur le cycle de vie d'un commun (proposer, brouillon, révision, actif) arrive prochainement — phase 4 du plan de production.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ===== Sidebar ===== -->
+        <div class="col-span-4">
+          <div class="pp-sidebar">
+
+            <div class="glass-card pp-sidebar-card no-hover" style="background: linear-gradient(135deg, #fffcf7, var(--bg-elevated)); border: 1.5px solid var(--primary-20);">
+              <h4><i class="fas fa-house-chimney" style="color: var(--primary);"></i> Pas encore visité la maison&nbsp;?</h4>
+              <p>Avant d'enchaîner les premiers pas, la métaphore de la maison aide à situer où vous mettez les pieds.</p>
+              <a href="maison-esol.html" class="btn btn-primary btn-sm w-full" style="justify-content: center;">Visiter la maison</a>
+            </div>
+
+            <div class="glass-card pp-sidebar-card no-hover">
+              <h4><i class="fas fa-book-open" style="color: var(--secondary);"></i> Glossaire e-Sol</h4>
+              <p>COPIL, fiche bazar, ZAN, Refersols, IPRSols&hellip; Les termes que vous croiserez et leur traduction simple.</p>
+              <a href="glossaire.html" class="btn btn-outline btn-sm w-full" style="justify-content: center;">Ouvrir le glossaire</a>
+            </div>
+
+            <div class="glass-card pp-sidebar-card no-hover">
+              <h4><i class="fas fa-book-open-reader" style="color: var(--primary);"></i> Envie d'aller plus loin&nbsp;?</h4>
+              <p>Tutoriels et guides classés par situation, avec filtres et recherche : le centre de ressources rassemble tout.</p>
+              <a href="tutoriels.html" class="btn btn-outline btn-sm w-full" style="justify-content: center;">Centre de ressources</a>
+            </div>
+
+            <div class="glass-card pp-sidebar-card no-hover">
+              <h4><i class="fas fa-clock" style="color: var(--cat-politique);"></i> Combien de temps&nbsp;?</h4>
+              <p style="margin-bottom: 8px;">Les 5 étapes prennent environ <strong>40 minutes au total</strong>, sans précipitation. À étaler sur quelques jours si besoin.</p>
+              <ul class="pp-checklist" style="font-size: 0.85rem;">
+                <li><i class="fas fa-circle-dot" style="color: var(--primary);"></i> Profil — 5 min</li>
+                <li><i class="fas fa-circle-dot" style="color: #b04510;"></i> Communautés — 10 min</li>
+                <li><i class="fas fa-circle-dot" style="color: var(--primary-light);"></i> Forum — 5 min</li>
+                <li><i class="fas fa-circle-dot" style="color: #6b5c54;"></i> Charte — 10 min</li>
+                <li><i class="fas fa-circle-dot" style="color: var(--secondary);"></i> Commun — 10 min</li>
+              </ul>
+            </div>
+
+            <div class="glass-card pp-sidebar-card no-hover" style="background: var(--bg-warm);">
+              <h4><i class="fas fa-life-ring" style="color: var(--primary);"></i> Une question&nbsp;?</h4>
+              <p>Rien ne presse. Postez votre question sur le forum ou écrivez à l'équipe d'animation.</p>
+              <a href="contact.html" class="btn btn-ghost btn-sm w-full" style="justify-content: center;">Contact</a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FAQ NOUVEAU MEMBRE ============== -->
+  <section class="section section-alt">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Questions du nouveau membre</span>
+        <h2>Ce que les gens demandent souvent</h2>
+      </div>
+
+      <div class="glass-card no-hover" style="padding: 8px 32px;">
+
+        <div class="pp-faq-item">
+          <button class="pp-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Suis-je obligé·e d'adhérer à l'AFES pour utiliser e-Sol&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pp-faq-answer">
+            <p>Non. e-Sol est ouvert à toute personne intéressée par les sols, indépendamment de l'adhésion à l'AFES. L'AFES anime et héberge la plateforme, mais l'inscription au réseau est gratuite et indépendante de la cotisation à l'association.</p>
+          </div>
+        </div>
+
+        <div class="pp-faq-item">
+          <button class="pp-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Je ne suis pas pédologue. Ai-je ma place ici&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pp-faq-answer">
+            <p>Oui, sans hésitation. Le réseau est pensé pour réunir chercheurs, ingénieurs, consultants, agriculteurs, enseignants, médiateurs, citoyens engagés. La diversité des regards est une condition de la vitalité du réseau, et de la qualité des communs produits.</p>
+          </div>
+        </div>
+
+        <div class="pp-faq-item">
+          <button class="pp-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Combien de communautés puis-je rejoindre&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pp-faq-answer">
+            <p>Autant que vous voulez, mais le conseil est de commencer par une ou deux où vous serez réellement présent·e. Une participation régulière à une communauté apporte beaucoup plus qu'une présence passive dans cinq.</p>
+          </div>
+        </div>
+
+        <div class="pp-faq-item">
+          <button class="pp-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Si je propose un document, qui en garde la propriété&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pp-faq-answer">
+            <p>Vous restez auteur·rice de votre contribution. Conformément à la charte, les contenus partagés sur e-Sol sont publiés sous licence <strong>Creative Commons BY-SA</strong>&nbsp;: ils peuvent être réutilisés et adaptés, à condition de citer l'origine et de partager dans les mêmes conditions.</p>
+          </div>
+        </div>
+
+        <div class="pp-faq-item">
+          <button class="pp-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Je veux ouvrir une nouvelle communauté. Comment ça marche&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pp-faq-answer">
+            <p>Le cadre formel arrive dans la phase 3 du plan de production de guides. En attendant, écrivez à l'équipe d'animation ou ouvrez un fil sur le forum&nbsp;: une nouvelle pièce dans la maison peut se monter avec un·e ou deux animateur·rices motivé·es et un sujet bien défini.</p>
+          </div>
+        </div>
+
+        <div class="pp-faq-item">
+          <button class="pp-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Que se passe-t-il si je n'ai pas le temps d'être actif·ve&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="pp-faq-answer">
+            <p>Aucune obligation d'activité. Vous pouvez tout à fait être en veille pendant des mois, observer, et revenir quand vos projets s'alignent. Le réseau accepte des engagements de très différentes intensités.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== NEXT STEPS ============== -->
+  <section class="section">
+    <div class="container container-narrow text-center">
+      <span class="badge badge-olive mb-4">Et ensuite&nbsp;?</span>
+      <h2 style="margin-bottom: 24px;">Vous avez fait le tour&nbsp;?</h2>
+      <p class="text-muted" style="margin: 0 auto 32px; font-size: 1.1rem;">Une fois les cinq premiers pas franchis, deux directions s'ouvrent naturellement&nbsp;: approfondir une communauté qui vous attire, ou contribuer à un commun qui vous parle. Et bien sûr, revenir lire le glossaire quand un mot vous échappe.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="communautes.html" class="btn btn-primary"><i class="fas fa-people-roof"></i> Approfondir une communauté</a>
+        <a href="communs.html" class="btn btn-secondary"><i class="fas fa-hand-holding-heart"></i> Contribuer à un commun</a>
+        <a href="tutoriels.html" class="btn btn-outline"><i class="fas fa-book-open-reader"></i> Centre de ressources</a>
+        <a href="glossaire.html" class="btn btn-outline"><i class="fas fa-book-open"></i> Glossaire</a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+</body>
+</html>

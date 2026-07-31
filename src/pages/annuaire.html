@@ -3,11 +3,22 @@
 <head>
   {{> head }}
   <title>Annuaire des Membres — e-Sol</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
   <style>
+    /* ============================================
+       Annuaire — Map + Grid + List Views
+       ============================================ */
+
     /* View toggle */
     .view-controls {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
     }
 
@@ -31,18 +42,18 @@
       color: var(--primary);
     }
 
-    /* Search */
+    /* Search & Filters */
     .search-bar {
       display: flex;
       gap: 12px;
       align-items: center;
-      margin-bottom: 40px;
+      margin-bottom: 28px;
       flex-wrap: wrap;
     }
 
     .search-input {
       flex: 1;
-      min-width: 280px;
+      min-width: 240px;
       padding: 12px 20px 12px 44px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-full);
@@ -62,7 +73,7 @@
     .search-wrapper {
       position: relative;
       flex: 1;
-      min-width: 280px;
+      min-width: 240px;
     }
 
     .search-wrapper i {
@@ -74,7 +85,7 @@
       font-size: 14px;
     }
 
-    .region-select {
+    .filter-select {
       padding: 12px 20px;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-full);
@@ -85,11 +96,99 @@
       color: var(--text-muted);
       cursor: pointer;
       outline: none;
-      min-width: 200px;
+      min-width: 180px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%239a8a82'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
     }
 
-    .region-select:focus {
+    .filter-select:focus {
       border-color: var(--primary);
+    }
+
+    /* Active filter pills */
+    .active-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .active-filters:empty {
+      display: none;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--primary-10);
+      border: 1px solid var(--primary-20);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      font-family: var(--font-display);
+      animation: fadeInUp 0.3s var(--ease-out);
+    }
+
+    .filter-pill button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+
+    .filter-pill button:hover {
+      opacity: 1;
+    }
+
+    .clear-all-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: var(--font-display);
+      transition: all 0.2s ease;
+    }
+
+    .clear-all-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Results counter */
+    .results-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+
+    .results-count {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .results-count strong {
+      color: var(--primary);
+      font-weight: 700;
     }
 
     /* Member grid card */
@@ -235,6 +334,323 @@
     #list-view { display: none; }
     #list-view.active { display: flex; }
     #grid-view.hidden { display: none; }
+
+    /* ============================================
+       MAP VIEW
+       ============================================ */
+    #map-view {
+      display: none;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    #map-view.active {
+      display: block;
+    }
+
+    #map-container {
+      width: 100%;
+      height: 560px;
+      background: var(--bg-warm);
+      z-index: 1;
+    }
+
+    /* Custom Leaflet popup styling */
+    .leaflet-popup-content-wrapper {
+      border-radius: 16px !important;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.12) !important;
+      border: 1px solid rgba(156, 63, 0, 0.08) !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+
+    .leaflet-popup-content {
+      margin: 0 !important;
+      min-width: 220px;
+    }
+
+    .leaflet-popup-tip {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    }
+
+    .map-popup {
+      padding: 20px;
+      font-family: var(--font-body);
+    }
+
+    .map-popup-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .map-popup-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(156,63,0,0.1), rgba(88,99,48,0.1));
+      color: #9c3f00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .map-popup-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #1a1512;
+      line-height: 1.2;
+    }
+
+    .map-popup-org {
+      font-size: 12px;
+      color: #6b5c54;
+      margin-top: 2px;
+    }
+
+    .map-popup-role {
+      font-size: 12px;
+      color: #9a8a82;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .map-popup-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #9a8a82;
+      padding: 8px 12px;
+      background: #f6f3eb;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .map-popup-badges {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .map-popup-badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(156,63,0,0.1);
+      color: #9c3f00;
+    }
+
+    .map-popup a.map-popup-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #9c3f00;
+      text-decoration: none;
+      padding: 6px 14px;
+      background: rgba(156,63,0,0.06);
+      border-radius: 999px;
+      transition: background 0.2s;
+    }
+
+    .map-popup a.map-popup-link:hover {
+      background: rgba(156,63,0,0.12);
+    }
+
+    /* Custom marker styling */
+    .custom-marker {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9c3f00, #c05814);
+      border: 3px solid white;
+      box-shadow: 0 4px 12px rgba(156, 63, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      transition: transform 0.2s var(--ease-spring);
+    }
+
+    .custom-marker:hover {
+      transform: scale(1.15);
+    }
+
+    /* Marker cluster overrides */
+    .marker-cluster-small {
+      background-color: rgba(156, 63, 0, 0.15) !important;
+    }
+    .marker-cluster-small div {
+      background-color: rgba(156, 63, 0, 0.6) !important;
+      color: white !important;
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+    }
+
+    .marker-cluster-medium {
+      background-color: rgba(156, 63, 0, 0.2) !important;
+    }
+    .marker-cluster-medium div {
+      background-color: rgba(156, 63, 0, 0.7) !important;
+      color: white !important;
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+    }
+
+    .marker-cluster-large {
+      background-color: rgba(156, 63, 0, 0.25) !important;
+    }
+    .marker-cluster-large div {
+      background-color: rgba(156, 63, 0, 0.8) !important;
+      color: white !important;
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+    }
+
+    /* Map legend overlay */
+    .map-legend {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.6);
+      font-size: 12px;
+      min-width: 180px;
+    }
+
+    .map-legend-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .map-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .map-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9c3f00, #c05814);
+      border: 1.5px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    .map-legend-cluster {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(156, 63, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .map-legend-cluster-inner {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(156, 63, 0, 0.6);
+    }
+
+    /* Map zoom hint */
+    .map-zoom-hint {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(26, 21, 18, 0.75);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-family: var(--font-display);
+      font-weight: 500;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    .map-zoom-hint.fade {
+      opacity: 0;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 768px) {
+      .search-bar {
+        flex-direction: column;
+      }
+
+      .search-wrapper,
+      .filter-select {
+        min-width: 100%;
+        width: 100%;
+      }
+
+      .results-bar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      #map-container {
+        height: 420px;
+      }
+
+      .map-legend {
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        min-width: auto;
+      }
+
+      .member-list-item {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -249,15 +665,15 @@
 
       <div class="annuaire-stats mt-6">
         <div class="annuaire-stat">
-          <div class="num">238</div>
+          <div class="num" id="stat-members">—</div>
           <div class="label">Membres inscrits</div>
         </div>
         <div class="annuaire-stat">
-          <div class="num">12</div>
+          <div class="num" id="stat-regions">—</div>
           <div class="label">Régions</div>
         </div>
         <div class="annuaire-stat">
-          <div class="num">85+</div>
+          <div class="num" id="stat-orgs">—</div>
           <div class="label">Organisations</div>
         </div>
       </div>
@@ -266,27 +682,62 @@
 
   <section class="section-sm">
     <div class="container">
+      <!-- Search & Filters -->
       <div class="search-bar">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
           <input type="text" class="search-input" id="search-input" placeholder="Rechercher un membre, une organisation…">
         </div>
-        <select class="region-select" id="region-select">
+        <select class="filter-select" id="region-select">
           <option value="all">Toutes les régions</option>
+        </select>
+        <select class="filter-select" id="community-select">
+          <option value="all">Toutes les communautés</option>
         </select>
         <div class="view-controls">
           <button class="view-btn active" id="btn-grid" title="Grille"><i class="fas fa-grid-2"></i></button>
           <button class="view-btn" id="btn-list" title="Liste"><i class="fas fa-list"></i></button>
+          <button class="view-btn" id="btn-map" title="Carte"><i class="fas fa-map-location-dot"></i></button>
         </div>
       </div>
 
+      <!-- Active filters display -->
+      <div class="active-filters" id="active-filters"></div>
+
+      <!-- Results count -->
+      <div class="results-bar">
+        <div class="results-count" id="results-count"></div>
+      </div>
+
+      <!-- Grid View -->
       <div class="bento-grid" id="grid-view"></div>
+
+      <!-- List View -->
       <div class="flex flex-col gap-3" id="list-view"></div>
 
-      <!-- More members note -->
+      <!-- Map View -->
+      <div id="map-view">
+        <div id="map-container"></div>
+        <div class="map-legend">
+          <div class="map-legend-title"><i class="fas fa-circle-info"></i> Légende</div>
+          <div class="map-legend-item">
+            <div class="map-legend-dot"></div>
+            <span>Membre individuel</span>
+          </div>
+          <div class="map-legend-item">
+            <div class="map-legend-cluster"><div class="map-legend-cluster-inner"></div></div>
+            <span>Groupe de membres</span>
+          </div>
+        </div>
+        <div class="map-zoom-hint" id="map-hint">
+          <i class="fas fa-hand-pointer"></i> Cliquez sur un marqueur ou un groupe pour zoomer
+        </div>
+      </div>
+
+      <!-- Fiction disclaimer -->
       <div class="text-center mt-8">
-        <div class="glass-card no-hover" style="display: inline-block; padding: 20px 40px;">
-          <p class="text-muted" style="max-width: 100%;"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Cet aperçu présente 20 membres sur les 238 inscrits. L'annuaire complet est disponible sur <a href="https://e-sol.fr/?Annuaire" target="_blank">e-sol.fr</a>.</p>
+        <div class="glass-card no-hover" style="display: inline-block; padding: 20px 40px; max-width: 720px;">
+          <p class="text-muted" style="max-width: 100%;"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Les 100 profils présentés dans cette démo sont entièrement fictifs : personnes, structures et coordonnées ont été inventées pour la démonstration. Toute ressemblance avec des personnes réelles serait fortuite. L'annuaire réel se trouve sur <a href="https://e-sol.fr/?Annuaire" target="_blank">e-sol.fr</a>.</p>
         </div>
       </div>
     </div>
@@ -294,102 +745,353 @@
 
   {{> footer }}
 
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet MarkerCluster JS -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
   <script>
-    fetch('data/members-sample.json')
-      .then(r => r.json())
-      .then(members => {
-        // Regions
-        const regions = [...new Set(members.map(m => m.region))].sort();
-        const regionSelect = document.getElementById('region-select');
-        regions.forEach(r => {
-          const opt = document.createElement('option');
-          opt.value = r; opt.textContent = r;
-          regionSelect.appendChild(opt);
-        });
+    // ============================================
+    // Community name lookup
+    // ============================================
+    const communityNames = {};
+    let communitiesData = [];
 
-        renderGrid(members);
-        renderList(members);
+    // Load both data sources
+    Promise.all([
+      fetch('data/members-sample.json').then(r => r.json()),
+      fetch('data/communities.json').then(r => r.json())
+    ]).then(([members, communities]) => {
+      communitiesData = communities;
 
-        // Search & filter
-        const searchInput = document.getElementById('search-input');
-
-        function filterMembers() {
-          const q = searchInput.value.toLowerCase();
-          const region = regionSelect.value;
-
-          const filtered = members.filter(m => {
-            const matchQ = !q || `${m.firstName} ${m.lastName} ${m.organization} ${m.role}`.toLowerCase().includes(q);
-            const matchR = region === 'all' || m.region === region;
-            return matchQ && matchR;
-          });
-
-          // Grid
-          document.querySelectorAll('.member-card-wrapper').forEach(el => {
-            const id = el.dataset.id;
-            el.classList.toggle('hidden', !filtered.find(m => m.id === id));
-          });
-
-          // List
-          document.querySelectorAll('.member-list-wrapper').forEach(el => {
-            const id = el.dataset.id;
-            el.classList.toggle('hidden', !filtered.find(m => m.id === id));
-          });
-        }
-
-        searchInput.addEventListener('input', filterMembers);
-        regionSelect.addEventListener('change', filterMembers);
-
-        // View toggle
-        document.getElementById('btn-grid').addEventListener('click', () => {
-          document.getElementById('grid-view').classList.remove('hidden');
-          document.getElementById('list-view').classList.remove('active');
-          document.getElementById('btn-grid').classList.add('active');
-          document.getElementById('btn-list').classList.remove('active');
-        });
-
-        document.getElementById('btn-list').addEventListener('click', () => {
-          document.getElementById('grid-view').classList.add('hidden');
-          document.getElementById('list-view').classList.add('active');
-          document.getElementById('btn-list').classList.add('active');
-          document.getElementById('btn-grid').classList.remove('active');
-        });
-
-        function renderGrid(members) {
-          document.getElementById('grid-view').innerHTML = members.map(m => `
-            <div class="col-span-3 member-card-wrapper" data-id="${m.id}">
-              <div class="glass-card member-card">
-                <div class="member-avatar">${m.firstName[0]}${m.lastName[0]}</div>
-                <div class="member-name">${m.firstName} ${m.lastName}</div>
-                <div class="member-org">${m.organization}</div>
-                <div class="member-role">${m.role}</div>
-                <div class="member-region"><i class="fas fa-location-dot"></i> ${m.region}</div>
-                <div class="member-communities">
-                  ${m.communities.slice(0, 2).map(c => `<span class="member-comm-badge">${c}</span>`).join('')}
-                  ${m.communities.length > 2 ? `<span class="member-comm-badge" style="background: var(--bg-warm); color: var(--text-subtle);">+${m.communities.length - 2}</span>` : ''}
-                </div>
-              </div>
-            </div>
-          `).join('');
-        }
-
-        function renderList(members) {
-          document.getElementById('list-view').innerHTML = members.map(m => `
-            <div class="member-list-wrapper" data-id="${m.id}">
-              <div class="member-list-item">
-                <div class="member-list-avatar">${m.firstName[0]}${m.lastName[0]}</div>
-                <div class="member-list-info">
-                  <h4>${m.firstName} ${m.lastName}</h4>
-                  <p>${m.role} — ${m.organization}</p>
-                </div>
-                <div class="member-region" style="margin-bottom: 0;"><i class="fas fa-location-dot"></i> ${m.region}</div>
-                <div class="member-communities" style="justify-content: flex-end;">
-                  ${m.communities.slice(0, 2).map(c => `<span class="member-comm-badge">${c}</span>`).join('')}
-                </div>
-              </div>
-            </div>
-          `).join('');
-        }
+      // Build community name lookup
+      communities.forEach(c => {
+        communityNames[c.id] = c.name;
       });
+
+      // Hero stats computed from the (fictional) dataset
+      document.getElementById('stat-members').textContent = members.length;
+      document.getElementById('stat-regions').textContent = new Set(members.map(m => m.region)).size;
+      document.getElementById('stat-orgs').textContent = new Set(members.map(m => m.organization)).size;
+
+      // ============================================
+      // Populate filter dropdowns
+      // ============================================
+      const regions = [...new Set(members.map(m => m.region))].sort();
+      const regionSelect = document.getElementById('region-select');
+      regions.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r; opt.textContent = r;
+        regionSelect.appendChild(opt);
+      });
+
+      // Populate community filter
+      const communitySelect = document.getElementById('community-select');
+      const memberCommunityIds = [...new Set(members.flatMap(m => m.communities))].sort();
+      memberCommunityIds.forEach(cId => {
+        const opt = document.createElement('option');
+        opt.value = cId;
+        opt.textContent = communityNames[cId] || cId;
+        communitySelect.appendChild(opt);
+      });
+
+      // ============================================
+      // View element refs (used by render fns below)
+      // ============================================
+      const gridView = document.getElementById('grid-view');
+      const listView = document.getElementById('list-view');
+      const mapView = document.getElementById('map-view');
+
+      // ============================================
+      // Render views
+      // ============================================
+      renderGrid(members);
+      renderList(members);
+
+      // ============================================
+      // Initialize map (deferred until shown)
+      // ============================================
+      let map = null;
+      let markerClusterGroup = null;
+      let allMarkers = [];
+      let mapInitialized = false;
+
+      function initMap(filteredMembers) {
+        if (mapInitialized && map) {
+          updateMapMarkers(filteredMembers);
+          return;
+        }
+
+        map = L.map('map-container', {
+          zoomControl: false,
+          scrollWheelZoom: true,
+          attributionControl: true
+        }).setView([46.8, 2.5], 6);
+
+        // Zoom control in top-right
+        L.control.zoom({ position: 'topright' }).addTo(map);
+
+        // Premium map tiles (CartoDB Voyager — clean, neutral)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 18
+        }).addTo(map);
+
+        markerClusterGroup = L.markerClusterGroup({
+          maxClusterRadius: 50,
+          spiderfyOnMaxZoom: true,
+          showCoverageOnHover: false,
+          zoomToBoundsOnClick: true,
+          iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let size = 'small';
+            if (count >= 10) size = 'large';
+            else if (count >= 5) size = 'medium';
+            return L.divIcon({
+              html: '<div>' + count + '</div>',
+              className: 'marker-cluster marker-cluster-' + size,
+              iconSize: L.point(40, 40)
+            });
+          }
+        });
+
+        addMarkers(filteredMembers);
+        map.addLayer(markerClusterGroup);
+        mapInitialized = true;
+
+        // Fade the hint after a few seconds
+        setTimeout(() => {
+          document.getElementById('map-hint')?.classList.add('fade');
+        }, 4000);
+      }
+
+      function addMarkers(memberList) {
+        allMarkers = [];
+        memberList.forEach(m => {
+          if (!m.lat || !m.lng) return;
+
+          const icon = L.divIcon({
+            className: '',
+            html: `<div class="custom-marker">${m.firstName[0]}${m.lastName[0]}</div>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+            popupAnchor: [0, -22]
+          });
+
+          const commBadges = m.communities
+            .map(cId => `<span class="map-popup-badge">${communityNames[cId] || cId}</span>`)
+            .join('');
+
+          const popupContent = `
+            <div class="map-popup">
+              <div class="map-popup-header">
+                <div class="map-popup-avatar">${m.firstName[0]}${m.lastName[0]}</div>
+                <div>
+                  <div class="map-popup-name">${m.firstName} ${m.lastName}</div>
+                  <div class="map-popup-org">${m.organization}</div>
+                </div>
+              </div>
+              <div class="map-popup-role">${m.role}</div>
+              <div class="map-popup-meta">
+                <i class="fas fa-location-dot"></i>
+                ${m.city ? m.city + ' — ' : ''}${m.region}
+              </div>
+              <div class="map-popup-badges">${commBadges}</div>
+              <a href="${m.profileUrl}" class="map-popup-link">
+                <i class="fas fa-arrow-right"></i> Voir le profil
+              </a>
+            </div>
+          `;
+
+          const marker = L.marker([m.lat, m.lng], { icon })
+            .bindPopup(popupContent, { maxWidth: 280, closeButton: true });
+
+          marker._memberId = m.id;
+          allMarkers.push(marker);
+        });
+
+        allMarkers.forEach(marker => markerClusterGroup.addLayer(marker));
+      }
+
+      function updateMapMarkers(filteredMembers) {
+        if (!markerClusterGroup) return;
+        markerClusterGroup.clearLayers();
+        addMarkers(filteredMembers);
+
+        // Fit bounds to visible markers
+        if (allMarkers.length > 0) {
+          const group = L.featureGroup(allMarkers);
+          map.fitBounds(group.getBounds().pad(0.15), { maxZoom: 8 });
+        }
+      }
+
+      // ============================================
+      // FILTERING
+      // ============================================
+      const searchInput = document.getElementById('search-input');
+      const activeFiltersEl = document.getElementById('active-filters');
+      const resultsCountEl = document.getElementById('results-count');
+
+      function getFilteredMembers() {
+        const q = searchInput.value.toLowerCase().trim();
+        const region = regionSelect.value;
+        const community = communitySelect.value;
+
+        return members.filter(m => {
+          const matchQ = !q || `${m.firstName} ${m.lastName} ${m.organization} ${m.role} ${m.city || ''}`.toLowerCase().includes(q);
+          const matchR = region === 'all' || m.region === region;
+          const matchC = community === 'all' || m.communities.includes(community);
+          return matchQ && matchR && matchC;
+        });
+      }
+
+      function filterMembers() {
+        const filtered = getFilteredMembers();
+        const q = searchInput.value.toLowerCase().trim();
+        const region = regionSelect.value;
+        const community = communitySelect.value;
+
+        // Grid visibility
+        document.querySelectorAll('.member-card-wrapper').forEach(el => {
+          const id = el.dataset.id;
+          el.classList.toggle('hidden', !filtered.find(m => m.id === id));
+        });
+
+        // List visibility
+        document.querySelectorAll('.member-list-wrapper').forEach(el => {
+          const id = el.dataset.id;
+          el.classList.toggle('hidden', !filtered.find(m => m.id === id));
+        });
+
+        // Map update
+        if (mapInitialized) {
+          updateMapMarkers(filtered);
+        }
+
+        // Update results count
+        resultsCountEl.innerHTML = `<strong>${filtered.length}</strong> membre${filtered.length !== 1 ? 's' : ''} trouvé${filtered.length !== 1 ? 's' : ''}`;
+
+        // Active filter pills
+        let pills = '';
+        if (q) {
+          pills += `<span class="filter-pill"><i class="fas fa-search"></i> "${q}" <button onclick="clearSearch()">×</button></span>`;
+        }
+        if (region !== 'all') {
+          pills += `<span class="filter-pill"><i class="fas fa-location-dot"></i> ${region} <button onclick="clearFilter('region')">×</button></span>`;
+        }
+        if (community !== 'all') {
+          const cName = communityNames[community] || community;
+          pills += `<span class="filter-pill"><i class="fas fa-users"></i> ${cName} <button onclick="clearFilter('community')">×</button></span>`;
+        }
+        if (pills) {
+          pills += `<button class="clear-all-btn" onclick="clearAllFilters()"><i class="fas fa-xmark"></i> Effacer tout</button>`;
+        }
+        activeFiltersEl.innerHTML = pills;
+      }
+
+      window.clearSearch = function() {
+        searchInput.value = '';
+        filterMembers();
+      };
+
+      window.clearFilter = function(type) {
+        if (type === 'region') regionSelect.value = 'all';
+        if (type === 'community') communitySelect.value = 'all';
+        filterMembers();
+      };
+
+      window.clearAllFilters = function() {
+        searchInput.value = '';
+        regionSelect.value = 'all';
+        communitySelect.value = 'all';
+        filterMembers();
+      };
+
+      searchInput.addEventListener('input', filterMembers);
+      regionSelect.addEventListener('change', filterMembers);
+      communitySelect.addEventListener('change', filterMembers);
+
+      // Initial render
+      filterMembers();
+
+      // ============================================
+      // VIEW TOGGLE
+      // ============================================
+      const btnGrid = document.getElementById('btn-grid');
+      const btnList = document.getElementById('btn-list');
+      const btnMap = document.getElementById('btn-map');
+
+      function setView(view) {
+        // Reset all
+        gridView.classList.add('hidden');
+        listView.classList.remove('active');
+        mapView.classList.remove('active');
+        btnGrid.classList.remove('active');
+        btnList.classList.remove('active');
+        btnMap.classList.remove('active');
+
+        if (view === 'grid') {
+          gridView.classList.remove('hidden');
+          btnGrid.classList.add('active');
+        } else if (view === 'list') {
+          listView.classList.add('active');
+          btnList.classList.add('active');
+        } else if (view === 'map') {
+          mapView.classList.add('active');
+          btnMap.classList.add('active');
+          // Init map on first show (or refresh markers)
+          setTimeout(() => {
+            const filtered = getFilteredMembers();
+            initMap(filtered);
+            map.invalidateSize();
+          }, 100);
+        }
+      }
+
+      btnGrid.addEventListener('click', () => setView('grid'));
+      btnList.addEventListener('click', () => setView('list'));
+      btnMap.addEventListener('click', () => setView('map'));
+
+      // ============================================
+      // RENDER FUNCTIONS
+      // ============================================
+      function renderGrid(members) {
+        gridView.innerHTML = members.map(m => `
+          <div class="col-span-3 member-card-wrapper" data-id="${m.id}">
+            <a href="${m.profileUrl}" class="glass-card member-card" style="display: flex; color: inherit; text-decoration: none;">
+              <div class="member-avatar">${m.firstName[0]}${m.lastName[0]}</div>
+              <div class="member-name">${m.firstName} ${m.lastName}</div>
+              <div class="member-org">${m.organization}</div>
+              <div class="member-role">${m.role}</div>
+              <div class="member-region"><i class="fas fa-location-dot"></i> ${m.city ? m.city + ', ' : ''}${m.region}</div>
+              <div class="member-communities">
+                ${m.communities.slice(0, 2).map(c => `<span class="member-comm-badge">${communityNames[c] || c}</span>`).join('')}
+                ${m.communities.length > 2 ? `<span class="member-comm-badge" style="background: var(--bg-warm); color: var(--text-subtle);">+${m.communities.length - 2}</span>` : ''}
+              </div>
+            </a>
+          </div>
+        `).join('');
+      }
+
+      function renderList(members) {
+        listView.innerHTML = members.map(m => `
+          <div class="member-list-wrapper" data-id="${m.id}">
+            <a href="${m.profileUrl}" class="member-list-item" style="color: inherit; text-decoration: none;">
+              <div class="member-list-avatar">${m.firstName[0]}${m.lastName[0]}</div>
+              <div class="member-list-info">
+                <h4>${m.firstName} ${m.lastName}</h4>
+                <p>${m.role} — ${m.organization}</p>
+              </div>
+              <div class="member-region" style="margin-bottom: 0;"><i class="fas fa-location-dot"></i> ${m.city ? m.city + ', ' : ''}${m.region}</div>
+              <div class="member-communities" style="justify-content: flex-end;">
+                ${m.communities.slice(0, 2).map(c => `<span class="member-comm-badge">${communityNames[c] || c}</span>`).join('')}
+              </div>
+            </a>
+          </div>
+        `).join('');
+      }
+    });
   </script>
 
 </body>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Glossaire e-Sol — Les mots du réseau</title>
+
+  <style>
+    /* ---- Search bar ---- */
+    .gloss-search {
+      max-width: 540px;
+      margin: 0 auto 48px;
+      position: relative;
+    }
+
+    .gloss-search input {
+      width: 100%;
+      padding: 14px 18px 14px 48px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-main);
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+    }
+
+    .gloss-search input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+
+    .gloss-search .gloss-search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      font-size: 15px;
+    }
+
+    .gloss-search-clear {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+    }
+
+    .gloss-search-clear.visible { display: block; }
+
+    /* ---- Filter alphabet ---- */
+    .gloss-alpha {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 40px;
+    }
+
+    .gloss-alpha button {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-out);
+    }
+
+    .gloss-alpha button:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .gloss-alpha button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .gloss-alpha button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ---- Term entries ---- */
+    .gloss-section {
+      margin-bottom: 36px;
+      scroll-margin-top: 100px;
+    }
+
+    .gloss-section-letter {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 2.4rem;
+      color: var(--primary);
+      line-height: 1;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary-10);
+      letter-spacing: -0.02em;
+    }
+
+    .gloss-entry {
+      padding: 22px 26px;
+      margin-bottom: 12px;
+    }
+
+    .gloss-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .gloss-entry h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: var(--text-main);
+    }
+
+    .gloss-entry .gloss-tag {
+      flex-shrink: 0;
+    }
+
+    .gloss-entry p {
+      color: var(--text-muted);
+      font-size: 0.97rem;
+      line-height: 1.65;
+      margin-bottom: 8px;
+      max-width: 100%;
+    }
+
+    .gloss-entry p:last-child { margin-bottom: 0; }
+
+    .gloss-entry .gloss-also {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .gloss-entry .gloss-also a {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .gloss-entry.hidden { display: none; }
+    .gloss-section.hidden { display: none; }
+
+    /* Tag types */
+    .gloss-tag-acteur { background: var(--primary-10); color: var(--primary); border: 1px solid var(--primary-20); }
+    .gloss-tag-concept { background: var(--secondary-10); color: var(--secondary); border: 1px solid rgba(88,99,48,0.2); }
+    .gloss-tag-outil { background: rgba(78,78,136,0.1); color: var(--cat-politique); border: 1px solid rgba(78,78,136,0.2); }
+    .gloss-tag-theme { background: rgba(136,80,96,0.12); color: var(--cat-culture); border: 1px solid rgba(136,80,96,0.2); }
+    .gloss-tag-todo { background: rgba(0,0,0,0.04); color: var(--text-subtle); border: 1px solid rgba(0,0,0,0.1); }
+
+    /* No-results */
+    .gloss-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-subtle);
+      display: none;
+    }
+
+    .gloss-empty.visible { display: block; }
+
+    .gloss-empty i {
+      font-size: 36px;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    /* Side TOC for desktop */
+    .gloss-toc {
+      position: sticky;
+      top: calc(var(--header-height) + 24px);
+      padding: 20px;
+      max-height: calc(100vh - var(--header-height) - 48px);
+      overflow-y: auto;
+    }
+
+    .gloss-toc h4 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-subtle);
+      margin-bottom: 12px;
+    }
+
+    .gloss-toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .gloss-toc li a {
+      display: block;
+      padding: 6px 10px;
+      border-radius: var(--radius-xs);
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .gloss-toc li a:hover {
+      background: var(--primary-10);
+      color: var(--primary);
+    }
+
+    @media (max-width: 900px) {
+      .gloss-toc { position: static; max-height: none; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <!-- ============== HERO ============== -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-olive mb-4">Décoder e-Sol</span>
+      <h1>Glossaire</h1>
+      <p>Les mots et acronymes que vous croiserez sur le réseau, expliqués simplement. Cliquez sur une lettre, ou cherchez un terme.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+
+      <!-- Search bar -->
+      <div class="gloss-search">
+        <i class="fas fa-magnifying-glass gloss-search-icon"></i>
+        <input id="gloss-search-input" type="search" placeholder="Chercher un terme (ex. COPIL, ZAN, charte…)" aria-label="Chercher un terme">
+        <button class="gloss-search-clear" id="gloss-search-clear" aria-label="Effacer">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Alphabet -->
+      <div class="gloss-alpha" id="gloss-alpha"></div>
+
+      <div class="bento-grid">
+
+        <!-- ===== Main: entries ===== -->
+        <div class="col-span-9" id="gloss-list">
+
+          <!-- ===== A ===== -->
+          <div class="gloss-section" id="letter-A" data-letter="A">
+            <div class="gloss-section-letter">A</div>
+
+            <div class="glass-card gloss-entry no-hover" data-term="AFES adelphe association française étude sol">
+              <div class="gloss-entry-header">
+                <h3>AFES</h3>
+                <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
+              </div>
+              <p><strong>Association Française pour l'Étude du Sol.</strong> Société savante qui rassemble les acteurs scientifiques, techniques et pédagogiques autour du sol depuis 1934. Anime et héberge le réseau e-Sol, sans en être propriétaire.</p>
+              <div class="gloss-also">À voir aussi : <a href="#term-copil">COPIL</a>, <a href="#term-charte">Charte</a> · Site officiel&nbsp;: <a href="https://www.afes.fr" target="_blank" rel="noopener">afes.fr</a></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-annuaire" data-term="annuaire membres répertoire">
+              <div class="gloss-entry-header">
+                <h3>Annuaire</h3>
+                <span class="badge gloss-tag gloss-tag-outil">Outil</span>
+              </div>
+              <p>Répertoire des membres inscrits sur la plateforme, avec leurs spécialités, structures d'appartenance et région. Permet de chercher un·e expert·e ou un·e contact selon ses besoins.</p>
+              <div class="gloss-also">À voir aussi : <a href="#term-membre">Membre</a>, <a href="annuaire.html">Annuaire (démo)</a></div>
+            </div>
+          </div>
+
+          <!-- ===== B ===== -->
+          <div class="gloss-section" id="letter-B" data-letter="B">
+            <div class="gloss-section-letter">B</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-bazar" data-term="bazar fiche yeswiki formulaire">
+              <div class="gloss-entry-header">
+                <h3>Bazar (fiche bazar)</h3>
+                <span class="badge gloss-tag gloss-tag-outil">Outil</span>
+              </div>
+              <p>Mécanisme de <a href="#term-yeswiki">YesWiki</a> qui permet de créer des fiches structurées (annuaire, événements, ressources, projets…) à partir d'un formulaire. La plupart des entrées du réseau (membres, communautés, communs) sont des fiches bazar.</p>
+            </div>
+          </div>
+
+          <!-- ===== C ===== -->
+          <div class="gloss-section" id="letter-C" data-letter="C">
+            <div class="gloss-section-letter">C</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-charte" data-term="charte règles principes gouvernance">
+              <div class="gloss-entry-header">
+                <h3>Charte</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p>Document fondateur du réseau e-Sol qui pose les principes (transparence, biens communs, évolutivité, robustesse), les statuts de membre, le rôle du COPIL, les licences applicables aux contributions (CC BY-SA) et les conditions de révision. Lue à l'entrée, relue régulièrement.</p>
+              <div class="gloss-also">À voir aussi : <a href="charte.html">Charte (démo)</a> · <a href="https://e-sol.fr/?Charte" target="_blank" rel="noopener">Charte officielle</a></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-commun" data-term="commun biens partagés ressources">
+              <div class="gloss-entry-header">
+                <h3>Commun (e-Sol)</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p><strong>Ressource produite, maintenue et gouvernée par une communauté</strong>, selon des règles partagées, pour un bénéfice collectif. Peut prendre la forme d'un jeu de données, d'un guide, d'un kit pédagogique, d'un outil logiciel, d'une carte. Mis à disposition sous licence ouverte.</p>
+              <p>Dans la métaphore de la maison&nbsp;: les outils partagés (cuisine, atelier, bibliothèque, salle commune).</p>
+              <div class="gloss-also">À voir aussi : <a href="#term-cycle">Cycle de vie d'un commun</a>, <a href="communs.html">Les communs</a></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-communaute" data-term="communauté groupe thématique pièce">
+              <div class="gloss-entry-header">
+                <h3>Communauté thématique</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p>Groupe de membres rassemblé autour d'un sujet précis (Fresque du Sol, ZAN, Sols Forestiers, Pédologie de Terrain&hellip;) avec un·e ou des animateur·rices, un espace dédié sur la plateforme, et des objectifs propres. Dans la maison&nbsp;: une pièce.</p>
+              <div class="gloss-also">À voir aussi : <a href="communautes.html">Liste des communautés</a></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-copil" data-term="copil comité pilotage gouvernance">
+              <div class="gloss-entry-header">
+                <h3>COPIL e-Sol</h3>
+                <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
+              </div>
+              <p><strong>Comité de pilotage du réseau e-Sol.</strong> Instance multi-acteurs qui oriente les choix stratégiques de la plateforme&nbsp;: <strong>AFES</strong>, <strong>GIS Sol</strong>, <strong>RMT Sols et Territoires</strong>, <strong>RNEST</strong>, avec le soutien de l'<strong>ADEME</strong> et de l'<strong>OFB</strong>. Le COPIL valide, arbitre, valorise — il n'anime pas au quotidien.</p>
+              <div class="gloss-also">À voir aussi : <a href="#term-afes">AFES</a>, <a href="#term-gissol">GIS Sol</a>, <a href="#term-rmt">RMT Sols et Territoires</a>, <a href="#term-rnest">RNEST</a></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-cycle" data-term="cycle vie commun statut brouillon révision actif">
+              <div class="gloss-entry-header">
+                <h3>Cycle de vie d'un commun</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p>Parcours d'évolution d'une ressource partagée, de l'idée à la maintenance&nbsp;: <strong>proposition</strong> → <strong>brouillon</strong> → <strong>en révision</strong> → <strong>actif</strong> → <strong>archivé</strong> (si plus pertinent). Chaque statut implique des engagements et des droits différents.</p>
+              <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Guide complet — phase 4</span></div>
+            </div>
+          </div>
+
+          <!-- ===== E ===== -->
+          <div class="gloss-section" id="letter-E" data-letter="E">
+            <div class="gloss-section-letter">E</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-esol" data-term="esol e-sol réseau plateforme">
+              <div class="gloss-entry-header">
+                <h3>e-Sol</h3>
+                <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
+              </div>
+              <p>Plateforme collaborative et réseau d'acteurs autour de la connaissance, la préservation et la régénération des sols en France. Animé par l'<a href="#term-afes">AFES</a>, gouverné par le <a href="#term-copil">COPIL</a>, technologiquement bâti sur <a href="#term-yeswiki">YesWiki</a>. Site&nbsp;: <a href="https://e-sol.fr" target="_blank" rel="noopener">e-sol.fr</a></p>
+            </div>
+          </div>
+
+          <!-- ===== F ===== -->
+          <div class="gloss-section" id="letter-F" data-letter="F">
+            <div class="gloss-section-letter">F</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-ficheaction" data-term="fiche action projet">
+              <div class="gloss-entry-header">
+                <h3>Fiche action</h3>
+                <span class="badge gloss-tag gloss-tag-outil">Outil</span>
+              </div>
+              <p>Type de fiche bazar permettant à un·e membre ou une communauté de déclarer une action (atelier, projet, événement, intervention) et de chercher des collaborations. Visible dans l'<a href="https://e-sol.fr/?EspaceActions" target="_blank" rel="noopener">Espace Actions</a>.</p>
+              <div class="gloss-also">À voir aussi : <a href="#term-bazar">Fiche bazar</a></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-forum" data-term="forum discussion échange">
+              <div class="gloss-entry-header">
+                <h3>Forum</h3>
+                <span class="badge gloss-tag gloss-tag-outil">Outil</span>
+              </div>
+              <p>Espace de discussion asynchrone du réseau, hébergé sur <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum.e-sol.fr</a>. Sert au hall d'accueil (présentations), aux questions transverses et à la coordination entre communautés.</p>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-fresque" data-term="fresque sol atelier pédagogique">
+              <div class="gloss-entry-header">
+                <h3>Fresque du Sol</h3>
+                <span class="badge gloss-tag gloss-tag-theme">Communauté</span>
+              </div>
+              <p>Communauté pédagogique et atelier collaboratif qui aide à comprendre les enjeux du sol par cartes et discussions, à la manière des Fresques du Climat. Souvent recommandée comme porte d'entrée transverse pour découvrir le réseau.</p>
+              <div class="gloss-also">À voir aussi : <a href="communaute-detail.html?c=fresque-sol">Fiche communauté</a></div>
+            </div>
+          </div>
+
+          <!-- ===== G ===== -->
+          <div class="gloss-section" id="letter-G" data-letter="G">
+            <div class="gloss-section-letter">G</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-gissol" data-term="gis sol groupement intérêt scientifique">
+              <div class="gloss-entry-header">
+                <h3>GIS Sol</h3>
+                <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
+              </div>
+              <p><strong>Groupement d'Intérêt Scientifique Sol.</strong> Structure nationale qui coordonne et fédère les actions de recherche sur les sols français (inventaire, surveillance, données). Membre du COPIL e-Sol.</p>
+            </div>
+          </div>
+
+          <!-- ===== I ===== -->
+          <div class="gloss-section" id="letter-I" data-letter="I">
+            <div class="gloss-section-letter">I</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-iprsol" data-term="iprsols indicateurs pression risque">
+              <div class="gloss-entry-header">
+                <h3>IPRSols</h3>
+                <span class="badge gloss-tag gloss-tag-theme">Communauté</span>
+              </div>
+              <p>Communauté de travail sur les <strong>indicateurs de pression et de risque sur les sols</strong> (artificialisation, érosion, contamination, perte de matière organique&hellip;). Vise à mutualiser les méthodes d'évaluation utilisées par différents acteurs.</p>
+              <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Définition à confirmer avec le·la référent·e</span></div>
+            </div>
+          </div>
+
+          <!-- ===== L ===== -->
+          <div class="gloss-section" id="letter-L" data-letter="L">
+            <div class="gloss-section-letter">L</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-licence" data-term="licence cc by sa creative commons">
+              <div class="gloss-entry-header">
+                <h3>Licence CC BY-SA</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p><strong>Creative Commons Attribution — Partage dans les Mêmes Conditions.</strong> Licence libre par défaut sur e-Sol&nbsp;: les contributions peuvent être réutilisées et adaptées, à condition de citer l'auteur·rice et de partager les œuvres dérivées sous la même licence ouverte.</p>
+            </div>
+          </div>
+
+          <!-- ===== M ===== -->
+          <div class="gloss-section" id="letter-M" data-letter="M">
+            <div class="gloss-section-letter">M</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-membre" data-term="membre inscrit participant">
+              <div class="gloss-entry-header">
+                <h3>Membre</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p>Personne inscrite sur la plateforme. L'inscription est gratuite et ouverte ; elle ne nécessite pas d'adhésion à l'AFES. Le statut, les rôles et engagements possibles sont décrits dans la <a href="#term-charte">charte</a>.</p>
+            </div>
+          </div>
+
+          <!-- ===== P ===== -->
+          <div class="gloss-section" id="letter-P" data-letter="P">
+            <div class="gloss-section-letter">P</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-pedologie" data-term="pédologie science sol">
+              <div class="gloss-entry-header">
+                <h3>Pédologie</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p>Science du sol&nbsp;: étude de sa formation, de ses constituants, de sa structure, de son évolution et de ses propriétés. Un·e <strong>pédologue</strong> en est le·la spécialiste. La pédologie n'épuise pas le sujet&nbsp;: agronomie, écologie, droit, sociologie travaillent aussi sur les sols.</p>
+            </div>
+          </div>
+
+          <!-- ===== R ===== -->
+          <div class="gloss-section" id="letter-R" data-letter="R">
+            <div class="gloss-section-letter">R</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-refersols" data-term="refersols référentiel pédologique">
+              <div class="gloss-entry-header">
+                <h3>Refersols</h3>
+                <span class="badge gloss-tag gloss-tag-theme">Communauté</span>
+              </div>
+              <p>Communauté autour du <strong>référentiel pédologique français</strong>&nbsp;: cadre commun pour décrire et classer les sols. Espace de discussion entre pédologues praticien·ne·s et académiques sur les évolutions du référentiel.</p>
+              <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Définition à confirmer avec le·la référent·e</span></div>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-rmt" data-term="rmt sols territoires réseau mixte technologique">
+              <div class="gloss-entry-header">
+                <h3>RMT Sols et Territoires</h3>
+                <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
+              </div>
+              <p><strong>Réseau Mixte Technologique « Sols et Territoires ».</strong> Réseau d'acteurs de la recherche, de la formation et du développement agricole travaillant sur la connaissance et la gestion durable des sols. Membre du COPIL e-Sol.</p>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-rnest" data-term="rnest réseau national expertise scientifique technique">
+              <div class="gloss-entry-header">
+                <h3>RNEST</h3>
+                <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
+              </div>
+              <p><strong>Réseau National d'Expertise Scientifique et Technique sur les sols.</strong> Réseau qui structure et mobilise l'expertise française en pédologie au service des politiques publiques. Membre du COPIL e-Sol.</p>
+            </div>
+          </div>
+
+          <!-- ===== S ===== -->
+          <div class="gloss-section" id="letter-S" data-letter="S">
+            <div class="gloss-section-letter">S</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-science-citoyenne" data-term="science citoyenne participative">
+              <div class="gloss-entry-header">
+                <h3>Science citoyenne (ou participative)</h3>
+                <span class="badge gloss-tag gloss-tag-concept">Concept</span>
+              </div>
+              <p>Pratique scientifique associant des citoyen·ne·s non-spécialistes à la production de connaissance (observation, collecte de données, analyse, co-construction). Valeur portée par la <a href="#term-charte">charte</a> e-Sol — chacun·e a sa place dans la maison.</p>
+            </div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-srpsols" data-term="srp sols structure régionale">
+              <div class="gloss-entry-header">
+                <h3>SRP Sols</h3>
+                <span class="badge gloss-tag gloss-tag-theme">Communauté</span>
+              </div>
+              <p>Communauté autour des <strong>Structures Régionales de Pédologie</strong> (ou approchant — vocabulaire à préciser avec le·la référent·e). Espace dédié aux acteurs régionaux qui cartographient, conservent et valorisent les données pédologiques sur leurs territoires.</p>
+              <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Définition à confirmer avec le·la référent·e</span></div>
+            </div>
+          </div>
+
+          <!-- ===== Y ===== -->
+          <div class="gloss-section" id="letter-Y" data-letter="Y">
+            <div class="gloss-section-letter">Y</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-yeswiki" data-term="yeswiki wiki collaboratif">
+              <div class="gloss-entry-header">
+                <h3>YesWiki</h3>
+                <span class="badge gloss-tag gloss-tag-outil">Outil</span>
+              </div>
+              <p>Logiciel libre francophone de <strong>wiki collaboratif</strong>, particulièrement utilisé par les réseaux d'éducation populaire et les communs. e-sol.fr est bâti sur YesWiki. Permet l'édition de pages, des formulaires (fiches bazar), des galeries, et la gestion de droits par groupe.</p>
+              <div class="gloss-also">Site officiel&nbsp;: <a href="https://yeswiki.net" target="_blank" rel="noopener">yeswiki.net</a></div>
+            </div>
+          </div>
+
+          <!-- ===== Z ===== -->
+          <div class="gloss-section" id="letter-Z" data-letter="Z">
+            <div class="gloss-section-letter">Z</div>
+
+            <div class="glass-card gloss-entry no-hover" id="term-zan" data-term="zan zéro artificialisation nette">
+              <div class="gloss-entry-header">
+                <h3>ZAN</h3>
+                <span class="badge gloss-tag gloss-tag-theme">Communauté</span>
+              </div>
+              <p><strong>Zéro Artificialisation Nette.</strong> Objectif de politique publique française (loi Climat et Résilience de 2021) qui vise à diviser par deux le rythme d'artificialisation des sols d'ici 2030, et à l'annuler en 2050. La communauté ZAN d'e-Sol travaille sur la mise en œuvre, les indicateurs, et les retours d'expérience.</p>
+              <div class="gloss-also">À voir aussi : <a href="communaute-detail.html?c=zan">Communauté ZAN</a></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ===== Side TOC ===== -->
+        <div class="col-span-3">
+          <div class="glass-card gloss-toc no-hover">
+            <h4>Navigation rapide</h4>
+            <ul>
+              <li><a href="#letter-A">A — AFES, Annuaire</a></li>
+              <li><a href="#letter-B">B — Bazar</a></li>
+              <li><a href="#letter-C">C — Charte, Commun, Communauté, COPIL, Cycle</a></li>
+              <li><a href="#letter-E">E — e-Sol</a></li>
+              <li><a href="#letter-F">F — Fiche action, Forum, Fresque du Sol</a></li>
+              <li><a href="#letter-G">G — GIS Sol</a></li>
+              <li><a href="#letter-I">I — IPRSols</a></li>
+              <li><a href="#letter-L">L — Licence CC BY-SA</a></li>
+              <li><a href="#letter-M">M — Membre</a></li>
+              <li><a href="#letter-P">P — Pédologie</a></li>
+              <li><a href="#letter-R">R — Refersols, RMT, RNEST</a></li>
+              <li><a href="#letter-S">S — Science citoyenne, SRP Sols</a></li>
+              <li><a href="#letter-Y">Y — YesWiki</a></li>
+              <li><a href="#letter-Z">Z — ZAN</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Empty state -->
+      <div class="gloss-empty" id="gloss-empty">
+        <i class="fas fa-magnifying-glass"></i>
+        <h3>Aucun terme ne correspond</h3>
+        <p class="text-muted">Essayez un autre mot-clef, ou <a href="contact.html">signalez-nous</a> un terme manquant.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============== CONTRIB ============== -->
+  <section class="section section-alt">
+    <div class="container container-narrow text-center">
+      <span class="badge badge-olive mb-4">Un mot manque&nbsp;?</span>
+      <h2 style="margin-bottom: 16px;">Ce glossaire est vivant</h2>
+      <p class="text-muted" style="margin: 0 auto 28px; font-size: 1.05rem;">Si un acronyme, un sigle ou un terme métier vous a fait tiquer sans qu'il soit listé ici, signalez-le. Le glossaire s'enrichit au fil des arrivées dans la maison.</p>
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="contact.html" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Proposer un terme</a>
+        <a href="tutoriels.html" class="btn btn-outline"><i class="fas fa-book-open-reader"></i> Centre de ressources</a>
+        <a href="premiers-pas.html" class="btn btn-ghost"><i class="fas fa-shoe-prints"></i> Premiers pas</a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Build alphabet filter dynamically based on present letters
+    (function() {
+      const sections = document.querySelectorAll('.gloss-section');
+      const presentLetters = new Set(Array.from(sections).map(s => s.dataset.letter));
+      const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      const alpha = document.getElementById('gloss-alpha');
+
+      // "Tous" button
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'Tous';
+      allBtn.classList.add('active');
+      allBtn.style.width = 'auto';
+      allBtn.style.padding = '0 14px';
+      allBtn.style.borderRadius = '18px';
+      allBtn.dataset.letter = 'all';
+      alpha.appendChild(allBtn);
+
+      allLetters.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.textContent = letter;
+        btn.dataset.letter = letter;
+        if (!presentLetters.has(letter)) btn.disabled = true;
+        alpha.appendChild(btn);
+      });
+
+      alpha.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn || btn.disabled) return;
+        alpha.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const letter = btn.dataset.letter;
+        if (letter === 'all') {
+          sections.forEach(s => s.classList.remove('hidden'));
+        } else {
+          sections.forEach(s => {
+            s.classList.toggle('hidden', s.dataset.letter !== letter);
+          });
+          document.getElementById('letter-' + letter)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // also clear search
+        const searchInput = document.getElementById('gloss-search-input');
+        if (searchInput.value) {
+          searchInput.value = '';
+          searchInput.dispatchEvent(new Event('input'));
+        }
+      });
+    })();
+
+    // Search
+    (function() {
+      const input = document.getElementById('gloss-search-input');
+      const clearBtn = document.getElementById('gloss-search-clear');
+      const entries = document.querySelectorAll('.gloss-entry');
+      const sections = document.querySelectorAll('.gloss-section');
+      const empty = document.getElementById('gloss-empty');
+      const alpha = document.getElementById('gloss-alpha');
+
+      function normalize(s) {
+        return s.toLowerCase()
+          .normalize('NFD').replace(/[̀-ͯ]/g, '');
+      }
+
+      input.addEventListener('input', () => {
+        const q = normalize(input.value.trim());
+        clearBtn.classList.toggle('visible', q.length > 0);
+
+        if (!q) {
+          // restore (and respect alpha filter if any active)
+          const activeLetter = alpha.querySelector('button.active')?.dataset.letter || 'all';
+          entries.forEach(e => e.classList.remove('hidden'));
+          sections.forEach(s => {
+            if (activeLetter === 'all') s.classList.remove('hidden');
+            else s.classList.toggle('hidden', s.dataset.letter !== activeLetter);
+          });
+          empty.classList.remove('visible');
+          return;
+        }
+
+        // reset alpha to "all" if user searches
+        if (alpha.querySelector('button.active')?.dataset.letter !== 'all') {
+          alpha.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          alpha.querySelector('button[data-letter="all"]').classList.add('active');
+        }
+
+        let totalVisible = 0;
+        sections.forEach(section => {
+          let sectionHasMatch = false;
+          section.querySelectorAll('.gloss-entry').forEach(entry => {
+            const haystack = normalize(entry.dataset.term + ' ' + entry.textContent);
+            const show = haystack.includes(q);
+            entry.classList.toggle('hidden', !show);
+            if (show) { sectionHasMatch = true; totalVisible++; }
+          });
+          section.classList.toggle('hidden', !sectionHasMatch);
+        });
+
+        empty.classList.toggle('visible', totalVisible === 0);
+      });
+
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        input.focus();
+      });
+    })();
+  </script>
+
+</body>
+</html>

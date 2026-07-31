@@ -48,7 +48,9 @@ Les fichiers JSON dans `src/data/` sont structurés pour correspondre aux futurs
 
 - `communities.json` — 12 communautés réelles d'e-Sol
 - `communs.json` — 9 ressources partagées
-- `members-sample.json` — 20 membres représentatifs
+- `members-sample.json` — 100 profils de membres **entièrement fictifs**, générés par `scripts/generate-fake-members.js`
+
+> 🔒 **Données personnelles** — L'annuaire, les profils et les annonces de cette démo ne contiennent aucune personne réelle : noms, structures, rôles et coordonnées sont inventés (e-mails sur le domaine réservé `example.org`). Toute ressemblance avec des personnes réelles serait fortuite.
 
 ## Intégration YesWiki
 

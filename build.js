@@ -46,6 +46,21 @@ function build() {
     console.log('  ✓ data/ copied');
   }
 
+  // Copy img directory
+  const srcImg = path.join(__dirname, 'src', 'img');
+  const distImg = path.join(distDir, 'img');
+  if (fs.existsSync(srcImg)) {
+    copyDir(srcImg, distImg);
+    console.log('  ✓ img/ copied');
+  }
+
+  // Regenerate dist/img/manifest.json
+  try {
+    require('./scripts/generate-manifest.js');
+  } catch (e) {
+    console.warn('  ⚠ manifest generation failed:', e.message);
+  }
+
   console.log(`\nBuild complete! ${fs.readdirSync(distDir).filter(f => f.endsWith('.html')).length} pages in dist/`);
 }
 

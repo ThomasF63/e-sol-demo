@@ -1,0 +1,14 @@
+Captures d'écran des tutoriels forum (session 4).
+
+Dossier vide pour l'instant : le certificat TLS de forum.e-sol.fr est expiré
+depuis le 19/07/2026, aucune capture n'était possible (voir
+docs/tutoriels-forum-yeswiki.md, section « Captures d'écran : état et procédure »).
+
+Une fois le certificat réparé :
+- vues publiques : node scripts/capture-tutos-forum.js (7 fichiers, floutage
+  automatique des avatars et noms) ;
+- vues connectées (fiches C à H) : en session guidée, liste des fichiers
+  attendus dans docs/tutoriels-forum-yeswiki.md.
+
+Règle : jamais de vrais membres dans les livrables. Flouter, ou utiliser des
+comptes fictifs (Cécile Chanteloup, etc.).

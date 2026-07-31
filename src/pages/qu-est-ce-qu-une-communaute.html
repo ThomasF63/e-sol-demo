@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Qu'est-ce qu'une communauté ? · e-Sol</title>
+
+  <style>
+    /* ---- Lead definition ---- */
+    .qc-lead {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .qc-lead p.qc-lead-main {
+      font-size: 1.25rem;
+      line-height: 1.7;
+      color: var(--text-main);
+      font-family: var(--font-display);
+      font-weight: 500;
+      max-width: 100%;
+    }
+
+    .qc-lead p.qc-lead-sub {
+      margin-top: 18px;
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      max-width: 100%;
+    }
+
+    /* ---- Est / n'est pas ---- */
+    .qc-def-card {
+      padding: 30px;
+      height: 100%;
+    }
+
+    .qc-def-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qc-def-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .qc-def-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .qc-def-list li i {
+      flex-shrink: 0;
+      margin-top: 4px;
+      font-size: 14px;
+    }
+
+    .qc-def-list li strong {
+      color: var(--text-main);
+    }
+
+    /* ---- Example cards ---- */
+    .qc-exemple-card {
+      padding: 26px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .qc-exemple-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .qc-exemple-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .qc-exemple-head h3 {
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .qc-exemple-card > p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.65;
+      flex-grow: 1;
+      max-width: 100%;
+    }
+
+    .qc-exemple-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12.5px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ---- Rôles cards ---- */
+    .qc-role-card {
+      padding: 26px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .qc-role-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .qc-role-card h3 { font-size: 1.05rem; }
+
+    .qc-role-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    .qc-renvoi {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding: 28px 32px;
+    }
+
+    .qc-renvoi p { max-width: 560px; }
+
+    /* ---- Cycle de vie ---- */
+    .qc-cycle {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .qc-stage {
+      flex: 1;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .qc-stage-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: #fdfbf9;
+    }
+
+    .qc-stage h3 { font-size: 1rem; }
+
+    .qc-stage p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    .qc-cycle-arrow {
+      align-self: center;
+      color: var(--border-strong);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .qc-cycle { flex-direction: column; }
+      .qc-cycle-arrow { transform: rotate(90deg); align-self: center; }
+    }
+
+    /* ---- Étapes rejoindre ---- */
+    .qc-step {
+      display: flex;
+      gap: 22px;
+      padding: 26px 30px;
+    }
+
+    .qc-step-num {
+      flex: 0 0 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 4px 14px rgba(156,63,0,0.18);
+    }
+
+    .qc-step-body h3 {
+      font-size: 1.12rem;
+      margin-bottom: 6px;
+    }
+
+    .qc-step-body p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      max-width: 100%;
+    }
+
+    .qc-step-body .qc-step-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .qc-step { flex-direction: column; gap: 14px; padding: 22px; }
+    }
+
+    /* ---- Proposer ---- */
+    .qc-critere-list, .qc-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .qc-critere-list li, .qc-checklist li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .qc-critere-list li i, .qc-checklist li i {
+      flex-shrink: 0;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--secondary);
+    }
+
+    .qc-checklist li i { color: var(--text-subtle); }
+
+    .qc-demarche-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 14px 0;
+    }
+
+    .qc-demarche-item + .qc-demarche-item {
+      border-top: 1px solid var(--border);
+    }
+
+    .qc-demarche-num {
+      flex: 0 0 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .qc-demarche-item h4 { font-size: 0.98rem; margin-bottom: 2px; }
+
+    .qc-demarche-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    /* ---- FAQ (même motif que premiers-pas) ---- */
+    .qc-faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 4px 0;
+    }
+    .qc-faq-item:last-child { border-bottom: none; }
+
+    .qc-faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 0;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-main);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .qc-faq-question:hover { color: var(--primary); }
+    .qc-faq-question i {
+      transition: transform 0.3s var(--ease-out);
+      font-size: 13px;
+      color: var(--text-subtle);
+    }
+    .qc-faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease-out), padding 0.35s ease;
+      padding: 0;
+    }
+    .qc-faq-answer.open {
+      max-height: 600px;
+      padding-bottom: 18px;
+    }
+    .qc-faq-answer p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 100%;
+    }
+    .qc-faq-item.open .qc-faq-question i { transform: rotate(180deg); }
+
+    .footnote {
+      font-size: 0.82rem;
+      color: var(--text-subtle);
+      margin-top: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <!-- ============== HERO ============== -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Comprendre e-Sol</span>
+      <h1>Qu'est-ce qu'une communauté&nbsp;?</h1>
+      <p>Le cœur d'e-Sol, ce sont ses communautés&nbsp;: des groupes qui travaillent ensemble sur un aspect des sols. Voici ce qu'elles sont, comment on les rejoint et comment on en crée une.</p>
+    </div>
+  </div>
+
+  <!-- ============== DÉFINITION ============== -->
+  <section class="section" id="definition">
+    <div class="container">
+      <div class="qc-lead mb-8">
+        <p class="qc-lead-main">Une communauté e-Sol, c'est un groupe de membres rassemblé autour d'un sujet précis lié aux sols, avec un espace de travail dédié, un·e ou plusieurs animateur·rices, et une ambition&nbsp;: produire ensemble des ressources utiles à tou·tes, les communs.</p>
+        <p class="qc-lead-sub">Dans la <a href="maison-esol.html">maison e-Sol</a>, chaque communauté est une pièce&nbsp;: on y entre librement, on y retrouve celles et ceux qui travaillent le même sujet, et rien n'empêche de fréquenter plusieurs pièces à la fois.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-6">
+          <div class="glass-card qc-def-card no-hover" style="border-top: 3px solid var(--secondary);">
+            <h3><i class="fas fa-circle-check" style="color: var(--secondary);"></i> Une communauté, c'est</h3>
+            <ul class="qc-def-list">
+              <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Un groupe de personnes</strong>&nbsp;: des membres qui se connaissent, échangent et avancent ensemble sur leur sujet.</span></li>
+              <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Un espace de travail</strong>&nbsp;: une page dédiée sur la plateforme, des documents partagés et une catégorie sur le forum.</span></li>
+              <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Une animation identifiée</strong>&nbsp;: un·e ou plusieurs animateur·rices qui accueillent, coordonnent et font vivre le groupe.</span></li>
+              <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Une fabrique de communs</strong>&nbsp;: ce qui y est produit (guides, données, méthodes) est partagé au réseau, sous licence ouverte.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-span-6">
+          <div class="glass-card qc-def-card no-hover" style="border-top: 3px solid var(--cat-culture);">
+            <h3><i class="fas fa-circle-xmark" style="color: var(--cat-culture);"></i> Ce n'est pas</h3>
+            <ul class="qc-def-list">
+              <li><i class="fas fa-xmark" style="color: var(--cat-culture);"></i><span><strong>Un simple canal d'annonces</strong>&nbsp;: on n'y consomme pas de l'information, on y construit ensemble.</span></li>
+              <li><i class="fas fa-xmark" style="color: var(--cat-culture);"></i><span><strong>Un club fermé d'expert·es</strong>&nbsp;: chercheur·ses, praticien·nes, enseignant·es et citoyen·nes engagé·es s'y côtoient.</span></li>
+              <li><i class="fas fa-xmark" style="color: var(--cat-culture);"></i><span><strong>Une nouvelle association</strong>&nbsp;: pas de statuts, pas de cotisation&nbsp;; on entre et on sort librement.</span></li>
+              <li><i class="fas fa-xmark" style="color: var(--cat-culture);"></i><span><strong>Un monde à part</strong>&nbsp;: la <a href="charte.html">charte</a> du réseau s'y applique comme partout, du forum aux documents partagés.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== EXEMPLES CONCRETS ============== -->
+  <section class="section section-alt" id="exemples">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Sur le terrain</span>
+        <h2>Ce qu'on y fait, concrètement</h2>
+        <p>Quatre exemples tirés des communautés existantes, du groupe de 15 personnes au réseau de plus de 100 membres.</p>
+      </div>
+
+      <div class="bento-grid" id="qc-exemples-grid">
+        <!-- Rempli par JS depuis communities.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== QUI FAIT QUOI ============== -->
+  <section class="section" id="roles">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Qui fait quoi</span>
+        <h2>Trois positions dans une communauté</h2>
+        <p>Chaque communauté règle son fonctionnement interne. Le cercle restreint est un outil à activer si besoin, pas une règle imposée.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-4">
+          <div class="glass-card qc-role-card no-hover">
+            <div class="qc-role-icon" style="background: var(--secondary-10); color: var(--secondary);">
+              <i class="fas fa-user"></i>
+            </div>
+            <h3>Membre</h3>
+            <p>Participe aux espaces partagés de la communauté&nbsp;: pages et documents, discussions, catégorie de forum. Selon les réglages choisis, peut aussi éditer certaines pages.</p>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card qc-role-card no-hover">
+            <div class="qc-role-icon" style="background: var(--cat-culture-bg); color: var(--cat-culture);">
+              <i class="fas fa-circle-half-stroke"></i>
+            </div>
+            <h3>Membre du cercle restreint&nbsp;*</h3>
+            <p>Accède en plus à des espaces réservés&nbsp;: pages en accès limité, documents de travail, co-écriture. Chaque communauté choisit d'activer ce cercle ou de s'en passer.</p>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card qc-role-card no-hover">
+            <div class="qc-role-icon" style="background: var(--primary-10); color: var(--primary);">
+              <i class="fas fa-compass"></i>
+            </div>
+            <h3>Animateur·rice</h3>
+            <p>Accueille les nouveaux membres, valide les adhésions si la communauté a choisi ce régime, édite les pages, active ou non le cercle restreint, et veille au respect de la charte dans son périmètre.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card qc-renvoi no-hover mt-6" style="background: linear-gradient(135deg, #fffcf7, var(--bg-elevated)); border: 1.5px solid var(--primary-20);">
+        <div class="flex items-center gap-6">
+          <div style="width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--primary-10); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
+            <i class="fas fa-stairs"></i>
+          </div>
+          <p class="text-muted" style="font-size: 0.95rem;">L'escalier des cinq niveaux de la plateforme, le schéma de la vue communauté et le détail droit par droit sont sur la page <strong>Rôles et droits</strong>.</p>
+        </div>
+        <a href="roles-et-droits.html" class="btn btn-primary">Voir les rôles et droits <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <p class="footnote">* Le cercle restreint est optionnel&nbsp;: une communauté sans cercle restreint fonctionne très bien avec deux positions seulement.</p>
+    </div>
+  </section>
+
+  <!-- ============== CYCLE DE VIE ============== -->
+  <section class="section section-alt" id="cycle-de-vie">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Le cycle de vie</span>
+        <h2>De la naissance à l'essaimage</h2>
+        <p>Une communauté n'est pas éternelle, et ce n'est pas grave&nbsp;: elle vit au rythme de son sujet et de ses membres.</p>
+      </div>
+
+      <div class="qc-cycle">
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--secondary);"><i class="fas fa-seedling"></i></div>
+          <h3>Naissance</h3>
+          <p>Une proposition portée par un·e futur·e animateur·rice, validée par le comité de pilotage. La pièce est ouverte, avec sa page et sa catégorie de forum.</p>
+        </div>
+        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--primary);"><i class="fas fa-people-group"></i></div>
+          <h3>Animation</h3>
+          <p>Rencontres, discussions, accueil des nouveaux&nbsp;: l'animateur·rice fait vivre la pièce, les membres la remplissent.</p>
+        </div>
+        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--primary-light);"><i class="fas fa-hand-holding-heart"></i></div>
+          <h3>Production de communs</h3>
+          <p>La communauté laisse des traces utiles à tou·tes&nbsp;: guides, données, méthodes, ateliers, publiés sous licence ouverte (CC BY-SA).</p>
+        </div>
+        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--cat-institutionnel);"><i class="fas fa-moon"></i></div>
+          <h3>Sommeil ou essaimage</h3>
+          <p>L'activité peut ralentir&nbsp;: la communauté s'endort, ses communs restent, un réveil est toujours possible. Ou le sujet déborde&nbsp;: une partie du groupe essaime et fonde une nouvelle communauté.</p>
+        </div>
+      </div>
+
+      <p class="footnote">Ce cycle décrit la vie réelle des communautés. Le cadre formel (qui constate le sommeil, comment on relance ou ferme une communauté) reste à écrire avec l'équipe d'animation.</p>
+    </div>
+  </section>
+
+  <!-- ============== REJOINDRE ============== -->
+  <section class="section" id="rejoindre">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Rejoindre</span>
+        <h2>Rejoindre une communauté, pas à pas</h2>
+        <p>Quatre gestes simples. Aucun niveau d'expertise n'est demandé, seulement l'envie de participer.</p>
+      </div>
+
+      <div class="flex flex-col gap-4" style="max-width: 860px; margin: 0 auto;">
+
+        <div class="glass-card qc-step no-hover animate-in">
+          <div class="qc-step-num">1</div>
+          <div class="qc-step-body">
+            <h3>Je crée mon compte e-Sol</h3>
+            <p>Si ce n'est pas déjà fait&nbsp;: l'inscription est gratuite, ouverte à toute personne intéressée par les sols, et crée votre fiche dans l'annuaire.</p>
+            <div class="qc-step-actions">
+              <a href="inscription.html" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> M'inscrire</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card qc-step no-hover animate-in delay-1">
+          <div class="qc-step-num" style="background: linear-gradient(135deg, #b04510, var(--primary));">2</div>
+          <div class="qc-step-body">
+            <h3>Je choisis ma communauté</h3>
+            <p>Je parcours la liste des 12 communautés, je lis les présentations, je regarde ce qui s'y passe sur le forum. Une ou deux pièces où être vraiment présent·e valent mieux que dix effleurées.</p>
+            <div class="qc-step-actions">
+              <a href="communautes.html" class="btn btn-outline btn-sm"><i class="fas fa-people-roof"></i> Parcourir les communautés</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card qc-step no-hover animate-in delay-2">
+          <div class="qc-step-num" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);">3</div>
+          <div class="qc-step-body">
+            <h3>Je demande à entrer</h3>
+            <p>Selon la communauté, l'entrée est immédiate (bouton «&nbsp;Rejoindre&nbsp;» sur sa page) ou passe par un mot à l'animateur·rice, qui accueille et valide&nbsp;*. Dans les deux cas, je coche la communauté sur ma fiche annuaire.</p>
+          </div>
+        </div>
+
+        <div class="glass-card qc-step no-hover animate-in delay-3">
+          <div class="qc-step-num" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 14px rgba(88,99,48,0.18);">4</div>
+          <div class="qc-step-body">
+            <h3>Je me présente et je participe</h3>
+            <p>Un mot de bonjour dans la catégorie de forum de la communauté, un œil aux documents partagés, et me voilà membre. La suite vient naturellement&nbsp;: discussions, rencontres, contributions.</p>
+            <div class="qc-step-actions">
+              <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i class="fas fa-comments"></i> Aller au forum</a>
+              <a href="premiers-pas.html" class="btn btn-ghost btn-sm">Voir les premiers pas</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="footnote">* Les deux régimes d'adhésion (entrée immédiate ou sur validation) coexistent&nbsp;; le choix appartient à chaque communauté. Le régime par défaut reste à valider avec l'équipe d'animation.</p>
+    </div>
+  </section>
+
+  <!-- ============== PROPOSER ============== -->
+  <section class="section section-alt" id="proposer">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Créer</span>
+        <h2>Proposer une nouvelle communauté</h2>
+        <p>Une pièce manque dans la maison&nbsp;? Tout membre peut proposer d'en ouvrir une. Voici les repères&nbsp;*.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-6">
+          <div class="glass-card qc-def-card no-hover">
+            <h3><i class="fas fa-list-check" style="color: var(--secondary);"></i> Les ingrédients qui comptent</h3>
+            <ul class="qc-critere-list">
+              <li><i class="fas fa-check"></i><span><strong>Un sujet précis lié aux sols</strong>, qui ne recoupe pas une communauté existante (sinon, autant la rejoindre et l'enrichir).</span></li>
+              <li><i class="fas fa-check"></i><span><strong>Un·e ou deux animateur·rices motivé·es</strong>, prêt·es à accueillir et à faire vivre le groupe dans la durée.</span></li>
+              <li><i class="fas fa-check"></i><span><strong>Quelques membres partants</strong> dès le départ, pour que la pièce ne reste pas vide.</span></li>
+              <li><i class="fas fa-check"></i><span><strong>L'envie de produire des communs</strong>, dans le cadre de la charte et de ses licences ouvertes.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-span-6">
+          <div class="glass-card qc-def-card no-hover">
+            <h3><i class="fas fa-route" style="color: var(--primary);"></i> La démarche</h3>
+            <div class="qc-demarche-item">
+              <div class="qc-demarche-num">1</div>
+              <div>
+                <h4>J'en parle</h4>
+                <p>Un fil sur le <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum</a> pour sonder les intéressé·es, ou un message à l'équipe d'animation via la page <a href="contact.html">contact</a>.</p>
+              </div>
+            </div>
+            <div class="qc-demarche-item">
+              <div class="qc-demarche-num">2</div>
+              <div>
+                <h4>Le comité de pilotage valide</h4>
+                <p>La création d'une communauté est validée par le COPIL e-Sol, qui veille à la cohérence d'ensemble du réseau.</p>
+              </div>
+            </div>
+            <div class="qc-demarche-item">
+              <div class="qc-demarche-num">3</div>
+              <div>
+                <h4>On ouvre la pièce ensemble</h4>
+                <p>La mise en place technique se fait avec un·e administrateur·rice de la plateforme et l'animateur·rice pressenti·e.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12">
+          <div class="glass-card no-hover" style="padding: 28px 32px; border: 2px dashed var(--border-strong);">
+            <h3 style="font-size: 1.05rem; margin-bottom: 14px;"><i class="fas fa-clipboard-list" style="color: var(--primary);"></i> Checklist d'ouverture d'une communauté (proposition&nbsp;*)</h3>
+            <div class="bento-grid" style="gap: 8px 24px;">
+              <ul class="qc-checklist col-span-6">
+                <li><i class="fas fa-square-check"></i><span>Créer la page de la communauté (présentation, objectifs, animateur·rice) et ses sous-pages.</span></li>
+                <li><i class="fas fa-square-check"></i><span>Créer le groupe de membres et régler les droits d'accès selon les trois curseurs (adhésion, cercle restreint, écriture).</span></li>
+                <li><i class="fas fa-square-check"></i><span>Ajouter la communauté à la liste des communautés et au formulaire d'inscription.</span></li>
+              </ul>
+              <ul class="qc-checklist col-span-6">
+                <li><i class="fas fa-square-check"></i><span>Ouvrir la catégorie dédiée sur le forum.</span></li>
+                <li><i class="fas fa-square-check"></i><span>Prévoir, si besoin, un formulaire propre à la communauté (comme le fait déjà Sols et Art).</span></li>
+                <li><i class="fas fa-square-check"></i><span>Annoncer l'ouverture au réseau&nbsp;: forum et page d'accueil.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="footnote">* Le cadre formel de création (critères détaillés, engagements de l'animateur·rice) est en cours d'écriture&nbsp;; cette page en donne l'esprit, la validation revient à l'équipe d'animation et au COPIL.</p>
+    </div>
+  </section>
+
+  <!-- ============== FAQ ============== -->
+  <section class="section" id="faq">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Questions fréquentes</span>
+        <h2>Trois questions qui reviennent souvent</h2>
+      </div>
+
+      <div class="glass-card no-hover" style="padding: 8px 32px;">
+
+        <div class="qc-faq-item">
+          <button class="qc-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Puis-je être membre de plusieurs communautés&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="qc-faq-answer">
+            <p>Oui, autant que vous voulez&nbsp;: rien ne limite le nombre. Le conseil reste de commencer par une ou deux communautés où vous serez réellement présent·e&nbsp;: une participation régulière apporte plus, à vous comme au groupe, qu'une présence passive dans cinq.</p>
+          </div>
+        </div>
+
+        <div class="qc-faq-item">
+          <button class="qc-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Que se passe-t-il si je deviens inactif·ve&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="qc-faq-answer">
+            <p>Rien de fâcheux. Aucune obligation d'activité&nbsp;: vous pouvez rester en veille pendant des mois et revenir quand vos projets s'alignent. Une communauté entière peut d'ailleurs ralentir elle aussi&nbsp;: elle passe en sommeil, ses communs restent disponibles, et un réveil est toujours possible.</p>
+          </div>
+        </div>
+
+        <div class="qc-faq-item">
+          <button class="qc-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            Qui décide de la ligne éditoriale d'une communauté&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="qc-faq-answer">
+            <p>La communauté elle-même. Les orientations se discutent entre membres, et l'animateur·rice organise les espaces et veille au respect de la charte. Ni l'AFES ni le COPIL n'imposent de ligne&nbsp;: ils garantissent le cadre commun (la charte) et la cohérence d'ensemble du réseau.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CTA ============== -->
+  <section class="section-sm">
+    <div class="container text-center">
+      <div class="flex gap-3 justify-center flex-wrap">
+        <a href="communautes.html" class="btn btn-primary"><i class="fas fa-people-roof"></i> Parcourir les 12 communautés</a>
+        <a href="premiers-pas.html" class="btn btn-outline"><i class="fas fa-shoe-prints"></i> Premiers pas</a>
+        <a href="roles-et-droits.html" class="btn btn-outline"><i class="fas fa-stairs"></i> Rôles et droits</a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Exemples concrets : 4 communautés réelles de communities.json,
+    // avec une formulation « ce qu'on y fait » tirée de leur description.
+    const QC_EXEMPLES = [
+      { id: 'fresque-sol', activite: "Se transmettre les ficelles de l'atelier : les animateur·rices partagent leurs retours d'expérience et leurs variantes pédagogiques autour du jeu collaboratif de 50 cartes qui fait comprendre le fonctionnement des sols." },
+      { id: 'zan', activite: "Préserver les sols naturels et agricoles face à l'urbanisation : la communauté accompagne les collectivités et travaille à la définition des trajectoires « Zéro Artificialisation Nette »." },
+      { id: 'refersols', activite: "Faire vivre le répertoire national des études cartographiques de sol : les membres mutualisent leurs données et harmonisent leurs méthodes de travail." },
+      { id: 'sols-et-art', activite: "Explorer les liens entre les sols et les pratiques artistiques (photographie, peinture, sculpture, land art) pour valoriser la beauté et la diversité des sols par l'expression créative." }
+    ];
+
+    fetch('data/communities.json')
+      .then(r => r.json())
+      .then(communities => {
+        const grid = document.getElementById('qc-exemples-grid');
+        grid.innerHTML = QC_EXEMPLES.map(ex => {
+          const c = communities.find(x => x.id === ex.id);
+          if (!c) return '';
+          return `
+          <div class="col-span-6">
+            <div class="glass-card qc-exemple-card no-hover">
+              <div class="qc-exemple-head">
+                <div class="qc-exemple-icon" style="background: ${c.categoryBg}; color: ${c.categoryColor};">
+                  <i class="fas ${c.icon}"></i>
+                </div>
+                <div>
+                  <h3>${c.name}</h3>
+                  <span class="badge" style="background: white; color: ${c.categoryColor}; border: 1px solid ${c.categoryColor}30; font-size: 10px; margin-top: 4px;">${c.category}</span>
+                </div>
+              </div>
+              <p>${ex.activite}</p>
+              <div class="qc-exemple-foot">
+                <span><i class="fas fa-users" style="color: ${c.categoryColor};"></i> ${c.members} membres · ${c.resources} ressources</span>
+                <a href="communaute-detail.html?c=${c.id}" class="btn btn-ghost btn-sm" style="color: ${c.categoryColor};">Voir la communauté <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      });
+  </script>
+
+</body>
+</html>

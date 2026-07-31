@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>La Maison e-Sol — Comprendre le réseau</title>
+
+  <!-- Mermaid for governance diagram -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+  <style>
+    /* ---- House illustration frame ---- */
+    .maison-illustration {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+      background: linear-gradient(180deg, #fffcf7 0%, var(--bg-surface) 100%);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+    }
+
+    .maison-illustration svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ---- Narrative blocks ---- */
+    .room-card {
+      padding: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      height: 100%;
+    }
+
+    .room-icon {
+      flex-shrink: 0;
+      width: 56px; height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .room-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .room-card .room-tag {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-subtle);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .room-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 12px;
+      max-width: 100%;
+    }
+
+    .room-card .room-link {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Color variants */
+    .room-toit .room-icon  { background: var(--primary-10); color: var(--primary); }
+    .room-piece .room-icon { background: #ffdbcc; color: #7a3000; }
+    .room-outil .room-icon { background: #dbe9a9; color: #3d4d1f; }
+    .room-porte .room-icon { background: rgba(192,88,20,0.12); color: var(--primary-light); }
+    .room-fond .room-icon  { background: rgba(107,92,84,0.15); color: #4a3728; }
+    .room-jardin .room-icon { background: rgba(109,128,53,0.18); color: #3d4d1f; }
+
+    .room-toit { border-left: 3px solid var(--primary); }
+    .room-piece { border-left: 3px solid #9c3f00; }
+    .room-outil { border-left: 3px solid var(--secondary); }
+    .room-porte { border-left: 3px solid var(--primary-light); }
+    .room-fond { border-left: 3px solid #6b5c54; }
+    .room-jardin { border-left: 3px solid #6d8035; }
+
+    /* ---- Governance diagram block ---- */
+    .gov-frame {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+
+    .gov-frame .mermaid {
+      display: flex;
+      justify-content: center;
+      min-width: 600px;
+    }
+
+    .gov-note {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      text-align: center;
+      margin-top: 16px;
+      font-style: italic;
+    }
+
+    /* ---- Pull quote ---- */
+    .maison-quote {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+      line-height: 1.45;
+      color: var(--text-main);
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      letter-spacing: -0.01em;
+    }
+
+    .maison-quote .accent {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    .maison-quote::before,
+    .maison-quote::after {
+      content: '"';
+      color: var(--primary);
+      opacity: 0.4;
+      font-size: 1.4em;
+      line-height: 0;
+      vertical-align: -0.3em;
+    }
+    .maison-quote::before { margin-right: 8px; }
+    .maison-quote::after { margin-left: 6px; }
+
+    /* ---- Doorway CTA cards ---- */
+    .doorway-card {
+      padding: 28px;
+      text-align: center;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+    }
+
+    .doorway-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .doorway-card h4 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .doorway-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      flex-grow: 1;
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+
+    @media (max-width: 700px) {
+      .room-card { flex-direction: column; padding: 24px; }
+      .room-icon { width: 48px; height: 48px; font-size: 18px; }
+      .gov-frame { padding: 24px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <!-- ============== HERO ============== -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Comprendre e-Sol</span>
+      <h1>La maison e-Sol</h1>
+      <p>Une métaphore pour visualiser comment le réseau fonctionne, qui fait quoi, et où vous pouvez prendre place.</p>
+    </div>
+  </div>
+
+  <!-- ============== ILLUSTRATION ============== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="maison-illustration">
+        {{> illustration-maison }}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PULL QUOTE ============== -->
+  <section class="section-sm">
+    <div class="container container-narrow">
+      <p class="maison-quote">
+        e-Sol, c'est une <span class="accent">grande maison</span> où chaque communauté a sa pièce, et où l'on partage tous les mêmes outils communs.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============== ROOMS NARRATIVE ============== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Visite guidée</span>
+        <h2>Les six espaces de la maison</h2>
+        <p>Chaque partie de la maison a un rôle distinct — mais tout est connecté.</p>
+      </div>
+
+      <div class="bento-grid">
+
+        <!-- Le toit -->
+        <div class="col-span-6">
+          <div class="glass-card room-card room-toit no-hover">
+            <div class="room-icon"><i class="fas fa-house-chimney"></i></div>
+            <div>
+              <span class="room-tag">Le toit</span>
+              <h3>L'AFES anime, héberge, ne possède pas</h3>
+              <p>L'Association Française pour l'Étude du Sol est l'<strong>animatrice</strong> et l'<strong>hébergeuse</strong> du réseau. Elle préserve la maison, accueille les nouveaux, et fait circuler la chaleur — mais elle ne détient ni les pièces, ni les outils. Le COPIL e-Sol (AFES, GIS Sol, RMT Sols et Territoires, RNEST, avec le soutien de l'ADEME et l'OFB) oriente l'ensemble.</p>
+              <a href="https://www.afes.fr" target="_blank" rel="noopener" class="room-link" style="color: var(--primary);">
+                Site de l'AFES <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- La porte -->
+        <div class="col-span-6">
+          <div class="glass-card room-card room-porte no-hover">
+            <div class="room-icon"><i class="fas fa-door-open"></i></div>
+            <div>
+              <span class="room-tag">La porte d'entrée</span>
+              <h3>L'accueil : charte, inscription, annuaire, forum</h3>
+              <p>Tout le monde entre par là. La <strong>charte</strong> dit qui peut entrer et selon quels principes. L'<strong>inscription</strong> donne la clef. L'<strong>annuaire</strong> permet de se présenter aux autres habitants. Le <strong>forum</strong>, c'est le hall où l'on discute avant de monter dans les pièces.</p>
+              <a href="charte.html" class="room-link" style="color: var(--primary-light);">
+                Lire la charte <i class="fas fa-arrow-right text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les pièces -->
+        <div class="col-span-6">
+          <div class="glass-card room-card room-piece no-hover">
+            <div class="room-icon"><i class="fas fa-people-roof"></i></div>
+            <div>
+              <span class="room-tag">Les pièces · à l'étage</span>
+              <h3>Les communautés thématiques</h3>
+              <p>Chaque <strong>communauté</strong> est une pièce avec son ambiance, son·sa référent·e, et ses habitué·e·s. Fresque du Sol, Sols Forestiers, ZAN, Pédologie de Terrain, Sols et Art… On y entre selon ses intérêts ; on peut être dans plusieurs pièces ; on peut en proposer une nouvelle.</p>
+              <a href="communautes.html" class="room-link" style="color: #7a3000;">
+                Voir les communautés <i class="fas fa-arrow-right text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les outils -->
+        <div class="col-span-6">
+          <div class="glass-card room-card room-outil no-hover">
+            <div class="room-icon"><i class="fas fa-toolbox"></i></div>
+            <div>
+              <span class="room-tag">Les outils partagés · au rez-de-chaussée</span>
+              <h3>Les communs : cuisine, atelier, bibliothèque</h3>
+              <p>Les <strong>communs</strong>, ce sont la <strong>cuisine</strong> (où l'on produit ensemble), la <strong>bibliothèque</strong> (guides, données, cartes), l'<strong>atelier</strong> (outils logiciels, méthodes), la <strong>salle commune</strong> (formations, événements). Tout le monde y a accès, tout le monde peut y contribuer, tout le monde les entretient.</p>
+              <a href="communs.html" class="room-link" style="color: var(--secondary);">
+                Découvrir les communs <i class="fas fa-arrow-right text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les fondations -->
+        <div class="col-span-6">
+          <div class="glass-card room-card room-fond no-hover">
+            <div class="room-icon"><i class="fas fa-shield-halved"></i></div>
+            <div>
+              <span class="room-tag">Les fondations</span>
+              <h3>Charte, valeurs, gouvernance partagée</h3>
+              <p>Sans fondations, pas de maison. La <strong>charte e-Sol</strong> pose les principes : transparence, biens communs, évolutivité, robustesse. Elle garantit les <strong>licences ouvertes</strong> (CC BY-SA), le rôle du COPIL, et les règles du jeu pour vivre ensemble dans la maison.</p>
+              <a href="https://e-sol.fr/?Charte" target="_blank" rel="noopener" class="room-link" style="color: #4a3728;">
+                Charte sur e-sol.fr <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Le jardin -->
+        <div class="col-span-6">
+          <div class="glass-card room-card room-jardin no-hover">
+            <div class="room-icon"><i class="fas fa-seedling"></i></div>
+            <div>
+              <span class="room-tag">Le jardin · autour</span>
+              <h3>Les actions et le lien avec la société</h3>
+              <p>Le <strong>jardin</strong>, c'est là où la maison rencontre le monde extérieur : ateliers grand public, événements, projets pilotes, plaidoyer. C'est là que poussent les graines des prochains communs, et que les bénéficiaires (citoyens, institutions, écoles) viennent profiter du travail collectif.</p>
+              <a href="participer.html" class="room-link" style="color: #3d4d1f;">
+                Espace actions <i class="fas fa-arrow-right text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== GOVERNANCE DIAGRAM ============== -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Côté gouvernance</span>
+        <h2>Qui décide quoi ?</h2>
+        <p>Une vue de coupe complémentaire à la maison : les flux d'animation, de production et de retombées.</p>
+      </div>
+
+      <div class="gov-frame">
+        <div class="mermaid">
+flowchart TB
+    AFES[("&lt;b&gt;AFES&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Association porteuse&lt;/i&gt;&lt;br/&gt;anime · héberge · valorise")]
+    COPIL["&lt;b&gt;COPIL e-Sol&lt;/b&gt;&lt;br/&gt;AFES · GIS Sol · RMT Sols et Territoires · RNEST&lt;br/&gt;&lt;i&gt;soutien : ADEME, OFB&lt;/i&gt;"]
+
+    subgraph PIECES["LES PIÈCES — communautés thématiques"]
+      direction LR
+      C1["Fresque&lt;br/&gt;du Sol"]
+      C2["Sols&lt;br/&gt;Forestiers"]
+      C3["ZAN ·&lt;br/&gt;Aménagement"]
+      C4["Pédologie&lt;br/&gt;de Terrain"]
+      C5["+ autres&lt;br/&gt;communautés"]
+    end
+
+    subgraph COMMUNS["LES OUTILS PARTAGÉS — communs"]
+      direction LR
+      K1["Données&lt;br/&gt;&amp; cartes"]
+      K2["Guides &amp;&lt;br/&gt;protocoles"]
+      K3["Kits&lt;br/&gt;pédagogiques"]
+      K4["Outils&lt;br/&gt;logiciels"]
+    end
+
+    MEMBRES(["&lt;b&gt;Membres&lt;/b&gt;&lt;br/&gt;chercheurs · praticiens&lt;br/&gt;citoyens · étudiants"])
+    SOCIETE[/"&lt;b&gt;Société &amp; partenaires&lt;/b&gt;&lt;br/&gt;institutions · public · acteurs"\]
+
+    AFES -. "siège &amp; anime" .-> COPIL
+    COPIL == "oriente · arbitre" ==> PIECES
+    COPIL == "valide · valorise" ==> COMMUNS
+    MEMBRES -- "rejoignent" --> PIECES
+    PIECES == "produisent" ==> COMMUNS
+    COMMUNS -- "bénéficient à" --> SOCIETE
+    COMMUNS -. "retombées → animation" .-> AFES
+
+    classDef afes fill:#9c3f00,stroke:#7a3000,color:#fdfbf9,stroke-width:2px
+    classDef copil fill:#fdfbf9,stroke:#9c3f00,color:#1a1512,stroke-width:1.5px
+    classDef community fill:#ffdbcc,stroke:#9c3f00,color:#7a3000
+    classDef commun fill:#dbe9a9,stroke:#586330,color:#3d4d1f
+    classDef people fill:#eeeef8,stroke:#4e4e88,color:#3d3d5c
+    classDef society fill:#f5edf2,stroke:#885060,color:#5a3038
+
+    class AFES afes
+    class COPIL copil
+    class C1,C2,C3,C4,C5 community
+    class K1,K2,K3,K4 commun
+    class MEMBRES people
+    class SOCIETE society
+
+    style PIECES fill:#fff7f0,stroke:#9c3f00,stroke-width:1.5px,color:#9c3f00
+    style COMMUNS fill:#f6faea,stroke:#586330,stroke-width:1.5px,color:#586330
+        </div>
+        <p class="gov-note">Le cycle est vertueux : les retombées de la valorisation des communs alimentent l'animation du réseau.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== DOORWAYS / CTAs ============== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Et vous ?</span>
+        <h2>Par quelle porte entrer ?</h2>
+        <p>Selon ce que vous cherchez, voici les chemins les plus directs dans la maison.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: var(--primary-10); color: var(--primary);">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <h4>Je viens d'arriver</h4>
+            <p>Je m'inscris, je complète mon profil, je me présente sur le forum.</p>
+            <a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
+          </div>
+        </div>
+
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: #ffdbcc; color: #7a3000;">
+              <i class="fas fa-people-roof"></i>
+            </div>
+            <h4>Je cherche une pièce</h4>
+            <p>J'explore les communautés et je rejoins celle qui correspond à mes intérêts.</p>
+            <a href="communautes.html" class="btn btn-outline btn-sm">Voir les pièces</a>
+          </div>
+        </div>
+
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: #dbe9a9; color: #3d4d1f;">
+              <i class="fas fa-toolbox"></i>
+            </div>
+            <h4>Je veux contribuer à un commun</h4>
+            <p>J'apporte une donnée, un guide, un outil, ou j'en propose un nouveau.</p>
+            <a href="communs.html" class="btn btn-secondary btn-sm">Voir les outils</a>
+          </div>
+        </div>
+
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: rgba(78,78,136,0.12); color: var(--cat-politique);">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h4>Je veux ouvrir une nouvelle pièce</h4>
+            <p>Je porte un projet de communauté et je sollicite l'accompagnement du réseau.</p>
+            <a href="contact.html" class="btn btn-outline btn-sm" style="border-color: var(--cat-politique-bg); color: var(--cat-politique);">Nous écrire</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        fontFamily: 'Outfit, sans-serif',
+        fontSize: '14px',
+        primaryColor: '#fdfbf9',
+        primaryTextColor: '#1a1512',
+        primaryBorderColor: '#9c3f00',
+        lineColor: '#9c3f00',
+        secondaryColor: '#dbe9a9',
+        tertiaryColor: '#f5edf2'
+      },
+      flowchart: {
+        curve: 'basis',
+        nodeSpacing: 35,
+        rankSpacing: 60,
+        padding: 12
+      }
+    });
+  </script>
+
+</body>
+</html>
