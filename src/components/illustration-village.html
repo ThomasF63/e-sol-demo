@@ -1,0 +1,606 @@
+<!--
+  Le village e-Sol — décor dessiné à la main.
+
+  Ce fichier contient tout ce qui est immuable : le ciel, les collines, la place,
+  les cinq lieux partagés, les jardins, le sol, et les scènes de chaque communauté
+  sous forme de <symbol id="vg-{id}">.
+
+  Les maisons, elles, ne sont PAS écrites ici : elles sont générées depuis
+  src/data/communities.json par scripts/generate-village.js et injectées plus bas,
+  à l'inclusion du composant village-maisons. Ajouter une communauté au JSON suffit.
+  (Ne pas écrire la syntaxe d'inclusion dans ce commentaire : build.js la résoudrait
+  ici aussi, et le village se retrouverait dessiné deux fois.)
+
+  Pour donner une scène à une nouvelle communauté : ajouter un <symbol id="vg-{id}"
+  viewBox="0 0 84 52"> dans les défs ci-dessous. Sans scène dédiée, le générateur
+  retombe sur l'emblème de la catégorie (vgc-*), puis sur vg-neutre.
+
+  Zéro dépendance externe, aucun JavaScript, texte en <text>.
+-->
+<svg class="vl-svg" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="group" aria-labelledby="vl-svg-titre vl-svg-desc">
+  <title id="vl-svg-titre">Le village e-Sol</title>
+  <desc id="vl-svg-desc">Un village vu de face. Autour d'une place centrale se tiennent l'agora (le forum), l'atelier (les communs), la bibliothèque (les ressources), le panneau d'affichage (les annonces), l'accueil (l'inscription) et le registre (l'annuaire). En arc autour de la place, une maison par communauté thématique, chacune montrant à travers sa baie ce qu'on y fait. Sous le village, une bande de sol en coupe porte la charte. La liste complète des communautés est donnée en texte sous l'image.</desc>
+
+  <defs>
+    <linearGradient id="vlCiel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c5e8f7" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#c5e8f7" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vlToitLumiere" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vlSolProfil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b5c54"/>
+      <stop offset="55%" stop-color="#8c7166"/>
+      <stop offset="100%" stop-color="#a08562"/>
+    </linearGradient>
+
+    <!-- ============================================================
+         Les scènes des communautés — 84 × 52, sol de la scène à y=48
+         ============================================================ -->
+
+    <!-- Fresque du Sol : on joue les cartes sur la table -->
+    <symbol id="vg-fresque-sol" viewBox="0 0 84 52">
+      <rect x="14" y="30" width="56" height="5" rx="2" fill="#b09570"/>
+      <rect x="19" y="35" width="4" height="13" fill="#8c7166"/>
+      <rect x="61" y="35" width="4" height="13" fill="#8c7166"/>
+      <g stroke="#8c7166" stroke-width="0.7">
+        <rect x="20" y="21" width="11" height="9" rx="1.5" fill="#fdfbf9" transform="rotate(-9 25 25)"/>
+        <rect x="32" y="20" width="11" height="9" rx="1.5" fill="#ffdbcc"/>
+        <rect x="44" y="20" width="11" height="9" rx="1.5" fill="#dbe9a9"/>
+        <rect x="56" y="21" width="11" height="9" rx="1.5" fill="#fdfbf9" transform="rotate(9 61 25)"/>
+      </g>
+      <g><circle cx="9" cy="23" r="5.2" fill="#f0c5a0"/><path d="M2,48 Q2,31 9,31 Q16,31 16,48 Z" fill="#9c3f00"/></g>
+      <g><circle cx="75" cy="25" r="5.2" fill="#d4a574"/><path d="M68,48 Q68,33 75,33 Q82,33 82,48 Z" fill="#586330"/></g>
+    </symbol>
+
+    <!-- Sols Forestiers : un coin de forêt -->
+    <symbol id="vg-iprsol" viewBox="0 0 84 52">
+      <rect x="0" y="44" width="84" height="4" fill="#6d8035" opacity="0.3"/>
+      <g>
+        <rect x="20" y="34" width="4" height="14" fill="#6b3a1f"/>
+        <path d="M22,6 L34,28 L10,28 Z" fill="#586330"/>
+        <path d="M22,1 L31,18 L13,18 Z" fill="#6d8035"/>
+      </g>
+      <g>
+        <rect x="47" y="38" width="4" height="10" fill="#6b3a1f"/>
+        <path d="M49,16 L59,34 L39,34 Z" fill="#586330"/>
+        <path d="M49,12 L57,26 L41,26 Z" fill="#6d8035"/>
+      </g>
+      <g>
+        <rect x="68" y="40" width="3" height="8" fill="#6b3a1f"/>
+        <path d="M69.5,22 L78,38 L61,38 Z" fill="#6d8035"/>
+      </g>
+      <g><ellipse cx="7" cy="45" rx="6" ry="3" fill="#8c7166"/><rect x="3" y="40" width="8" height="5" fill="#a0836a"/></g>
+      <circle cx="34" cy="44" r="2" fill="#c07830" opacity="0.7"/>
+    </symbol>
+
+    <!-- Sols et Éducation : le tableau et le pupitre -->
+    <symbol id="vg-promosolseduc" viewBox="0 0 84 52">
+      <rect x="6" y="6" width="45" height="31" rx="1.5" fill="#3d4d1f" stroke="#705740" stroke-width="1.5"/>
+      <g stroke="#d8e6a6" stroke-width="1.6" fill="none" stroke-linecap="round">
+        <path d="M28,32 L28,20"/>
+        <path d="M28,24 Q21,22 20,15"/>
+        <path d="M28,21 Q35,19 36,13"/>
+      </g>
+      <g stroke="#d8e6a6" stroke-width="1" opacity="0.65"><path d="M11,32 L21,32"/></g>
+      <rect x="4" y="37" width="49" height="2.5" fill="#8c7166"/>
+      <rect x="58" y="33" width="22" height="3.5" rx="1" fill="#b09570"/>
+      <rect x="60" y="36" width="3" height="12" fill="#8c7166"/>
+      <rect x="75" y="36" width="3" height="12" fill="#8c7166"/>
+      <rect x="63" y="29" width="12" height="4" rx="1" fill="#9c3f00"/>
+      <g><circle cx="69" cy="19" r="5" fill="#e8b88a"/><path d="M62,29 Q62,14 69,14 Q76,14 76,29 Z" fill="#4e4e88"/></g>
+    </symbol>
+
+    <!-- Pédologie de terrain : la fosse et la bêche -->
+    <symbol id="vg-promosolsterrain" viewBox="0 0 84 52">
+      <rect x="0" y="44" width="84" height="4" fill="#6d8035" opacity="0.3"/>
+      <g stroke="#5a4836" stroke-width="1.2">
+        <rect x="42" y="18" width="34" height="8" fill="#4a3728"/>
+        <rect x="42" y="26" width="34" height="10" fill="#8c7166"/>
+        <rect x="42" y="36" width="34" height="12" fill="#c07830" opacity="0.8"/>
+      </g>
+      <g stroke="#fdfbf9" stroke-width="1" opacity="0.8">
+        <path d="M46,18 L46,48" stroke-dasharray="3 3"/>
+      </g>
+      <g><rect x="24" y="12" width="2.5" height="26" rx="1" fill="#b09570"/><path d="M21,38 L30,38 L28,48 L23,48 Z" fill="#8c7166" stroke="#5a4836" stroke-width="1"/><rect x="22" y="9" width="7" height="3" rx="1.5" fill="#705740"/></g>
+      <g><circle cx="10" cy="24" r="5" fill="#f0c5a0"/><path d="M3,48 Q3,30 10,30 Q17,30 17,48 Z" fill="#9c3f00"/></g>
+    </symbol>
+
+    <!-- Refersols : les cartes étalées sur la table -->
+    <symbol id="vg-refersols" viewBox="0 0 84 52">
+      <rect x="12" y="30" width="60" height="5" rx="2" fill="#b09570"/>
+      <rect x="17" y="35" width="4" height="13" fill="#8c7166"/>
+      <rect x="63" y="35" width="4" height="13" fill="#8c7166"/>
+      <rect x="20" y="17" width="44" height="14" rx="1" fill="#fdfbf9" stroke="#8c7166" stroke-width="0.8"/>
+      <g stroke="#586330" stroke-width="0.9" fill="none" opacity="0.85">
+        <path d="M24,28 Q32,22 40,26 Q48,30 58,23"/>
+        <path d="M24,24 Q33,19 41,22 Q50,26 60,20"/>
+      </g>
+      <path d="M27,21 L31,19 L34,22 Z" fill="#9c3f00" opacity="0.6"/>
+      <g><rect x="66" y="20" width="7" height="11" rx="3.5" fill="#f5ede0" stroke="#8c7166" stroke-width="0.8"/></g>
+      <g><circle cx="9" cy="22" r="5" fill="#d4a574"/><path d="M2,48 Q2,28 9,28 Q16,28 16,48 Z" fill="#586330"/><path d="M14,30 L22,26" stroke="#d4a574" stroke-width="3" stroke-linecap="round"/></g>
+    </symbol>
+
+    <!-- Secteur privé : la mallette et le carottier -->
+    <symbol id="vg-secteur-prive" viewBox="0 0 84 52">
+      <rect x="0" y="44" width="84" height="4" fill="#8c7166" opacity="0.25"/>
+      <g>
+        <rect x="8" y="28" width="28" height="19" rx="2" fill="#705740"/>
+        <rect x="8" y="34" width="28" height="2.5" fill="#5a4836"/>
+        <path d="M17,28 Q17,22 22,22 Q27,22 27,28" stroke="#5a4836" stroke-width="2" fill="none"/>
+        <rect x="20" y="33" width="5" height="5" rx="1" fill="#c07830"/>
+      </g>
+      <g>
+        <rect x="45" y="12" width="11" height="35" rx="2" fill="#f5ede0" stroke="#8c7166" stroke-width="1"/>
+        <rect x="46" y="19" width="9" height="8" fill="#4a3728"/>
+        <rect x="46" y="27" width="9" height="10" fill="#8c7166"/>
+        <rect x="46" y="37" width="9" height="9" fill="#c07830" opacity="0.85"/>
+      </g>
+      <g>
+        <rect x="63" y="18" width="15" height="21" rx="1.5" fill="#fdfbf9" stroke="#8c7166" stroke-width="1"/>
+        <rect x="67" y="15" width="7" height="4" rx="1" fill="#586330"/>
+        <g stroke="#8c7166" stroke-width="0.9"><path d="M66,25 L75,25"/><path d="M66,29 L75,29"/><path d="M66,33 L72,33"/></g>
+      </g>
+    </symbol>
+
+    <!-- SRP Sols : citoyen·nes et scientifique sur le même prélèvement -->
+    <symbol id="vg-srp-sols" viewBox="0 0 84 52">
+      <rect x="0" y="44" width="84" height="4" fill="#6d8035" opacity="0.3"/>
+      <g>
+        <rect x="30" y="37" width="24" height="7" rx="1.5" fill="#b09570" stroke="#8c7166" stroke-width="0.8"/>
+        <rect x="32" y="38.5" width="20" height="4" fill="#4a3728"/>
+      </g>
+      <g><circle cx="14" cy="21" r="5.2" fill="#f0c5a0"/><path d="M7,44 Q7,27 14,27 Q21,27 21,44 Z" fill="#885060"/><path d="M20,32 L29,37" stroke="#f0c5a0" stroke-width="3.2" stroke-linecap="round"/></g>
+      <g><circle cx="69" cy="21" r="5.2" fill="#d4a574"/><path d="M62,44 Q62,27 69,27 Q76,27 76,44 Z" fill="#4e4e88"/><path d="M63,32 L56,36" stroke="#d4a574" stroke-width="3.2" stroke-linecap="round"/></g>
+      <g><circle cx="53" cy="34" r="5" fill="#c5e8f7" fill-opacity="0.7" stroke="#586330" stroke-width="1.4"/><path d="M56,38 L60,42" stroke="#586330" stroke-width="2" stroke-linecap="round"/></g>
+    </symbol>
+
+    <!-- ZAN : la ville qui grignote, et la limite tracée -->
+    <symbol id="vg-zan" viewBox="0 0 84 52">
+      <rect x="0" y="44" width="84" height="4" fill="#8c7166" opacity="0.25"/>
+      <g fill="#4e4e88">
+        <rect x="6" y="26" width="11" height="18" opacity="0.55"/>
+        <rect x="18" y="16" width="12" height="28" opacity="0.75"/>
+        <rect x="31" y="30" width="10" height="14" opacity="0.5"/>
+        <rect x="42" y="22" width="11" height="22" opacity="0.65"/>
+      </g>
+      <g fill="#eeeef8" opacity="0.85">
+        <rect x="21" y="20" width="3" height="3"/><rect x="26" y="20" width="3" height="3"/>
+        <rect x="21" y="26" width="3" height="3"/><rect x="26" y="26" width="3" height="3"/>
+        <rect x="45" y="26" width="3" height="3"/><rect x="49" y="26" width="3" height="3"/>
+      </g>
+      <path d="M57,10 L57,48" stroke="#9c3f00" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>
+      <g>
+        <rect x="60" y="38" width="22" height="6" rx="1" fill="#6d8035" opacity="0.55"/>
+        <path d="M65,38 Q65,30 69,30" stroke="#586330" stroke-width="1.4" fill="none"/>
+        <ellipse cx="72" cy="31" rx="4" ry="2.2" fill="#6d8035" transform="rotate(-20 72 31)"/>
+      </g>
+    </symbol>
+
+    <!-- Sols et Art : le chevalet et les pigments de terre -->
+    <symbol id="vg-sols-et-art" viewBox="0 0 84 52">
+      <g stroke="#8c7166" stroke-width="2.2" stroke-linecap="round">
+        <path d="M22,48 L31,20"/><path d="M46,48 L37,20"/><path d="M25,38 L43,38"/>
+      </g>
+      <rect x="18" y="9" width="32" height="26" rx="1" fill="#fdfbf9" stroke="#705740" stroke-width="1.2"/>
+      <g>
+        <rect x="19" y="10" width="30" height="7" fill="#c5e8f7" opacity="0.5"/>
+        <rect x="19" y="17" width="30" height="6" fill="#c07830" opacity="0.75"/>
+        <rect x="19" y="23" width="30" height="6" fill="#8c7166"/>
+        <rect x="19" y="29" width="30" height="5" fill="#4a3728"/>
+      </g>
+      <g>
+        <ellipse cx="60" cy="44" rx="6" ry="4" fill="#9c3f00" opacity="0.8"/><rect x="54" y="38" width="12" height="6" fill="#b09570"/>
+        <ellipse cx="72" cy="45" rx="5" ry="3.5" fill="#586330" opacity="0.8"/><rect x="67" y="40" width="10" height="5" fill="#b09570"/>
+        <ellipse cx="66" cy="34" rx="4.5" ry="3" fill="#c07830" opacity="0.8"/><rect x="61.5" y="30" width="9" height="4" fill="#b09570"/>
+      </g>
+      <path d="M52,26 L64,20" stroke="#705740" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="65" cy="19" r="2.4" fill="#885060"/>
+    </symbol>
+
+    <!-- AFES Communication : l'affiche et le porte-voix -->
+    <symbol id="vg-afes-comm" viewBox="0 0 84 52">
+      <rect x="6" y="8" width="34" height="30" rx="1.5" fill="#fdfbf9" stroke="#8c7166" stroke-width="1.2"/>
+      <rect x="9" y="11" width="28" height="7" fill="#9c3f00" opacity="0.85"/>
+      <g stroke="#8c7166" stroke-width="1.1"><path d="M9,23 L34,23"/><path d="M9,27 L34,27"/><path d="M9,31 L27,31"/></g>
+      <rect x="21" y="38" width="3" height="10" fill="#8c7166"/>
+      <g transform="translate(50,20)">
+        <path d="M0,6 L10,0 L10,20 L0,14 Z" fill="#9c3f00"/>
+        <rect x="-6" y="7" width="7" height="6" rx="1" fill="#7a3000"/>
+        <path d="M2,16 L6,22" stroke="#7a3000" stroke-width="2.4" stroke-linecap="round"/>
+      </g>
+      <g stroke="#c05814" stroke-width="1.6" fill="none" opacity="0.75" stroke-linecap="round">
+        <path d="M64,24 Q68,30 64,36"/>
+        <path d="M70,20 Q77,30 70,40"/>
+      </g>
+    </symbol>
+
+    <!-- AFES Administrateurs : la table de réunion et le registre -->
+    <symbol id="vg-afes-admins" viewBox="0 0 84 52">
+      <ellipse cx="42" cy="34" rx="28" ry="10" fill="#8c7166" opacity="0.25"/>
+      <ellipse cx="42" cy="31" rx="26" ry="9" fill="#c4aa82" stroke="#8c7166" stroke-width="1"/>
+      <g fill="#fdfbf9" stroke="#8c7166" stroke-width="0.8">
+        <path d="M34,29 L42,26 L42,32 L34,34 Z"/>
+        <path d="M50,29 L42,26 L42,32 L50,34 Z"/>
+      </g>
+      <g><circle cx="12" cy="24" r="4.6" fill="#f0c5a0"/><path d="M6,44 Q6,29 12,29 Q18,29 18,44 Z" fill="#705740"/></g>
+      <g><circle cx="72" cy="24" r="4.6" fill="#d4a574"/><path d="M66,44 Q66,29 72,29 Q78,29 78,44 Z" fill="#586330"/></g>
+      <g><circle cx="42" cy="12" r="4.6" fill="#e8b88a"/><path d="M36,24 Q36,17 42,17 Q48,17 48,24 Z" fill="#9c3f00"/></g>
+    </symbol>
+
+    <!-- Zones humides : l'eau, les roseaux, le ponton -->
+    <symbol id="vg-zones-humides" viewBox="0 0 84 52">
+      <rect x="0" y="32" width="84" height="16" fill="#c5e8f7" opacity="0.6"/>
+      <g stroke="#4e4e88" stroke-width="1" fill="none" opacity="0.3">
+        <path d="M4,38 Q12,35 20,38 Q28,41 36,38"/>
+        <path d="M44,43 Q52,40 60,43 Q68,46 76,43"/>
+      </g>
+      <g stroke="#586330" stroke-width="1.6" fill="none" stroke-linecap="round">
+        <path d="M12,34 Q10,22 13,12"/><path d="M20,34 Q19,24 21,16"/><path d="M28,34 Q29,23 27,14"/>
+      </g>
+      <g fill="#705740">
+        <rect x="11.5" y="8" width="3.4" height="9" rx="1.7"/>
+        <rect x="19.5" y="12" width="3.2" height="8" rx="1.6"/>
+        <rect x="25.5" y="10" width="3.2" height="8" rx="1.6"/>
+      </g>
+      <g>
+        <rect x="46" y="28" width="34" height="4" rx="1" fill="#b09570" stroke="#8c7166" stroke-width="0.8"/>
+        <rect x="50" y="32" width="3" height="12" fill="#8c7166"/>
+        <rect x="72" y="32" width="3" height="12" fill="#8c7166"/>
+      </g>
+      <ellipse cx="62" cy="24" rx="5" ry="3" fill="#6d8035" opacity="0.7"/>
+    </symbol>
+
+    <!-- ============================================================
+         Emblèmes de repli par catégorie, pour une communauté sans scène
+         ============================================================ -->
+    <symbol id="vgc-formation" viewBox="0 0 84 52">
+      <path d="M42,16 Q30,10 18,14 L18,40 Q30,36 42,42 Q54,36 66,40 L66,14 Q54,10 42,16 Z" fill="#fdfbf9" stroke="#9c3f00" stroke-width="1.5"/>
+      <path d="M42,16 L42,42" stroke="#9c3f00" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="vgc-recherche" viewBox="0 0 84 52">
+      <circle cx="38" cy="24" r="13" fill="#c5e8f7" fill-opacity="0.55" stroke="#586330" stroke-width="2.2"/>
+      <path d="M47,33 L57,43" stroke="#586330" stroke-width="3.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="vgc-education" viewBox="0 0 84 52">
+      <path d="M42,14 L64,22 L42,30 L20,22 Z" fill="#705740"/>
+      <path d="M56,26 L56,36 Q42,42 28,36 L28,26" fill="none" stroke="#705740" stroke-width="2"/>
+    </symbol>
+    <symbol id="vgc-professionnel" viewBox="0 0 84 52">
+      <rect x="24" y="20" width="36" height="22" rx="2.5" fill="#586330" opacity="0.85"/>
+      <path d="M34,20 Q34,13 42,13 Q50,13 50,20" stroke="#586330" stroke-width="2.4" fill="none"/>
+      <rect x="38" y="28" width="8" height="6" rx="1" fill="#d8e6a6"/>
+    </symbol>
+    <symbol id="vgc-politique" viewBox="0 0 84 52">
+      <path d="M42,12 L66,24 L18,24 Z" fill="#4e4e88"/>
+      <g fill="#4e4e88"><rect x="24" y="26" width="5" height="14"/><rect x="36" y="26" width="5" height="14"/><rect x="48" y="26" width="5" height="14"/></g>
+      <rect x="18" y="41" width="48" height="4" fill="#4e4e88"/>
+    </symbol>
+    <symbol id="vgc-culture" viewBox="0 0 84 52">
+      <path d="M42,12 Q62,12 62,28 Q62,38 52,36 Q46,35 47,40 Q48,45 40,44 Q22,42 22,27 Q22,12 42,12 Z" fill="#f5edf2" stroke="#885060" stroke-width="1.6"/>
+      <circle cx="34" cy="22" r="3" fill="#9c3f00"/><circle cx="45" cy="19" r="3" fill="#586330"/><circle cx="53" cy="27" r="3" fill="#4e4e88"/>
+    </symbol>
+    <symbol id="vgc-institutionnel" viewBox="0 0 84 52">
+      <rect x="30" y="14" width="24" height="4" fill="#8c7166"/>
+      <rect x="34" y="18" width="16" height="22" fill="#f3efec" stroke="#8c7166" stroke-width="1.5"/>
+      <rect x="28" y="40" width="28" height="4" fill="#8c7166"/>
+      <path d="M40,24 L44,24 L44,40 L40,40 Z" fill="#8c7166" opacity="0.4"/>
+    </symbol>
+    <symbol id="vg-neutre" viewBox="0 0 84 52">
+      <rect x="26" y="28" width="32" height="4" rx="1.5" fill="#b09570"/>
+      <rect x="30" y="32" width="3" height="10" fill="#8c7166"/>
+      <rect x="51" y="32" width="3" height="10" fill="#8c7166"/>
+      <rect x="38" y="20" width="8" height="8" rx="1" fill="#f5ede0" stroke="#b09570" stroke-width="1"/>
+    </symbol>
+  </defs>
+
+  <!-- ============================================================
+       CIEL, SOLEIL, COLLINES
+       ============================================================ -->
+  <rect x="0" y="0" width="1200" height="330" fill="url(#vlCiel)"/>
+  <g transform="translate(1062, 86)" opacity="0.5">
+    <circle cx="0" cy="0" r="34" fill="#c05814" opacity="0.18"/>
+    <circle cx="0" cy="0" r="22" fill="#c05814" opacity="0.35"/>
+    <g stroke="#c05814" stroke-width="2" stroke-linecap="round" opacity="0.4">
+      <line x1="0" y1="-40" x2="0" y2="-50"/><line x1="28" y1="-28" x2="35" y2="-35"/>
+      <line x1="40" y1="0" x2="50" y2="0"/><line x1="28" y1="28" x2="35" y2="35"/>
+      <line x1="-28" y1="-28" x2="-35" y2="-35"/><line x1="-40" y1="0" x2="-50" y2="0"/>
+    </g>
+  </g>
+  <g stroke="#6b5c54" stroke-width="1.6" fill="none" opacity="0.35" stroke-linecap="round">
+    <path d="M150,96 q7,-6 14,0"/><path d="M164,96 q7,-6 14,0"/>
+    <path d="M228,66 q6,-5 12,0"/><path d="M240,66 q6,-5 12,0"/>
+  </g>
+  <path d="M0,296 Q160,252 320,274 Q480,296 640,258 Q800,222 960,254 Q1100,282 1200,264 L1200,380 L0,380 Z" fill="#586330" opacity="0.10"/>
+  <path d="M0,328 Q200,298 400,318 Q620,340 840,308 Q1020,284 1200,312 L1200,400 L0,400 Z" fill="#586330" opacity="0.14"/>
+
+  <!-- ============================================================
+       LE TERRAIN DU VILLAGE
+       ============================================================ -->
+  <rect x="0" y="330" width="1200" height="372" fill="#d4c4a8" opacity="0.26"/>
+  <g stroke="#586330" stroke-width="1.3" stroke-linecap="round" opacity="0.32" fill="none">
+    <g transform="translate(64,432)"><path d="M0,0 C-1,-6 -3,-9 -6,-12"/><path d="M4,0 C4,-7 4,-11 3,-15"/><path d="M8,0 C9,-6 11,-9 14,-11"/></g>
+    <g transform="translate(1126,454)"><path d="M0,0 C-1,-6 -3,-9 -6,-11"/><path d="M4,0 C4,-7 4,-10 3,-14"/><path d="M8,0 C9,-5 11,-8 13,-10"/></g>
+    <g transform="translate(258,616)"><path d="M0,0 C-1,-7 -3,-10 -6,-13"/><path d="M4,0 C4,-8 4,-12 3,-16"/><path d="M8,0 C9,-6 11,-10 14,-12"/></g>
+    <g transform="translate(1010,660)"><path d="M0,0 C-1,-6 -3,-9 -6,-12"/><path d="M4,0 C4,-7 4,-11 3,-15"/><path d="M8,0 C9,-6 11,-9 13,-11"/></g>
+    <g transform="translate(420,354)"><path d="M0,0 C-1,-5 -2,-8 -5,-10"/><path d="M3,0 C3,-6 3,-9 2,-12"/><path d="M7,0 C8,-5 9,-7 12,-9"/></g>
+    <g transform="translate(774,348)"><path d="M0,0 C-1,-5 -2,-8 -5,-10"/><path d="M3,0 C3,-6 3,-9 2,-12"/><path d="M7,0 C8,-5 9,-7 11,-9"/></g>
+    <g transform="translate(150,552)"><path d="M0,0 C-1,-6 -3,-9 -6,-12"/><path d="M4,0 C4,-7 4,-11 3,-15"/></g>
+  </g>
+
+  <!-- Le chemin : il entre par la gauche, longe la place, ressort à droite -->
+  <g opacity="0.55">
+    <path d="M-20,690 Q200,670 430,662 Q600,658 790,664 Q1000,672 1220,656" stroke="#c4aa82" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <path d="M-20,690 Q200,670 430,662 Q600,658 790,664 Q1000,672 1220,656" stroke="#a08562" stroke-width="30" fill="none" stroke-linecap="round" stroke-dasharray="2 30" opacity="0.45"/>
+  </g>
+
+  <!-- La place -->
+  <ellipse cx="600" cy="500" rx="262" ry="94" fill="#e6dccb" opacity="0.9"/>
+  <ellipse cx="600" cy="500" rx="262" ry="94" fill="none" stroke="#c4aa82" stroke-width="2"/>
+  <ellipse cx="600" cy="500" rx="212" ry="74" fill="none" stroke="#c4aa82" stroke-width="1.2" opacity="0.55"/>
+  <ellipse cx="600" cy="500" rx="136" ry="46" fill="none" stroke="#c4aa82" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- ============================================================
+       LES LIEUX PARTAGÉS
+       Chacun est une fonction réelle du site, donc un lien.
+       ============================================================ -->
+
+  <!-- L'AGORA · le forum -->
+  <a class="vl-cible vl-lieu" href="https://forum.e-sol.fr/" target="_blank" rel="noopener" tabindex="0" role="link" aria-label="L'agora, le forum e-Sol. S'ouvre dans un nouvel onglet.">
+    <title>L'agora — le forum e-Sol (nouvel onglet)</title>
+    <g transform="translate(600,474)">
+      <ellipse cx="0" cy="4" rx="96" ry="16" fill="#1a1512" opacity="0.07"/>
+      <g class="vl-lift">
+        <ellipse cx="0" cy="0" rx="92" ry="19" fill="#d8ceb9" stroke="#b09570" stroke-width="1.6"/>
+        <g fill="#f5ede0" stroke="#b09570" stroke-width="1.2">
+          <rect x="-74" y="-58" width="8" height="58"/><rect x="-45" y="-62" width="8" height="62"/>
+          <rect x="-4" y="-64" width="8" height="64"/><rect x="37" y="-62" width="8" height="62"/>
+          <rect x="66" y="-58" width="8" height="58"/>
+        </g>
+        <g>
+          <circle cx="-30" cy="-22" r="7" fill="#f0c5a0"/><path d="M-39,0 Q-39,-14 -30,-14 Q-21,-14 -21,0 Z" fill="#9c3f00"/>
+          <circle cx="-8" cy="-19" r="7" fill="#d4a574"/><path d="M-17,0 Q-17,-11 -8,-11 Q1,-11 1,0 Z" fill="#4e4e88"/>
+          <circle cx="16" cy="-22" r="7" fill="#e8b88a"/><path d="M7,0 Q7,-14 16,-14 Q25,-14 25,0 Z" fill="#586330"/>
+        </g>
+        <path d="M-100,-60 Q0,-116 100,-60 Z" fill="#9c3f00" stroke="#7a3000" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M-100,-60 Q0,-116 100,-60 Z" fill="url(#vlToitLumiere)" opacity="0.3"/>
+        <rect x="-3.5" y="-99" width="7" height="14" rx="3.5" fill="#7a3000"/>
+        <g fill="#fdfbf9" stroke="#9c3f00" stroke-width="1.4">
+          <path d="M-74,-94 h30 a5,5 0 0 1 5,5 v13 a5,5 0 0 1 -5,5 h-18 l-8,7 v-7 h-4 a5,5 0 0 1 -5,-5 v-13 a5,5 0 0 1 5,-5 z"/>
+          <path d="M46,-90 h26 a5,5 0 0 1 5,5 v11 a5,5 0 0 1 -5,5 h-16 l-7,6 v-6 h-3 a5,5 0 0 1 -5,-5 v-11 a5,5 0 0 1 5,-5 z"/>
+        </g>
+        <text class="vl-lieu-nom" x="0" y="42" text-anchor="middle">L'agora</text>
+        <text class="vl-lieu-sous" x="0" y="57" text-anchor="middle">le forum</text>
+        <rect class="vl-focus" x="-112" y="-132" width="224" height="200" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- L'ATELIER · les communs -->
+  <a class="vl-cible vl-lieu" href="communs.html" tabindex="0" role="link" aria-label="L'atelier, les communs du réseau : protocoles, données, kits pédagogiques, référentiels.">
+    <title>L'atelier — les communs</title>
+    <g transform="translate(400,468)">
+      <ellipse cx="0" cy="4" rx="66" ry="11" fill="#1a1512" opacity="0.08"/>
+      <g class="vl-lift">
+        <rect x="-62" y="-78" width="124" height="78" fill="#f5ede0" stroke="#b09570" stroke-width="1.8"/>
+        <path d="M-70,-78 L0,-116 L70,-78 Z" fill="#586330" stroke="#3d4d1f" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M-70,-78 L0,-116 L70,-78 Z" fill="url(#vlToitLumiere)" opacity="0.3"/>
+        <path d="M-30,0 L-30,-52 Q-30,-64 -16,-64 L16,-64 Q30,-64 30,-52 L30,0 Z" fill="#4a3728" opacity="0.9"/>
+        <g opacity="0.85">
+          <rect x="-20" y="-24" width="40" height="5" rx="1.5" fill="#b09570"/>
+          <rect x="-16" y="-19" width="4" height="19" fill="#8c7166"/><rect x="12" y="-19" width="4" height="19" fill="#8c7166"/>
+          <circle cx="-4" cy="-40" r="7" fill="#f0c5a0"/><path d="M-13,-24 Q-13,-36 -4,-36 Q5,-36 5,-24 Z" fill="#c05814"/>
+        </g>
+        <g stroke="#705740" stroke-width="2" opacity="0.9">
+          <path d="M-52,-56 L-52,-42"/><path d="M-58,-56 L-46,-56"/>
+          <path d="M46,-58 L54,-46"/><path d="M42,-46 L58,-46"/>
+        </g>
+        <rect x="-44" y="-70" width="88" height="4" rx="2" fill="#3d4d1f" opacity="0.5"/>
+        <text class="vl-lieu-nom" x="0" y="24" text-anchor="middle">L'atelier</text>
+        <text class="vl-lieu-sous" x="0" y="39" text-anchor="middle">les communs</text>
+        <rect class="vl-focus" x="-80" y="-124" width="160" height="172" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- LA BIBLIOTHÈQUE · le centre de ressources -->
+  <a class="vl-cible vl-lieu" href="tutoriels.html" tabindex="0" role="link" aria-label="La bibliothèque, le centre de ressources : tutoriels, guides d'usage, fiches du forum, glossaire.">
+    <title>La bibliothèque — le centre de ressources</title>
+    <g transform="translate(792,468)">
+      <ellipse cx="0" cy="4" rx="66" ry="11" fill="#1a1512" opacity="0.08"/>
+      <g class="vl-lift">
+        <rect x="-62" y="-78" width="124" height="78" fill="#f3efec" stroke="#b09570" stroke-width="1.8"/>
+        <path d="M-70,-78 L-30,-112 L30,-112 L70,-78 Z" fill="#705740" stroke="#4a3728" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M-70,-78 L-30,-112 L30,-112 L70,-78 Z" fill="url(#vlToitLumiere)" opacity="0.28"/>
+        <rect x="-48" y="-66" width="60" height="46" fill="#fffdf9" stroke="#8c7166" stroke-width="1.4"/>
+        <g>
+          <line x1="-48" y1="-51" x2="12" y2="-51" stroke="#8c7166" stroke-width="1.4"/>
+          <line x1="-48" y1="-36" x2="12" y2="-36" stroke="#8c7166" stroke-width="1.4"/>
+          <g><rect x="-45" y="-64" width="5" height="13" fill="#9c3f00"/><rect x="-39" y="-62" width="4" height="11" fill="#586330"/><rect x="-34" y="-65" width="5" height="14" fill="#4e4e88"/><rect x="-28" y="-63" width="4" height="12" fill="#885060"/><rect x="-23" y="-64" width="5" height="13" fill="#705740"/><rect x="-17" y="-62" width="4" height="11" fill="#9c3f00"/><rect x="-12" y="-65" width="5" height="14" fill="#586330"/><rect x="-6" y="-63" width="4" height="12" fill="#4e4e88"/><rect x="-1" y="-64" width="5" height="13" fill="#885060"/><rect x="5" y="-62" width="4" height="11" fill="#705740"/></g>
+          <g><rect x="-45" y="-49" width="4" height="13" fill="#586330"/><rect x="-40" y="-47" width="5" height="11" fill="#9c3f00"/><rect x="-34" y="-50" width="4" height="14" fill="#705740"/><rect x="-29" y="-48" width="5" height="12" fill="#4e4e88"/><rect x="-23" y="-49" width="4" height="13" fill="#885060"/><rect x="-18" y="-47" width="5" height="11" fill="#586330"/><rect x="-12" y="-50" width="4" height="14" fill="#9c3f00"/><rect x="-7" y="-48" width="5" height="12" fill="#705740"/><rect x="-1" y="-49" width="4" height="13" fill="#4e4e88"/><rect x="4" y="-47" width="5" height="11" fill="#885060"/></g>
+        </g>
+        <rect x="26" y="-46" width="26" height="46" rx="1.5" fill="#5a4836"/>
+        <circle cx="32" cy="-22" r="1.8" fill="#fdfbf9" opacity="0.85"/>
+        <g transform="translate(-30,-14)">
+          <circle cx="0" cy="-8" r="6.5" fill="#d4a574"/><path d="M-8,0 Q-8,-13 0,-13 Q8,-13 8,0 Z" fill="#4e4e88"/>
+          <rect x="-6" y="-4" width="12" height="8" rx="1" fill="#fdfbf9" stroke="#8c7166" stroke-width="0.8"/>
+        </g>
+        <text class="vl-lieu-nom" x="0" y="24" text-anchor="middle">La bibliothèque</text>
+        <text class="vl-lieu-sous" x="0" y="39" text-anchor="middle">guides et tutoriels</text>
+        <rect class="vl-focus" x="-80" y="-120" width="160" height="168" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- LE PANNEAU D'AFFICHAGE · les annonces -->
+  <a class="vl-cible vl-lieu" href="annonces.html" tabindex="0" role="link" aria-label="Le panneau d'affichage, les petites annonces du réseau : offres, demandes, informations.">
+    <title>Le panneau d'affichage — les annonces</title>
+    <g transform="translate(694,602)">
+      <ellipse cx="0" cy="3" rx="46" ry="8" fill="#1a1512" opacity="0.08"/>
+      <g class="vl-lift">
+        <rect x="-34" y="-30" width="7" height="30" fill="#8c7166"/>
+        <rect x="27" y="-30" width="7" height="30" fill="#8c7166"/>
+        <rect x="-44" y="-84" width="88" height="56" rx="2" fill="#e8dfd0" stroke="#8c7166" stroke-width="1.8"/>
+        <path d="M-50,-84 L0,-98 L50,-84 Z" fill="#9c3f00" stroke="#7a3000" stroke-width="1.5" stroke-linejoin="round"/>
+        <g stroke="#8c7166" stroke-width="0.7">
+          <rect x="-38" y="-78" width="26" height="20" rx="1" fill="#fdfbf9" transform="rotate(-3 -25 -68)"/>
+          <rect x="-8" y="-79" width="24" height="18" rx="1" fill="#ffdbcc"/>
+          <rect x="20" y="-77" width="18" height="17" rx="1" fill="#dbe9a9" transform="rotate(4 29 -68)"/>
+          <rect x="-36" y="-54" width="30" height="20" rx="1" fill="#eeeef8" transform="rotate(2 -21 -44)"/>
+          <rect x="2" y="-56" width="36" height="22" rx="1" fill="#fdfbf9"/>
+        </g>
+        <g stroke="#8c7166" stroke-width="0.8" opacity="0.7">
+          <path d="M-34,-72 L-16,-72"/><path d="M-34,-68 L-20,-68"/>
+          <path d="M6,-50 L34,-50"/><path d="M6,-45 L28,-45"/><path d="M6,-40 L32,-40"/>
+        </g>
+        <g fill="#c05814"><circle cx="-25" cy="-76" r="2"/><circle cx="4" cy="-77" r="2"/><circle cx="29" cy="-74" r="2"/><circle cx="-21" cy="-52" r="2"/><circle cx="20" cy="-54" r="2"/></g>
+        <text class="vl-lieu-nom" x="0" y="22" text-anchor="middle">Le panneau</text>
+        <text class="vl-lieu-sous" x="0" y="37" text-anchor="middle">les annonces</text>
+        <rect class="vl-focus" x="-60" y="-108" width="120" height="152" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- L'ACCUEIL · l'inscription -->
+  <a class="vl-cible vl-lieu" href="inscription.html" tabindex="0" role="link" aria-label="L'accueil du village, l'inscription. On entre librement, mais participer demande un compte.">
+    <title>L'accueil — s'inscrire et prendre sa clef</title>
+    <g transform="translate(474,638)">
+      <ellipse cx="0" cy="3" rx="52" ry="9" fill="#1a1512" opacity="0.08"/>
+      <g class="vl-lift">
+        <rect x="-44" y="-18" width="88" height="18" fill="#c4aa82" stroke="#8c7166" stroke-width="1.4"/>
+        <rect x="-44" y="-22" width="88" height="5" rx="2" fill="#b09570"/>
+        <rect x="-40" y="-56" width="5" height="34" fill="#8c7166"/>
+        <rect x="35" y="-56" width="5" height="34" fill="#8c7166"/>
+        <path d="M-52,-56 L0,-80 L52,-56 Z" fill="#c05814" stroke="#7a3000" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M-52,-56 L0,-80 L52,-56 Z" fill="url(#vlToitLumiere)" opacity="0.3"/>
+        <g transform="translate(-14,-22)">
+          <circle cx="0" cy="-14" r="7" fill="#f0c5a0"/><path d="M-9,0 Q-9,-13 0,-13 Q9,-13 9,0 Z" fill="#586330"/>
+        </g>
+        <g transform="translate(22,-30)" opacity="0.95">
+          <circle cx="0" cy="0" r="5" fill="none" stroke="#9c3f00" stroke-width="2.4"/>
+          <path d="M4,2 L13,10" stroke="#9c3f00" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M9,6 L7,9" stroke="#9c3f00" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <text class="vl-lieu-nom" x="0" y="20" text-anchor="middle">L'accueil</text>
+        <text class="vl-lieu-sous" x="0" y="35" text-anchor="middle">s'inscrire</text>
+        <rect class="vl-focus" x="-64" y="-90" width="128" height="132" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- LE REGISTRE · l'annuaire -->
+  <a class="vl-cible vl-lieu" href="annuaire.html" tabindex="0" role="link" aria-label="Le registre du village, l'annuaire des membres : qui habite ici et sur quoi chacun travaille.">
+    <title>Le registre — l'annuaire des membres</title>
+    <g transform="translate(586,646)">
+      <ellipse cx="0" cy="3" rx="30" ry="7" fill="#1a1512" opacity="0.08"/>
+      <g class="vl-lift">
+        <path d="M-4,0 L-4,-30 L4,-30 L4,0 Z" fill="#8c7166"/>
+        <path d="M-20,-4 L20,-4 L14,-12 L-14,-12 Z" fill="#8c7166" opacity="0.5"/>
+        <g transform="rotate(-14)">
+          <path d="M-24,-30 L0,-36 L0,-56 L-24,-50 Z" fill="#fdfbf9" stroke="#8c7166" stroke-width="1.4"/>
+          <path d="M24,-30 L0,-36 L0,-56 L24,-50 Z" fill="#fdfbf9" stroke="#8c7166" stroke-width="1.4"/>
+          <g stroke="#b09570" stroke-width="0.9">
+            <path d="M-19,-46 L-6,-49"/><path d="M-19,-42 L-6,-45"/><path d="M-19,-38 L-9,-41"/>
+            <path d="M6,-49 L19,-46"/><path d="M6,-45 L19,-42"/><path d="M6,-41 L16,-38"/>
+          </g>
+        </g>
+        <text class="vl-lieu-nom" x="0" y="22" text-anchor="middle">Le registre</text>
+        <text class="vl-lieu-sous" x="0" y="37" text-anchor="middle">l'annuaire</text>
+        <rect class="vl-focus" x="-44" y="-72" width="88" height="116" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- ============================================================
+       LES MAISONS — générées depuis src/data/communities.json
+       ============================================================ -->
+  {{> village-maisons }}
+
+  <!-- ============================================================
+       LES JARDINS ET LES CHEMINS · ce qui sort du village
+       ============================================================ -->
+  <a class="vl-cible vl-lieu" href="participer.html" tabindex="0" role="link" aria-label="Les jardins et les chemins, l'espace actions : ateliers grand public, événements, projets pilotes.">
+    <title>Les jardins et les chemins — l'espace actions</title>
+    <g transform="translate(812,645)">
+      <g class="vl-lift">
+        <ellipse cx="0" cy="0" rx="58" ry="17" fill="#6d8035" opacity="0.16"/>
+        <g transform="translate(-34,0)">
+          <path d="M0,0 Q-1,-14 0,-30" stroke="#586330" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="-8" cy="-20" rx="9" ry="4.4" fill="#6d8035" transform="rotate(-30 -8 -20)"/>
+          <ellipse cx="8" cy="-25" rx="8" ry="4" fill="#6d8035" transform="rotate(25 8 -25)"/>
+          <ellipse cx="0" cy="-32" rx="5.5" ry="3.4" fill="#7a9040"/>
+        </g>
+        <g transform="translate(0,4)">
+          <path d="M0,0 Q-1,-16 -2,-32" stroke="#586330" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="-10" cy="-22" rx="7" ry="3.4" fill="#6d8035" transform="rotate(-25 -10 -22)"/>
+          <circle cx="-2" cy="-36" r="3.4" fill="#c05814" opacity="0.85"/>
+          <circle cx="-7" cy="-34" r="2.8" fill="#9c3f00" opacity="0.7"/>
+          <circle cx="3" cy="-34" r="2.8" fill="#c05814" opacity="0.7"/>
+          <circle cx="-2" cy="-40" r="2.2" fill="#f0c5a0"/>
+        </g>
+        <g transform="translate(30,2)">
+          <rect x="-12" y="-16" width="24" height="12" rx="2" fill="#b09570" stroke="#8c7166" stroke-width="1.2"/>
+          <circle cx="-6" cy="-2" r="4" fill="#8c7166" stroke="#5a4836" stroke-width="1"/>
+          <path d="M8,-4 L16,2" stroke="#8c7166" stroke-width="2" stroke-linecap="round"/>
+          <path d="M-9,-16 Q-4,-24 2,-20" stroke="#586330" stroke-width="1.4" fill="none"/>
+        </g>
+        <g stroke="#9c3f00" stroke-width="2" fill="none" opacity="0.55" stroke-linecap="round">
+          <path d="M58,-22 L86,-30"/><path d="M78,-36 L88,-30 L80,-23"/>
+        </g>
+        <text class="vl-lieu-nom" x="0" y="34" text-anchor="middle">Les jardins</text>
+        <text class="vl-lieu-sous" x="0" y="49" text-anchor="middle">et les chemins</text>
+        <rect class="vl-focus" x="-70" y="-52" width="172" height="112" rx="12"/>
+      </g>
+    </g>
+  </a>
+
+  <!-- Quelques marcheur·euses sur le chemin -->
+  <g opacity="0.9">
+    <g transform="translate(196,678) scale(0.9)">
+      <circle cx="0" cy="-34" r="7" fill="#e8b88a"/><path d="M-9,-2 Q-9,-27 0,-27 Q9,-27 9,-2 Z" fill="#885060"/>
+      <ellipse cx="0" cy="0" rx="12" ry="3" fill="#1a1512" opacity="0.09"/>
+    </g>
+    <g transform="translate(966,684) scale(0.86)">
+      <circle cx="0" cy="-34" r="7" fill="#f0c5a0"/><path d="M-9,-2 Q-9,-27 0,-27 Q9,-27 9,-2 Z" fill="#4e4e88"/>
+      <ellipse cx="0" cy="0" rx="12" ry="3" fill="#1a1512" opacity="0.09"/>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       LE SOL · la charte, sous tout le village
+       ============================================================ -->
+  <a class="vl-cible vl-sol" href="charte.html" tabindex="0" role="link" aria-label="Le sol du village, la charte e-Sol : transparence, biens communs, évolutivité, robustesse, licences ouvertes.">
+    <title>Le sol — la charte e-Sol</title>
+    <g class="vl-lift-sol">
+      <path d="M0,718 Q150,710 300,716 Q450,722 600,714 Q750,706 900,714 Q1050,722 1200,712 L1200,800 L0,800 Z" fill="url(#vlSolProfil)"/>
+      <path d="M0,718 Q150,710 300,716 Q450,722 600,714 Q750,706 900,714 Q1050,722 1200,712 L1200,728 Q1050,738 900,730 Q750,722 600,730 Q450,738 300,732 Q150,726 0,734 Z" fill="#4a3728" opacity="0.55"/>
+      <g stroke="#4a3728" stroke-width="1.6" fill="none" opacity="0.4" stroke-linecap="round">
+        <path d="M120,728 Q124,744 116,756 Q112,764 118,772"/>
+        <path d="M420,726 Q426,742 418,754"/>
+        <path d="M760,726 Q754,742 762,756 Q766,764 760,772"/>
+        <path d="M1040,728 Q1046,742 1038,754"/>
+      </g>
+      <g fill="#6b5c54" opacity="0.5">
+        <ellipse cx="230" cy="768" rx="14" ry="8"/><ellipse cx="560" cy="776" rx="18" ry="9"/>
+        <ellipse cx="880" cy="766" rx="12" ry="7"/><ellipse cx="1080" cy="778" rx="16" ry="8"/>
+        <ellipse cx="70" cy="774" rx="13" ry="7"/>
+      </g>
+      <g transform="translate(300,776)" opacity="0.55">
+        <path d="M0,0 Q7,-5 14,-1 Q21,4 28,0" stroke="#c07830" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="28" cy="0" r="2.4" fill="#c07830"/>
+      </g>
+      <text class="vl-sol-titre" x="600" y="756" text-anchor="middle">LE SOL · LA CHARTE E-SOL</text>
+      <text class="vl-sol-sous" x="600" y="776" text-anchor="middle">transparence · biens communs · évolutivité · robustesse · licences ouvertes CC BY-SA</text>
+      <rect class="vl-focus" x="8" y="712" width="1184" height="82" rx="10"/>
+    </g>
+  </a>
+
+  <!-- Particules de sol en suspension, comme dans l'illustration de la maison -->
+  <g fill="#9c3f00" opacity="0.1">
+    <circle cx="120" cy="120" r="3"/><circle cx="330" cy="70" r="2.5"/>
+    <circle cx="880" cy="150" r="2.6"/><circle cx="60" cy="240" r="2.4"/>
+    <circle cx="1150" cy="380" r="3"/><circle cx="640" cy="120" r="2"/>
+  </g>
+</svg>

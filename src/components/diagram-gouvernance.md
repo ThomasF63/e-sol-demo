@@ -11,7 +11,7 @@ flowchart TB
     AFES[("<b>AFES</b><br/><i>Association porteuse</i><br/>anime · héberge · valorise")]
     COPIL["<b>COPIL e-Sol</b><br/>AFES · GIS Sol · RMT Sols et Territoires · RNEST<br/><i>soutien : ADEME, OFB</i>"]
 
-    subgraph PIECES["LES PIÈCES — communautés thématiques"]
+    subgraph MAISONS["LES MAISONS · communautés thématiques"]
       direction LR
       C1["Fresque<br/>du Sol"]
       C2["Sols<br/>Forestiers"]
@@ -33,11 +33,11 @@ flowchart TB
 
     %% ---------- Relations ----------
     AFES -. "siège &amp; anime" .-> COPIL
-    COPIL == "oriente · arbitre" ==> PIECES
+    COPIL == "oriente · arbitre" ==> MAISONS
     COPIL == "valide · valorise" ==> COMMUNS
 
-    MEMBRES -- "rejoignent" --> PIECES
-    PIECES == "produisent" ==> COMMUNS
+    MEMBRES -- "rejoignent" --> MAISONS
+    MAISONS == "produisent" ==> COMMUNS
     COMMUNS -- "bénéficient à" --> SOCIETE
     COMMUNS -. "retombées →&nbsp;animation" .-> AFES
 
@@ -56,7 +56,7 @@ flowchart TB
     class MEMBRES people
     class SOCIETE society
 
-    style PIECES fill:#fff7f0,stroke:#9c3f00,stroke-width:1.5px,color:#9c3f00
+    style MAISONS fill:#fff7f0,stroke:#9c3f00,stroke-width:1.5px,color:#9c3f00
     style COMMUNS fill:#f6faea,stroke:#586330,stroke-width:1.5px,color:#586330
 ```
 
@@ -64,8 +64,8 @@ flowchart TB
 
 - **AFES** est l'**association porteuse**. Elle anime le réseau et l'héberge techniquement, mais ne possède ni les communautés ni les communs.
 - Le **COPIL e-Sol** est l'instance multi-acteurs qui oriente le réseau : AFES + GIS Sol + RMT Sols et Territoires + RNEST, avec le soutien de l'ADEME et de l'OFB.
-- Les **membres** rejoignent une ou plusieurs **pièces** (communautés thématiques).
-- Les **pièces produisent des outils partagés** (communs) : données, guides, kits, logiciels.
+- Les **membres** habitent une ou plusieurs **maisons** (communautés thématiques).
+- Les **maisons produisent des communs** : données, guides, kits, logiciels.
 - Les **communs bénéficient à la société et aux partenaires** (intérêt général).
 - Les **retombées de la valorisation** des communs alimentent l'animation (cycle vertueux).
 
@@ -76,12 +76,12 @@ flowchart TB
 ```mermaid
 flowchart LR
     AFES[("<b>AFES</b><br/>+ COPIL")]
-    PIECES["<b>Communautés</b><br/><i>les pièces de la maison</i>"]
+    MAISONS["<b>Communautés</b><br/><i>les maisons du village</i>"]
     COMMUNS["<b>Communs</b><br/><i>les outils partagés</i>"]
     SOCIETE["<b>Société</b><br/><i>bénéficiaires</i>"]
 
-    AFES -- "anime" --> PIECES
-    PIECES -- "produisent" --> COMMUNS
+    AFES -- "anime" --> MAISONS
+    MAISONS -- "produisent" --> COMMUNS
     COMMUNS -- "bénéficient à" --> SOCIETE
 
     classDef a fill:#9c3f00,stroke:#7a3000,color:#fdfbf9,stroke-width:2px
@@ -89,23 +89,26 @@ flowchart LR
     classDef c fill:#dbe9a9,stroke:#586330,color:#3d4d1f
     classDef d fill:#f5edf2,stroke:#885060,color:#5a3038
     class AFES a
-    class PIECES b
+    class MAISONS b
     class COMMUNS c
     class SOCIETE d
 ```
 
-## Export PNG / SVG pour le wiki
+## Export PNG pour le wiki
 
 YesWiki ne rend pas Mermaid nativement. Pour publier ce schéma sur [e-sol.fr](https://e-sol.fr) :
 
-1. Coller le bloc Mermaid dans [mermaid.live](https://mermaid.live).
-2. Exporter en **PNG** (largeur ~1200px) ou **SVG**.
-3. Déposer dans `src/img/maison/` (versions repo) et téléverser sur la page wiki cible (`?MaisonESol` ou `?Gouvernance`).
-4. Garder ce fichier `.md` comme source éditable — tout changement de gouvernance se reflète ici en premier.
+1. `node build.js` puis `node scripts/capture-village.js` : la variante simplifiée est rendue
+   localement (mêmes bibliothèque, thème et polices que la démo) et exportée en
+   `src/img/portage/gouvernance-esol.png` (~1200 px de large). Repli manuel : mermaid.live
+   (procédure au § 2.2 de `docs/00-portage-README.md`).
+2. Téléverser sur la page wiki cible : `?VillageESol`.
+3. Garder ce fichier `.md` comme source éditable : tout changement de gouvernance se reflète ici
+   en premier, puis dans un nouvel export.
 
 ## À mettre à jour quand…
 
-- Une nouvelle communauté significative est lancée (ajouter dans le subgraph PIECES si pertinent).
+- Une nouvelle communauté significative est lancée (ajouter dans le subgraph MAISONS si pertinent).
 - La composition du COPIL change (entrée/sortie d'un partenaire).
 - La typologie des communs évolue (cf. phase 4 du plan : cycle de vie).
 - Les modalités de retombées économiques changent dans la Charte.

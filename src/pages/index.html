@@ -155,6 +155,83 @@
       font-weight: 500;
     }
 
+    /* ---- E-SOL EN UN COUP D'ŒIL ---- */
+    .village-quote {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.45;
+      color: var(--text-main); max-width: 780px; margin: 0 auto 40px;
+      text-align: center; letter-spacing: -0.01em;
+    }
+    .village-quote .accent {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-weight: 700;
+    }
+    .village-quote::before, .village-quote::after {
+      content: '"'; color: var(--primary); opacity: 0.4;
+      font-size: 1.4em; line-height: 0; vertical-align: -0.3em;
+    }
+    .village-quote::before { margin-right: 8px; }
+    .village-quote::after { margin-left: 6px; }
+
+    .vg-card {
+      padding: 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .vg-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+
+    .vg-card h3 { font-size: 1.02rem; }
+
+    .vg-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    /* ---- REJOINDRE EN QUATRE GESTES ---- */
+    .join-card {
+      padding: 26px 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .join-num {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 4px 14px rgba(156,63,0,0.18);
+    }
+
+    .join-card h3 { font-size: 1.05rem; }
+
+    .join-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
     /* ---- STATS BAR ---- */
     .stats-bar {
       padding: 48px 0;
@@ -387,7 +464,7 @@
             <p class="hero-subtitle">Le réseau e-Sol fédère chercheurs, praticiens et citoyens engagés pour la connaissance, la préservation et la régénération des sols en France.</p>
             <div class="flex gap-4 flex-wrap">
               <a href="communautes.html" class="btn btn-primary btn-lg">Découvrir les Communautés</a>
-              <a href="charte.html" class="btn btn-outline btn-lg">Lire la Charte</a>
+              <a href="village-esol.html" class="btn btn-outline btn-lg">Comment ça marche&nbsp;?</a>
             </div>
           </div>
           <div class="col-span-5 animate-in delay-2">
@@ -404,6 +481,62 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== E-SOL EN UN COUP D'ŒIL ===== -->
+    <section class="section-sm">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-olive mb-4">Comprendre</span>
+          <h2>e-Sol en un coup d'œil</h2>
+          <p>Quatre repères pour comprendre comment le réseau fonctionne, avant d'entrer dans le détail.</p>
+        </div>
+
+        <p class="village-quote">e-Sol, c'est un <span class="accent">village</span>&nbsp;: chaque communauté y a sa maison, et toutes sont bâties sur le même sol.</p>
+
+        <div class="bento-grid">
+          <div class="col-span-3 animate-in">
+            <div class="glass-card vg-card no-hover">
+              <div class="vg-icon" style="background: var(--cat-formation-bg); color: var(--cat-formation);">
+                <i class="fas fa-house-chimney"></i>
+              </div>
+              <h3>Une maison par communauté</h3>
+              <p>On entre dans celles qui nous concernent, et on peut en habiter plusieurs à la fois.</p>
+            </div>
+          </div>
+          <div class="col-span-3 animate-in delay-1">
+            <div class="glass-card vg-card no-hover">
+              <div class="vg-icon" style="background: var(--primary-10); color: var(--primary);">
+                <i class="fas fa-comments"></i>
+              </div>
+              <h3>La place et son agora</h3>
+              <p>On discute, on pose une question, on annonce un chantier, on répond&nbsp;: c'est le forum.</p>
+            </div>
+          </div>
+          <div class="col-span-3 animate-in delay-2">
+            <div class="glass-card vg-card no-hover">
+              <div class="vg-icon" style="background: var(--cat-recherche-bg); color: var(--cat-recherche);">
+                <i class="fas fa-screwdriver-wrench"></i>
+              </div>
+              <h3>L'atelier des communs</h3>
+              <p>Protocoles, données, kits pédagogiques&nbsp;: ce que les communautés produisent pour tout le monde.</p>
+            </div>
+          </div>
+          <div class="col-span-3 animate-in delay-3">
+            <div class="glass-card vg-card no-hover">
+              <div class="vg-icon" style="background: rgba(107,92,84,0.15); color: #4a3728;">
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <h3>Le sol&nbsp;: la charte</h3>
+              <p>Ce sur quoi tout est bâti&nbsp;: la charte, les valeurs, les licences ouvertes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center mt-8">
+          <a href="village-esol.html" class="btn btn-primary btn-lg"><i class="fas fa-tree-city"></i> Visiter le village e-Sol</a>
         </div>
       </div>
     </section>
@@ -437,8 +570,8 @@
       <div class="container">
         <div class="section-header">
           <span class="badge badge-olive mb-4">Explorer</span>
-          <h2>Votre Parcours e-Sol</h2>
-          <p>Des outils et des espaces adaptés à chaque besoin et chaque acteur du territoire.</p>
+          <h2>Trois chemins dans le village</h2>
+          <p>Rejoindre une maison, contribuer à l'atelier, prendre part à ce qui se fait autour&nbsp;: trois entrées selon ce que vous venez faire.</p>
         </div>
 
         <div class="bento-grid">
@@ -447,7 +580,7 @@
               <div class="pathway-icon-wrap" style="background: var(--primary-10); color: var(--primary);">
                 <i class="fas fa-users-viewfinder"></i>
               </div>
-              <h3>Les Communautés</h3>
+              <h3>Les maisons&nbsp;: les communautés</h3>
               <p>Rejoignez des groupes thématiques pour échanger, partager et construire des projets sur la Fresque du Sol, le ZAN, les sols forestiers et plus encore.</p>
               <a href="communautes.html" class="pathway-link" style="color: var(--primary);">
                 Voir les communautés <i class="fas fa-arrow-right"></i>
@@ -460,7 +593,7 @@
               <div class="pathway-icon-wrap" style="background: var(--secondary-10); color: var(--secondary);">
                 <i class="fas fa-hand-holding-heart"></i>
               </div>
-              <h3>Les Communs</h3>
+              <h3>L'atelier&nbsp;: les communs</h3>
               <p>Découvrez et participez à la création de ressources partagées : outils, données cartographiques, kits pédagogiques et protocoles de terrain.</p>
               <a href="communs.html" class="pathway-link" style="color: var(--secondary);">
                 Découvrir les communs <i class="fas fa-arrow-right"></i>
@@ -473,7 +606,7 @@
               <div class="pathway-icon-wrap" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
                 <i class="fas fa-rocket"></i>
               </div>
-              <h3>Passez à l'action</h3>
+              <h3>Les chemins&nbsp;: passer à l'action</h3>
               <p>Inscrivez-vous, rejoignez le forum, proposez des annonces ou devenez contributeur actif de la plateforme collaborative.</p>
               <a href="participer.html" class="pathway-link" style="color: var(--cat-politique);">
                 Comment participer <i class="fas fa-arrow-right"></i>
@@ -504,8 +637,54 @@
       </div>
     </section>
 
-    <!-- ===== QUICK LINKS (mirrors current homepage) ===== -->
+    <!-- ===== REJOINDRE EN QUATRE GESTES ===== -->
     <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-terra mb-4">Rejoindre</span>
+          <h2>Rejoindre une communauté, en quatre gestes</h2>
+          <p>Aucun niveau d'expertise n'est demandé, seulement l'envie de participer.</p>
+        </div>
+
+        <div class="bento-grid">
+          <div class="col-span-3 animate-in">
+            <div class="glass-card join-card no-hover">
+              <div class="join-num">1</div>
+              <h3>Je crée mon compte e-Sol</h3>
+              <p>L'inscription est gratuite, ouverte à toute personne intéressée par les sols, et crée votre fiche dans l'annuaire.</p>
+            </div>
+          </div>
+          <div class="col-span-3 animate-in delay-1">
+            <div class="glass-card join-card no-hover">
+              <div class="join-num" style="background: linear-gradient(135deg, #b04510, var(--primary));">2</div>
+              <h3>Je choisis ma communauté</h3>
+              <p>Je parcours la liste des 12 communautés, je lis les présentations. Une ou deux maisons où être vraiment présent·e valent mieux que dix effleurées.</p>
+            </div>
+          </div>
+          <div class="col-span-3 animate-in delay-2">
+            <div class="glass-card join-card no-hover">
+              <div class="join-num" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);">3</div>
+              <h3>Je demande à entrer</h3>
+              <p>Selon la communauté, l'entrée est immédiate ou passe par un mot à l'animateur·rice, qui accueille et valide. Dans les deux cas, je coche la communauté sur ma fiche annuaire.</p>
+            </div>
+          </div>
+          <div class="col-span-3 animate-in delay-3">
+            <div class="glass-card join-card no-hover">
+              <div class="join-num" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 14px rgba(88,99,48,0.18);">4</div>
+              <h3>Je me présente et je participe</h3>
+              <p>Un mot de bonjour dans la catégorie de forum de la communauté, un œil aux documents partagés, et me voilà membre.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center mt-8">
+          <a href="qu-est-ce-qu-une-communaute.html#rejoindre" class="btn btn-outline">Le pas à pas détaillé <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== QUICK LINKS (mirrors current homepage) ===== -->
+    <section class="section section-alt">
       <div class="container">
         <div class="section-header">
           <span class="badge badge-olive mb-4">Accès Rapide</span>

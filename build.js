@@ -8,6 +8,14 @@ const distDir = path.join(__dirname, 'dist');
 function build() {
   console.log('Building e-Sol Demo…');
 
+  // Composants générés depuis les données (le village), avant le chargement
+  // des composants : ils en font partie.
+  try {
+    require('./scripts/generate-village.js');
+  } catch (e) {
+    console.warn('  ⚠ village generation failed:', e.message);
+  }
+
   // Load components
   const components = {};
   if (fs.existsSync(srcComponents)) {
@@ -31,11 +39,19 @@ function build() {
     let content = fs.readFileSync(path.join(srcPages, file), 'utf8');
 
     // Replace component includes: {{> name }}
-    content = content.replace(/\{\{>\s*(\w[\w-]*)\s*\}\}/g, (match, name) => {
-      if (components[name]) return components[name];
-      console.warn(`  ⚠ Component not found: ${name}`);
-      return match;
-    });
+    // Résolution récursive : un composant peut lui-même en inclure un autre
+    // (illustration-village.html inclut village-maisons.html). La profondeur est
+    // bornée pour qu'une inclusion circulaire n'aboutisse pas à une boucle infinie.
+    const MAX_DEPTH = 5;
+    for (let depth = 0; depth < MAX_DEPTH; depth++) {
+      let remplace = false;
+      content = content.replace(/\{\{>\s*(\w[\w-]*)\s*\}\}/g, (match, name) => {
+        if (components[name]) { remplace = true; return components[name]; }
+        if (depth === 0) console.warn(`  ⚠ Component not found: ${name}`);
+        return match;
+      });
+      if (!remplace) break;
+    }
 
     fs.writeFileSync(path.join(distDir, file), content);
     console.log(`  ✓ ${file}`);

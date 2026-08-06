@@ -1,0 +1,27 @@
+{
+  "name": "e-sol-demo",
+  "version": "1.0.0",
+  "description": "Prototype haute-fidélité du nouveau site **e-sol.fr**, le réseau collaboratif pour la connaissance et la préservation des sols, porté par l'[AFES](https://www.afes.fr).",
+  "main": "build.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomasF63/e-sol-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ThomasF63/e-sol-demo/issues"
+  },
+  "homepage": "https://github.com/ThomasF63/e-sol-demo#readme",
+  "dependencies": {
+    "puppeteer-core": "^25.5.0"
+  }
+}

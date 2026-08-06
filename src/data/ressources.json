@@ -279,8 +279,8 @@
   },
   {
     "id": "guide-maison",
-    "titre": "La maison e-Sol",
-    "description": "La métaphore du réseau : le toit AFES, les pièces (communautés), les outils partagés (communs), les fondations (charte).",
+    "titre": "Le village e-Sol",
+    "description": "La métaphore du réseau : une maison par communauté, la place et son agora, l'atelier et la bibliothèque, et le sol commun qu'est la charte.",
     "type": "guide",
     "public": "tous",
     "outil": "reseau",
@@ -288,10 +288,10 @@
     "duree_min": 5,
     "format": "texte",
     "statut": "disponible",
-    "lien": "maison-esol.html",
+    "lien": "village-esol.html",
     "serie": null,
     "icone": "fa-house-chimney",
-    "motscles": "maison metaphore reseau comprendre afes copil pieces",
+    "motscles": "village maison metaphore reseau comprendre afes copil place agora",
     "ordre": 17
   },
   {

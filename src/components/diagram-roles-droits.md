@@ -146,18 +146,18 @@ flowchart LR
     class P n5
 ```
 
-## Export PNG / SVG pour le wiki
+## Export PNG pour le wiki
 
 YesWiki ne rend pas Mermaid nativement. Pour publier ces schémas sur [e-sol.fr](https://e-sol.fr) :
 
-1. Coller le bloc Mermaid voulu dans [mermaid.live](https://mermaid.live).
-2. Exporter en **PNG** (largeur ~1200px) ou **SVG**.
-3. Déposer dans `src/img/roles/` (versions repo) et téléverser sur la page wiki cible
-   (proposition : `?RolesEtDroits`, nom à valider).
-4. L'infographie compagne `src/components/illustration-roles.html` est du SVG pur : copier
-   son contenu dans un fichier `.svg` puis exporter en PNG (navigateur ou Inkscape), même
-   destination.
-5. Garder ce fichier `.md` comme source éditable : tout changement de droits se répercute
+1. `node build.js` puis `node scripts/capture-village.js` : la vue communauté est rendue
+   localement (mêmes bibliothèque, thème et polices que la démo) et exportée en
+   `src/img/portage/roles-vue-communaute.png` (~1200 px de large). L'infographie compagne
+   `src/components/illustration-roles.html` (l'escalier) est exportée par la même commande en
+   `src/img/portage/roles-cinq-niveaux.png`. Repli manuel : mermaid.live (procédure au § 2.2
+   de `docs/00-portage-README.md`).
+2. Téléverser sur la page wiki cible (proposition : `?RolesEtDroits`, nom à valider).
+3. Garder ce fichier `.md` comme source éditable : tout changement de droits se répercute
    d'abord dans `docs/roles-et-droits.md`, puis ici, puis dans les exports.
 
 ## À mettre à jour quand…

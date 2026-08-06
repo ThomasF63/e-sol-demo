@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Le village e-Sol — Comprendre le réseau</title>
+
+  <!-- Mermaid for governance diagram -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+  <style>
+    /* ================================================================
+       LE VILLAGE — cadre et interactions
+       Tout est en CSS : aucune ligne de JavaScript n'est nécessaire pour
+       survoler, naviguer au clavier ou afficher les noms.
+       ================================================================ */
+    .village-frame {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px;
+      background: linear-gradient(180deg, #fffcf7 0%, var(--bg-surface) 100%);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .village-scroll { min-width: 780px; }
+
+    .vl-svg { width: 100%; height: auto; display: block; }
+
+    .village-hint {
+      display: none;
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      text-align: center;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    /* ---- Cibles : maisons et lieux ---- */
+    .vl-cible { cursor: pointer; }
+    .vl-cible:focus { outline: none; }
+
+    .vl-cible .vl-lift {
+      transition: transform 0.38s var(--ease-out);
+    }
+    .vl-cible:hover .vl-lift,
+    .vl-cible:focus .vl-lift,
+    .vl-cible:focus-visible .vl-lift {
+      transform: translateY(-10px);
+    }
+
+    /* Le sol ne se soulève pas : il s'éclaircit. */
+    .vl-sol .vl-lift-sol { transition: opacity 0.3s var(--ease-out); }
+    .vl-sol:hover .vl-lift-sol,
+    .vl-sol:focus .vl-lift-sol { opacity: 0.88; }
+
+    /* ---- Plaque de survol : le nom complet apparaît ---- */
+    .vl-plaque {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s var(--ease-out);
+    }
+    .vl-cible:hover .vl-plaque,
+    .vl-cible:focus .vl-plaque,
+    .vl-cible:focus-visible .vl-plaque { opacity: 1; }
+
+    /* ---- Focus clavier : visible, et distinct du survol ---- */
+    .vl-focus {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 2.5;
+      stroke-dasharray: 7 4;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .vl-cible:focus .vl-focus,
+    .vl-cible:focus-visible .vl-focus { opacity: 1; }
+    .vl-cible:hover .vl-focus { opacity: 0; }
+    .vl-cible:focus:hover .vl-focus { opacity: 1; }
+
+    /* ---- Textes du dessin ---- */
+    .vl-nom {
+      font-family: var(--font-display);
+      font-size: 12.5px; font-weight: 600; fill: #6b5c54;
+    }
+    .vl-dort-tag {
+      font-family: var(--font-body);
+      font-size: 10px; fill: #9a8a82; font-style: italic;
+    }
+    .vl-plaque-titre {
+      font-family: var(--font-display);
+      font-size: 13px; font-weight: 700; fill: #1a1512;
+    }
+    .vl-plaque-sous {
+      font-family: var(--font-body);
+      font-size: 10.5px; fill: #6b5c54;
+    }
+    .vl-lieu-nom {
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 700; fill: #4a3728;
+    }
+    .vl-lieu-sous {
+      font-family: var(--font-body);
+      font-size: 12px; fill: #6b5c54;
+    }
+    .vl-sol-titre {
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 700; fill: #fdfbf9; letter-spacing: 2.4px;
+    }
+    .vl-sol-sous {
+      font-family: var(--font-body);
+      font-size: 11.5px; fill: #efe3d6; letter-spacing: 0.3px;
+    }
+
+    /* ---- Communauté en sommeil ---- */
+    .vl-dort { opacity: 0.68; }
+    .vl-dort .vl-nom { fill: #9a8a82; }
+
+    /* La fumée respire, doucement, et s'arrête si l'utilisateur
+       a demandé à réduire les animations. */
+    @keyframes vl-fumer {
+      0%   { opacity: 0.28; transform: translateY(0); }
+      50%  { opacity: 0.40; transform: translateY(-3px); }
+      100% { opacity: 0.28; transform: translateY(0); }
+    }
+    .vl-fumee { animation: vl-fumer 5.5s ease-in-out infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .vl-fumee { animation: none; }
+      .vl-cible .vl-lift, .vl-plaque, .vl-sol .vl-lift-sol { transition: none; }
+    }
+
+    /* ================================================================
+       LA LÉGENDE DU VILLAGE — le repli texte des lieux partagés
+       ================================================================ */
+    .vl-legende {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .vl-legende a {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: inherit;
+      height: 100%;
+      transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+    }
+    .vl-legende a:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .vl-legende-icone {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+    }
+    .vl-legende-titre {
+      font-family: var(--font-display);
+      font-weight: 600; font-size: 1rem;
+      display: block; margin-bottom: 3px;
+    }
+    .vl-legende-quoi {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;
+      display: block;
+    }
+
+    /* ================================================================
+       LA LISTE DES COMMUNAUTÉS — repli accessible, impression, portage
+       ================================================================ */
+    .vl-liste {
+      list-style: none; padding: 0; margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 12px;
+    }
+    .vl-item-lien {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      text-decoration: none; color: inherit; height: 100%;
+      transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+    }
+    .vl-item-lien:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .vl-item-pastille {
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      border-radius: var(--radius-sm);
+      border: 1px solid;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .vl-item-corps { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .vl-item-titre {
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 0.95rem; line-height: 1.35;
+    }
+    .vl-item-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+    .vl-item-meta {
+      font-family: var(--font-display); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-subtle);
+    }
+    .vl-item-etat {
+      font-family: var(--font-body); font-size: 0.72rem; font-weight: 500;
+      font-style: italic; color: var(--text-subtle); text-transform: none;
+      letter-spacing: 0;
+    }
+    .vl-item-dort .vl-item-lien { background: var(--bg-warm); }
+
+    /* ================================================================
+       Blocs narratifs, repris de la maison pour ne pas casser l'unité
+       ================================================================ */
+    .lieu-card {
+      padding: 26px; display: flex; gap: 18px;
+      align-items: flex-start; height: 100%;
+    }
+    .lieu-icon {
+      flex-shrink: 0; width: 54px; height: 54px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px;
+    }
+    .lieu-card h3 { font-size: 1.18rem; margin-bottom: 6px; }
+    .lieu-card .lieu-tag {
+      font-family: var(--font-display); font-weight: 600; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--text-subtle); margin-bottom: 10px; display: block;
+    }
+    .lieu-card p {
+      color: var(--text-muted); font-size: 0.94rem; line-height: 1.65;
+      margin-bottom: 12px; max-width: 100%;
+    }
+    .lieu-card .lieu-link {
+      font-family: var(--font-display); font-weight: 600; font-size: 13px;
+      display: inline-flex; align-items: center; gap: 6px; margin-right: 14px;
+    }
+
+    .village-quote {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.45;
+      color: var(--text-main); max-width: 780px; margin: 0 auto;
+      text-align: center; letter-spacing: -0.01em;
+    }
+    .village-quote .accent {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-weight: 700;
+    }
+    .village-quote::before, .village-quote::after {
+      content: '"'; color: var(--primary); opacity: 0.4;
+      font-size: 1.4em; line-height: 0; vertical-align: -0.3em;
+    }
+    .village-quote::before { margin-right: 8px; }
+    .village-quote::after { margin-left: 6px; }
+
+    .gov-frame {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 40px 32px;
+      box-shadow: var(--shadow-sm); overflow-x: auto;
+    }
+    .gov-frame .mermaid { display: flex; justify-content: center; min-width: 600px; }
+    .gov-note {
+      font-size: 0.85rem; color: var(--text-subtle); text-align: center;
+      margin-top: 16px; font-style: italic;
+    }
+
+    .doorway-card {
+      padding: 26px; text-align: center; height: 100%;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .doorway-icon {
+      width: 58px; height: 58px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 23px; margin-bottom: 16px;
+    }
+    .doorway-card h4 { margin-bottom: 8px; font-size: 1.08rem; }
+    .doorway-card p {
+      color: var(--text-muted); font-size: 0.89rem; line-height: 1.6;
+      flex-grow: 1; margin-bottom: 18px; max-width: 100%;
+    }
+
+    .village-note {
+      background: var(--bg-warm); border: 1px solid var(--border);
+      border-left: 3px solid var(--secondary);
+      border-radius: var(--radius-md); padding: 18px 22px;
+      font-size: 0.9rem; color: var(--text-muted); line-height: 1.65;
+      max-width: 880px; margin: 28px auto 0;
+    }
+
+    @media (max-width: 760px) {
+      .village-frame { padding: 10px; }
+      .village-hint { display: block; }
+      .lieu-card { flex-direction: column; padding: 22px; }
+      .gov-frame { padding: 24px 12px; }
+    }
+
+    @media print {
+      .village-scroll { min-width: 0; }
+      .village-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <!-- ============== HERO ============== -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Comprendre e-Sol</span>
+      <h1>Le village e-Sol</h1>
+      <p>Une métaphore pour voir d'un coup d'œil comment le réseau fonctionne, qui fait quoi, et où vous pouvez prendre place. Chaque lieu du village est une porte vers une page du site.</p>
+    </div>
+  </div>
+
+  <!-- ============== LE VILLAGE ============== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="village-frame">
+        <div class="village-scroll">
+          {{> illustration-village }}
+        </div>
+      </div>
+      <p class="village-hint">Faites glisser le village horizontalement pour l'explorer, ou parcourez la liste des lieux ci-dessous.</p>
+    </div>
+  </section>
+
+  <!-- ============== PHRASE-SIGNATURE ============== -->
+  <section class="section-sm">
+    <div class="container container-narrow">
+      <p class="village-quote">
+        e-Sol, c'est un <span class="accent">village</span>&nbsp;: chaque communauté y a sa maison, et toutes sont bâties sur le même sol.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============== LA LÉGENDE DU VILLAGE ============== -->
+  <section class="section" id="legende">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">La légende</span>
+        <h2>Se repérer dans le village</h2>
+        <p>Chaque lieu correspond à quelque chose qu'on peut faire sur e-Sol. Rien n'est là pour décorer.</p>
+      </div>
+
+      <ul class="vl-legende">
+        <li>
+          <a href="inscription.html">
+            <span class="vl-legende-icone" style="background: rgba(192,88,20,0.12); color: var(--primary-light);"><i class="fas fa-key" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">L'accueil</span>
+              <span class="vl-legende-quoi">On entre librement dans le village. Pour participer, il faut sa clef&nbsp;: c'est l'inscription.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="annuaire.html">
+            <span class="vl-legende-icone" style="background: var(--cat-institutionnel-bg); color: var(--cat-institutionnel);"><i class="fas fa-book-open" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">Le registre</span>
+              <span class="vl-legende-quoi">Qui habite le village, où, et sur quoi chacun·e travaille. C'est l'annuaire des membres.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="communautes.html">
+            <span class="vl-legende-icone" style="background: var(--cat-formation-bg); color: var(--cat-formation);"><i class="fas fa-house-chimney" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">Les maisons</span>
+              <span class="vl-legende-quoi">Une par communauté. On entre dans celles qui nous concernent, on peut en habiter plusieurs.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">
+            <span class="vl-legende-icone" style="background: var(--primary-10); color: var(--primary);"><i class="fas fa-comments" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">La place et son agora</span>
+              <span class="vl-legende-quoi">On discute, on pose une question, on annonce un chantier. C'est le forum. <i class="fas fa-arrow-up-right-from-square text-xs" aria-hidden="true"></i></span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="annonces.html">
+            <span class="vl-legende-icone" style="background: var(--cat-formation-bg); color: var(--cat-formation);"><i class="fas fa-thumbtack" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">Le panneau d'affichage</span>
+              <span class="vl-legende-quoi">On lit et on dépose une offre, une demande, une information. Ce sont les petites annonces.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="communs.html">
+            <span class="vl-legende-icone" style="background: var(--cat-recherche-bg); color: var(--cat-recherche);"><i class="fas fa-screwdriver-wrench" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">L'atelier</span>
+              <span class="vl-legende-quoi">Ce que les communautés fabriquent et partagent&nbsp;: protocoles, données, kits, référentiels. Ce sont les communs.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="tutoriels.html">
+            <span class="vl-legende-icone" style="background: var(--cat-education-bg); color: var(--cat-education);"><i class="fas fa-book-open-reader" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">La bibliothèque</span>
+              <span class="vl-legende-quoi">On apprend à se servir d'e-Sol&nbsp;: tutoriels, fiches du forum, guides d'usage, vocabulaire.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="charte.html">
+            <span class="vl-legende-icone" style="background: rgba(107,92,84,0.15); color: #4a3728;"><i class="fas fa-layer-group" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">Le sol</span>
+              <span class="vl-legende-quoi">Ce sur quoi tout est bâti&nbsp;: la charte, les valeurs, les licences ouvertes.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="participer.html">
+            <span class="vl-legende-icone" style="background: rgba(109,128,53,0.18); color: #3d4d1f;"><i class="fas fa-seedling" aria-hidden="true"></i></span>
+            <span>
+              <span class="vl-legende-titre">Les jardins et les chemins</span>
+              <span class="vl-legende-quoi">Ce qui sort du village&nbsp;: ateliers grand public, événements, projets pilotes, plaidoyer.</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="village-note">
+        <strong>Deux fonctions n'ont pas de bâtiment, volontairement.</strong> L'AFES et le COPIL ne sont pas un lieu&nbsp;: ils sont ce qui entretient les lieux. Et les pages qui expliquent le fonctionnement (<a href="roles-et-droits.html">les rôles et les droits</a>, <a href="qu-est-ce-qu-une-communaute.html">qu'est-ce qu'une communauté</a>) sont des repères de lecture, pas des endroits où l'on va.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LES 12 MAISONS EN TEXTE ============== -->
+  <section class="section section-alt" id="les-maisons">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Les maisons</span>
+        <h2>Les douze communautés du village</h2>
+        <p>La même information que le dessin, en texte&nbsp;: pour la lecture au clavier, pour l'impression, et pour le portage sur e-sol.fr.</p>
+      </div>
+
+      {{> village-liste }}
+    </div>
+  </section>
+
+  <!-- ============== VISITE GUIDÉE ============== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Visite guidée</span>
+        <h2>Ce qui se passe dans chaque lieu</h2>
+        <p>Le village en neuf arrêts, du portail qui n'existe pas jusqu'aux chemins qui en sortent.</p>
+      </div>
+
+      <div class="bento-grid">
+
+        <!-- L'accueil -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid var(--primary-light);">
+            <div class="lieu-icon" style="background: rgba(192,88,20,0.12); color: var(--primary-light);"><i class="fas fa-key"></i></div>
+            <div>
+              <span class="lieu-tag">L'accueil · à l'entrée</span>
+              <h3>On entre librement, on participe avec une clef</h3>
+              <p>Le village n'a ni portail ni remparts&nbsp;: on y entre par les chemins, on regarde les maisons, on lit ce qui se dit sur la place. Pour participer, en revanche, il faut sa clef&nbsp;: c'est l'<strong>inscription</strong>. Elle prend quelques minutes, elle est gratuite, elle est ouverte à toute personne que les sols intéressent, et elle ouvre le droit de poster, de rejoindre une maison et de déposer un commun. À côté de l'accueil se tient le <strong>registre</strong>&nbsp;: qui habite le village, où, et sur quoi chacun·e travaille.</p>
+              <a href="inscription.html" class="lieu-link" style="color: var(--primary-light);">S'inscrire <i class="fas fa-arrow-right text-xs"></i></a>
+              <a href="premiers-pas.html" class="lieu-link" style="color: var(--primary-light);">Premiers pas <i class="fas fa-arrow-right text-xs"></i></a>
+              <a href="annuaire.html" class="lieu-link" style="color: var(--primary-light);">Le registre <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les maisons -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid #9c3f00;">
+            <div class="lieu-icon" style="background: #ffdbcc; color: #7a3000;"><i class="fas fa-house-chimney"></i></div>
+            <div>
+              <span class="lieu-tag">Les maisons · autour de la place</span>
+              <h3>Une communauté, une maison</h3>
+              <p>Chaque communauté a sa maison, et chacune a son allure&nbsp;: chez la Fresque du Sol on joue les cartes sur la table, chez Sols et Art on travaille la terre comme un pigment, chez Sols Forestiers c'est un coin de forêt, chez ZAN une petite ville qui grignote ses bords. Certaines sont grandes et très animées, d'autres tiennent à quelques personnes, et c'est très bien ainsi. Chaque maison a son ou ses animateur·rices, ses habitué·es, et parfois une pièce du fond réservée à un cercle plus restreint. On peut en habiter plusieurs, et on peut proposer d'en construire une nouvelle.</p>
+              <a href="communautes.html" class="lieu-link" style="color: #7a3000;">Voir les maisons <i class="fas fa-arrow-right text-xs"></i></a>
+              <a href="qu-est-ce-qu-une-communaute.html" class="lieu-link" style="color: #7a3000;">Qu'est-ce qu'une communauté&nbsp;? <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- L'agora -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid var(--primary);">
+            <div class="lieu-icon" style="background: var(--primary-10); color: var(--primary);"><i class="fas fa-comments"></i></div>
+            <div>
+              <span class="lieu-tag">La place et son agora · au centre</span>
+              <h3>Là où tout le monde se croise</h3>
+              <p>Les chemins débouchent sur la place. C'est là que se tient l'agora, le <strong>forum</strong>&nbsp;: on s'y présente, on pose une question, on annonce un chantier, on répond à quelqu'un qu'on n'a jamais rencontré. Les habitant·es de toutes les maisons s'y croisent, et il n'y a pas besoin d'être invité·e pour lire ce qui s'y dit. Un détail qui compte&nbsp;: le forum a son propre compte, distinct de celui du site.</p>
+              <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="lieu-link" style="color: var(--primary);">Aller sur le forum <i class="fas fa-arrow-up-right-from-square text-xs"></i></a>
+              <a href="tutoriels-forum.html" class="lieu-link" style="color: var(--primary);">Le forum, pas à pas <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Le panneau -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid var(--primary-light);">
+            <div class="lieu-icon" style="background: #ffdbcc; color: #7a3000;"><i class="fas fa-thumbtack"></i></div>
+            <div>
+              <span class="lieu-tag">Le panneau d'affichage · sur la place</span>
+              <h3>Ce qui se cherche et ce qui se propose</h3>
+              <p>Contre le mur de la place, le panneau d'affichage&nbsp;: un stage à pourvoir, un jeu de données à récupérer, un covoiturage vers un colloque, une thèse qui cherche des terrains. On lit, on décroche ce qui nous intéresse, on épingle sa propre annonce.</p>
+              <a href="annonces.html" class="lieu-link" style="color: #7a3000;">Voir les annonces <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- L'atelier -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid var(--secondary);">
+            <div class="lieu-icon" style="background: #dbe9a9; color: #3d4d1f;"><i class="fas fa-screwdriver-wrench"></i></div>
+            <div>
+              <span class="lieu-tag">L'atelier · sur la place</span>
+              <h3>Les communs&nbsp;: ce que le réseau fabrique et partage</h3>
+              <p>L'atelier appartient à tout le monde. C'est là qu'on fabrique ensemble ce qu'on ne saurait pas faire seul·e, et qu'on récupère ce que les autres ont fabriqué&nbsp;: protocoles, jeux de données, kits pédagogiques, référentiels, cartes. Ce sont les <strong>communs</strong>&nbsp;: ils naissent dans les maisons, ils sortent sur la place, et ils sont publiés sous licence ouverte pour que n'importe qui puisse les reprendre. On y entre sans demander, on emprunte, on rapporte, et on est censé y laisser quelque chose de temps en temps.</p>
+              <a href="communs.html" class="lieu-link" style="color: var(--secondary);">Découvrir les communs <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- La bibliothèque -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid #705740;">
+            <div class="lieu-icon" style="background: #fedcbe; color: #705740;"><i class="fas fa-book-open-reader"></i></div>
+            <div>
+              <span class="lieu-tag">La bibliothèque · près de la place</span>
+              <h3>Apprendre à se servir du village</h3>
+              <p>Personne ne naît en sachant se servir d'un forum ni déposer un commun. La bibliothèque rassemble ce qui s'apprend&nbsp;: les premiers pas pour s'installer, les fiches pratiques du forum, les guides d'usage de la plateforme, et le vocabulaire du réseau quand un sigle résiste. Ce n'est pas là qu'on trouve les communs, c'est là qu'on apprend à s'en servir.</p>
+              <a href="tutoriels.html" class="lieu-link" style="color: #705740;">Centre de ressources <i class="fas fa-arrow-right text-xs"></i></a>
+              <a href="glossaire.html" class="lieu-link" style="color: #705740;">Glossaire <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Le sol -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid #6b5c54;">
+            <div class="lieu-icon" style="background: rgba(107,92,84,0.15); color: #4a3728;"><i class="fas fa-layer-group"></i></div>
+            <div>
+              <span class="lieu-tag">Le sol · sous tout le village</span>
+              <h3>Ce sur quoi tout est bâti&nbsp;: la charte</h3>
+              <p>Dans une maison, les fondations sont enterrées et on finit par les oublier. Dans un village, le sol est sous les pieds de tout le monde, tout le temps. La <strong>charte e-Sol</strong> pose les principes que partagent toutes les maisons&nbsp;: transparence, biens communs, évolutivité, robustesse. C'est elle qui garantit que ce qui est produit ici reste ouvert et réutilisable, sous licence CC BY-SA. On ne partage plus un toit, on partage un sol&nbsp;: c'est le seul point sur lequel personne ne peut faire bande à part.</p>
+              <a href="charte.html" class="lieu-link" style="color: #4a3728;">Lire la charte <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- L'intendance -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid var(--primary);">
+            <div class="lieu-icon" style="background: var(--primary-10); color: var(--primary);"><i class="fas fa-hands-holding-circle"></i></div>
+            <div>
+              <span class="lieu-tag">L'intendance · l'AFES et le COPIL</span>
+              <h3>Qui entretient le village</h3>
+              <p>L'AFES anime, héberge, et ne possède pas. Elle n'a pas de toit au-dessus des autres&nbsp;: elle garde la place ouverte, entretient les chemins et la bibliothèque, accueille celles et ceux qui arrivent. Elle habite d'ailleurs le village comme les autres, avec ses propres maisons (le groupe Communication, les administrateurs de l'association). Le <strong>COPIL e-Sol</strong> (AFES, GIS Sol, RMT Sols et Territoires, RNEST, avec le soutien de l'ADEME et de l'OFB) est l'assemblée qui oriente&nbsp;: il arbitre, il valide l'ouverture d'une nouvelle maison, il ne décide pas de ce qui se dit à l'intérieur.</p>
+              <a href="https://www.afes.fr" target="_blank" rel="noopener" class="lieu-link" style="color: var(--primary);">Site de l'AFES <i class="fas fa-arrow-up-right-from-square text-xs"></i></a>
+              <a href="contact.html" class="lieu-link" style="color: var(--primary);">Nous écrire <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les jardins -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid #6d8035;">
+            <div class="lieu-icon" style="background: rgba(109,128,53,0.18); color: #3d4d1f;"><i class="fas fa-seedling"></i></div>
+            <div>
+              <span class="lieu-tag">Les jardins et les chemins · autour</span>
+              <h3>Là où le village rencontre le reste du monde</h3>
+              <p>Un village fermé sur lui-même s'éteint. Autour des maisons, il y a les jardins et les chemins qui partent&nbsp;: ateliers grand public, événements, projets pilotes, plaidoyer, écoles et collectivités qui viennent chercher ce qui a été fabriqué ici. C'est là que poussent les graines des prochains communs, et c'est par là qu'arrive la plupart des nouveaux et nouvelles habitant·es.</p>
+              <a href="participer.html" class="lieu-link" style="color: #3d4d1f;">Espace actions <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dans une maison -->
+        <div class="col-span-6">
+          <div class="glass-card lieu-card no-hover" style="border-left: 3px solid var(--cat-politique);">
+            <div class="lieu-icon" style="background: rgba(78,78,136,0.12); color: var(--cat-politique);"><i class="fas fa-door-open"></i></div>
+            <div>
+              <span class="lieu-tag">De la place, on voit des façades</span>
+              <h3>Ce qu'il y a dans une maison</h3>
+              <p>À l'intérieur, chaque maison s'organise à peu près de la même manière&nbsp;: celles et ceux qui habitent là (les membres), la personne qui tient la maison (l'animateur·rice), et parfois une pièce du fond dont l'accès est réservé à un cercle plus restreint, quand la communauté a décidé d'en ouvrir une. Ce n'est pas une obligation&nbsp;: chaque maison décide.</p>
+              <a href="roles-et-droits.html" class="lieu-link" style="color: var(--cat-politique);">Les rôles et les droits <i class="fas fa-arrow-right text-xs"></i></a>
+              <a href="qu-est-ce-qu-une-communaute.html" class="lieu-link" style="color: var(--cat-politique);">Qu'est-ce qu'une communauté&nbsp;? <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== GOUVERNANCE ============== -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Côté gouvernance</span>
+        <h2>Qui décide quoi&nbsp;?</h2>
+        <p>Un plan complémentaire du village&nbsp;: les flux d'animation, de production et de retombées.</p>
+      </div>
+
+      <div class="gov-frame">
+        <div class="mermaid">
+flowchart TB
+    AFES[("&lt;b&gt;AFES&lt;/b&gt;&lt;br/&gt;&lt;i&gt;Association porteuse&lt;/i&gt;&lt;br/&gt;anime · héberge · valorise")]
+    COPIL["&lt;b&gt;COPIL e-Sol&lt;/b&gt;&lt;br/&gt;AFES · GIS Sol · RMT Sols et Territoires · RNEST&lt;br/&gt;&lt;i&gt;soutien : ADEME, OFB&lt;/i&gt;"]
+
+    subgraph MAISONS["LES MAISONS — communautés thématiques"]
+      direction LR
+      C1["Fresque&lt;br/&gt;du Sol"]
+      C2["Sols&lt;br/&gt;Forestiers"]
+      C3["ZAN ·&lt;br/&gt;Aménagement"]
+      C4["Pédologie&lt;br/&gt;de Terrain"]
+      C5["+ autres&lt;br/&gt;communautés"]
+    end
+
+    subgraph COMMUNS["L'ATELIER — les communs"]
+      direction LR
+      K1["Données&lt;br/&gt;&amp; cartes"]
+      K2["Guides &amp;&lt;br/&gt;protocoles"]
+      K3["Kits&lt;br/&gt;pédagogiques"]
+      K4["Outils&lt;br/&gt;logiciels"]
+    end
+
+    MEMBRES(["&lt;b&gt;Membres&lt;/b&gt;&lt;br/&gt;chercheurs · praticiens&lt;br/&gt;citoyens · étudiants"])
+    SOCIETE[/"&lt;b&gt;Société &amp; partenaires&lt;/b&gt;&lt;br/&gt;institutions · public · acteurs"\]
+
+    AFES -. "siège &amp; anime" .-> COPIL
+    COPIL == "oriente · arbitre" ==> MAISONS
+    COPIL == "valide · valorise" ==> COMMUNS
+    MEMBRES -- "rejoignent" --> MAISONS
+    MAISONS == "produisent" ==> COMMUNS
+    COMMUNS -- "bénéficient à" --> SOCIETE
+    COMMUNS -. "retombées → animation" .-> AFES
+
+    classDef afes fill:#9c3f00,stroke:#7a3000,color:#fdfbf9,stroke-width:2px
+    classDef copil fill:#fdfbf9,stroke:#9c3f00,color:#1a1512,stroke-width:1.5px
+    classDef community fill:#ffdbcc,stroke:#9c3f00,color:#7a3000
+    classDef commun fill:#dbe9a9,stroke:#586330,color:#3d4d1f
+    classDef people fill:#eeeef8,stroke:#4e4e88,color:#3d3d5c
+    classDef society fill:#f5edf2,stroke:#885060,color:#5a3038
+
+    class AFES afes
+    class COPIL copil
+    class C1,C2,C3,C4,C5 community
+    class K1,K2,K3,K4 commun
+    class MEMBRES people
+    class SOCIETE society
+
+    style MAISONS fill:#fff7f0,stroke:#9c3f00,stroke-width:1.5px,color:#9c3f00
+    style COMMUNS fill:#f6faea,stroke:#586330,stroke-width:1.5px,color:#586330
+        </div>
+        <p class="gov-note">Le cycle est vertueux&nbsp;: les retombées de la valorisation des communs alimentent l'animation du réseau.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PAR OÙ COMMENCER ============== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Et vous&nbsp;?</span>
+        <h2>Par où commencer&nbsp;?</h2>
+        <p>Selon ce que vous cherchez, voici les chemins les plus courts.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: var(--primary-10); color: var(--primary);"><i class="fas fa-key"></i></div>
+            <h4>Je viens d'arriver</h4>
+            <p>Je prends ma clef, je complète mon profil, je me présente sur l'agora.</p>
+            <a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
+          </div>
+        </div>
+
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: #ffdbcc; color: #7a3000;"><i class="fas fa-house-chimney"></i></div>
+            <h4>Je cherche une maison</h4>
+            <p>J'explore les communautés et je rejoins celle qui correspond à mes sujets.</p>
+            <a href="communautes.html" class="btn btn-outline btn-sm">Voir les maisons</a>
+          </div>
+        </div>
+
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: #dbe9a9; color: #3d4d1f;"><i class="fas fa-screwdriver-wrench"></i></div>
+            <h4>Je veux contribuer à un commun</h4>
+            <p>J'apporte une donnée, un guide, un outil, ou j'en propose un nouveau.</p>
+            <a href="communs.html" class="btn btn-secondary btn-sm">Voir les communs</a>
+          </div>
+        </div>
+
+        <div class="col-span-3">
+          <div class="glass-card doorway-card">
+            <div class="doorway-icon" style="background: rgba(78,78,136,0.12); color: var(--cat-politique);"><i class="fas fa-trowel-bricks"></i></div>
+            <h4>Je veux construire une maison</h4>
+            <p>Je porte un projet de communauté et je sollicite l'accompagnement du réseau.</p>
+            <a href="contact.html" class="btn btn-outline btn-sm" style="border-color: var(--cat-politique-bg); color: var(--cat-politique);">Nous écrire</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        fontFamily: 'Outfit, sans-serif',
+        fontSize: '14px',
+        primaryColor: '#fdfbf9',
+        primaryTextColor: '#1a1512',
+        primaryBorderColor: '#9c3f00',
+        lineColor: '#9c3f00',
+        secondaryColor: '#dbe9a9',
+        tertiaryColor: '#f5edf2'
+      },
+      flowchart: { curve: 'basis', nodeSpacing: 35, rankSpacing: 60, padding: 12 }
+    });
+  </script>
+
+</body>
+</html>
