@@ -1,0 +1,43 @@
+{
+  "esol-accueil.png": [
+    { "type": "cadre", "zone": "bouton-inscription" },
+    { "type": "pastille", "zone": "bouton-inscription", "n": 1 },
+    { "type": "cadre", "zone": { "x": 150, "y": 2390, "w": 2260, "h": 1738 } },
+    { "type": "etiquette", "zone": "titre-besoins", "texte": "La gare d'aiguillage", "decalage": { "dx": 1770, "dy": -91 } }
+  ],
+  "esol-inscription.png": [
+    { "type": "cadre", "zone": "photo" },
+    { "type": "pastille", "zone": "photo", "n": 1 },
+    { "type": "cadre", "zone": "structure" },
+    { "type": "pastille", "zone": "structure", "n": 2 },
+    { "type": "cadre", "zone": "specialites" },
+    { "type": "pastille", "zone": "specialites", "n": 3 },
+    { "type": "cadre", "zone": { "x": 180, "y": 6173, "w": 2200, "h": 673 } },
+    { "type": "pastille", "zone": { "x": 180, "y": 6173, "w": 2200, "h": 673 }, "n": 4 },
+    { "type": "cadre", "zone": { "x": 180, "y": 7358, "w": 2200, "h": 150 } },
+    { "type": "etiquette", "zone": "case-charte", "texte": "La case charte (voir l'étape 2)", "decalage": { "dx": 420, "dy": 10 } }
+  ],
+  "esol-charte.png": [
+    { "type": "cadre", "zone": "bandeau-titre" },
+    { "type": "cadre", "zone": "preambule" },
+    { "type": "pastille", "zone": "preambule", "n": 1 },
+    { "type": "cadre", "zone": { "x": 180, "y": 3030, "w": 2200, "h": 254 } },
+    { "type": "pastille", "zone": { "x": 180, "y": 3030, "w": 2200, "h": 254 }, "n": 2 }
+  ],
+  "esol-communautes.png": [
+    { "type": "cadre", "zone": "premier-panneau" },
+    { "type": "pastille", "zone": "premier-panneau", "n": 1 },
+    { "type": "cadre", "zone": "rejoindre" },
+    { "type": "pastille", "zone": "rejoindre", "n": 3, "decalage": { "dx": -34, "dy": -6 } }
+  ],
+  "esol-espace-actions.png": [
+    { "type": "cadre", "zone": "bouton-liste" },
+    { "type": "pastille", "zone": "bouton-liste", "n": 1 },
+    { "type": "cadre", "zone": "bouton-deposer" }
+  ],
+  "esol-annuaire.png": [
+    { "type": "cadre", "zone": "recherche" },
+    { "type": "cadre", "zone": "filtres" },
+    { "type": "etiquette", "zone": "liste-floutee", "texte": "Les fiches des membres (floutées ici)", "decalage": { "dx": 430, "dy": -1430 } }
+  ]
+}

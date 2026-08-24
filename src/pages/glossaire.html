@@ -183,47 +183,7 @@
       opacity: 0.4;
     }
 
-    /* Side TOC for desktop */
-    .gloss-toc {
-      position: sticky;
-      top: calc(var(--header-height) + 24px);
-      padding: 20px;
-      max-height: calc(100vh - var(--header-height) - 48px);
-      overflow-y: auto;
-    }
-
-    .gloss-toc h4 {
-      font-family: var(--font-display);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--text-subtle);
-      margin-bottom: 12px;
-    }
-
-    .gloss-toc ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .gloss-toc li a {
-      display: block;
-      padding: 6px 10px;
-      border-radius: var(--radius-xs);
-      font-size: 13px;
-      color: var(--text-muted);
-      transition: all 0.2s ease;
-    }
-
-    .gloss-toc li a:hover {
-      background: var(--primary-10);
-      color: var(--primary);
-    }
-
-    @media (max-width: 900px) {
-      .gloss-toc { position: static; max-height: none; }
-    }
+    /* Le sommaire latéral est porté par le composant sommaire-flottant. */
   </style>
 </head>
 <body>
@@ -269,7 +229,7 @@
                 <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
               </div>
               <p><strong>Association Française pour l'Étude du Sol.</strong> Société savante qui rassemble les acteurs scientifiques, techniques et pédagogiques autour du sol depuis 1934. Anime et héberge le réseau e-Sol, sans en être propriétaire.</p>
-              <div class="gloss-also">À voir aussi : <a href="#term-copil">COPIL</a>, <a href="#term-charte">Charte</a> · Site officiel&nbsp;: <a href="https://www.afes.fr" target="_blank" rel="noopener">afes.fr</a></div>
+              <div class="gloss-also">À voir aussi : <a href="#term-copil">COPIL</a>, <a href="#term-charte">Charte</a> - Site officiel&nbsp;: <a href="https://www.afes.fr" target="_blank" rel="noopener">afes.fr</a></div>
             </div>
 
             <div class="glass-card gloss-entry no-hover" id="term-annuaire" data-term="annuaire membres répertoire">
@@ -304,8 +264,8 @@
                 <h3>Charte</h3>
                 <span class="badge gloss-tag gloss-tag-concept">Concept</span>
               </div>
-              <p>Document fondateur du réseau e-Sol qui pose les principes (transparence, biens communs, évolutivité, robustesse), les statuts de membre, le rôle du COPIL, les licences applicables aux contributions (CC BY-SA) et les conditions de révision. Lue à l'entrée, relue régulièrement.</p>
-              <div class="gloss-also">À voir aussi : <a href="charte.html">Charte (démo)</a> · <a href="https://e-sol.fr/?Charte" target="_blank" rel="noopener">Charte officielle</a></div>
+              <p>Document fondateur du réseau e-Sol qui pose les principes (transparence, biens communs, évolutivité, robustesse), les statuts de membre, le rôle du COPIL, la licence recommandée pour les communs (CC BY-SA) et les conditions de révision. Lue à l'entrée, relue régulièrement.</p>
+              <div class="gloss-also">À voir aussi : <a href="charte.html">Charte (démo)</a> - <a href="https://e-sol.fr/?Charte" target="_blank" rel="noopener">Charte officielle</a></div>
             </div>
 
             <div class="glass-card gloss-entry no-hover" id="term-commun" data-term="commun biens partagés ressources">
@@ -313,7 +273,7 @@
                 <h3>Commun (e-Sol)</h3>
                 <span class="badge gloss-tag gloss-tag-concept">Concept</span>
               </div>
-              <p><strong>Ressource produite, maintenue et gouvernée par une communauté</strong>, selon des règles partagées, pour un bénéfice collectif. Peut prendre la forme d'un jeu de données, d'un guide, d'un kit pédagogique, d'un outil logiciel, d'une carte. Mis à disposition sous licence ouverte.</p>
+              <p><strong>Ressource produite, maintenue et gouvernée par une communauté</strong>, selon des règles partagées, pour un bénéfice collectif. Peut prendre la forme d'un jeu de données, d'un guide, d'un kit pédagogique, d'un outil logiciel, d'une carte. Le plus souvent mis à disposition sous licence ouverte.</p>
               <p>Dans la métaphore du village&nbsp;: l'atelier, sur la place, où l'on fabrique et où l'on récupère ce que les communautés produisent.</p>
               <div class="gloss-also">À voir aussi : <a href="#term-cycle">Cycle de vie d'un commun</a>, <a href="communs.html">Les communs</a></div>
             </div>
@@ -332,7 +292,7 @@
                 <h3>COPIL e-Sol</h3>
                 <span class="badge gloss-tag gloss-tag-acteur">Acteur</span>
               </div>
-              <p><strong>Comité de pilotage du réseau e-Sol.</strong> Instance multi-acteurs qui oriente les choix stratégiques de la plateforme&nbsp;: <strong>AFES</strong>, <strong>GIS Sol</strong>, <strong>RMT Sols et Territoires</strong>, <strong>RNEST</strong>, avec le soutien de l'<strong>ADEME</strong> et de l'<strong>OFB</strong>. Le COPIL valide, arbitre, valorise — il n'anime pas au quotidien.</p>
+              <p><strong>Comité de pilotage du réseau e-Sol.</strong> Instance multi-acteurs qui oriente les choix stratégiques de la plateforme&nbsp;: <strong>AFES</strong>, <strong>GIS Sol</strong>, <strong>RMT Sols et Territoires</strong>, <strong>RNEST</strong>, avec le soutien de l'<strong>ADEME</strong> et de l'<strong>OFB</strong>. Le COPIL valide, arbitre, valorise - il n'anime pas au quotidien.</p>
               <div class="gloss-also">À voir aussi : <a href="#term-afes">AFES</a>, <a href="#term-gissol">GIS Sol</a>, <a href="#term-rmt">RMT Sols et Territoires</a>, <a href="#term-rnest">RNEST</a></div>
             </div>
 
@@ -342,7 +302,7 @@
                 <span class="badge gloss-tag gloss-tag-concept">Concept</span>
               </div>
               <p>Parcours d'évolution d'une ressource partagée, de l'idée à la maintenance&nbsp;: <strong>proposition</strong> → <strong>brouillon</strong> → <strong>en révision</strong> → <strong>actif</strong> → <strong>archivé</strong> (si plus pertinent). Chaque statut implique des engagements et des droits différents.</p>
-              <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Guide complet — phase 4</span></div>
+              <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Guide complet - phase 4</span></div>
             </div>
           </div>
 
@@ -368,7 +328,7 @@
                 <h3>Fiche action</h3>
                 <span class="badge gloss-tag gloss-tag-outil">Outil</span>
               </div>
-              <p>Type de fiche bazar permettant à un·e membre ou une communauté de déclarer une action (atelier, projet, événement, intervention) et de chercher des collaborations. Visible dans l'<a href="https://e-sol.fr/?EspaceActions" target="_blank" rel="noopener">Espace Actions</a>.</p>
+              <p>Type de fiche bazar permettant à un·e membre ou une communauté de déclarer une action (atelier, projet, événement, intervention) et de chercher des collaborations. Visible dans l'<a href="espace-actions.html">Espace Actions</a> (sur le site réel&nbsp;: <a href="https://e-sol.fr/?EspaceActions" target="_blank" rel="noopener">e-sol.fr/?EspaceActions</a>).</p>
               <div class="gloss-also">À voir aussi : <a href="#term-bazar">Fiche bazar</a></div>
             </div>
 
@@ -426,7 +386,7 @@
                 <h3>Licence CC BY-SA</h3>
                 <span class="badge gloss-tag gloss-tag-concept">Concept</span>
               </div>
-              <p><strong>Creative Commons Attribution — Partage dans les Mêmes Conditions.</strong> Licence libre par défaut sur e-Sol&nbsp;: les contributions peuvent être réutilisées et adaptées, à condition de citer l'auteur·rice et de partager les œuvres dérivées sous la même licence ouverte.</p>
+              <p><strong>Creative Commons Attribution - Partage dans les Mêmes Conditions.</strong> Licence libre que l'équipe d'animation du réseau recommande pour les communs&nbsp;: les contenus peuvent être réutilisés et adaptés, à condition de citer l'auteur·rice et de partager les œuvres dérivées sous la même licence. Chaque communauté reste libre de choisir la licence de ses communs.</p>
             </div>
           </div>
 
@@ -503,7 +463,7 @@
                 <h3>SRP Sols</h3>
                 <span class="badge gloss-tag gloss-tag-theme">Communauté</span>
               </div>
-              <p>Communauté autour des <strong>Structures Régionales de Pédologie</strong> (ou approchant — vocabulaire à préciser avec le·la référent·e). Espace dédié aux acteurs régionaux qui cartographient, conservent et valorisent les données pédologiques sur leurs territoires.</p>
+              <p>Communauté autour des <strong>Structures Régionales de Pédologie</strong> (ou approchant - vocabulaire à préciser avec le·la référent·e). Espace dédié aux acteurs régionaux qui cartographient, conservent et valorisent les données pédologiques sur leurs territoires.</p>
               <div class="gloss-also"><span class="badge gloss-tag gloss-tag-todo" style="margin-left: 0;">Définition à confirmer avec le·la référent·e</span></div>
             </div>
           </div>
@@ -539,27 +499,25 @@
         </div>
 
         <!-- ===== Side TOC ===== -->
-        <div class="col-span-3">
-          <div class="glass-card gloss-toc no-hover">
+        <nav class="toc-flottant col-span-3 glass-card no-hover" aria-label="Navigation rapide">
             <h4>Navigation rapide</h4>
             <ul>
-              <li><a href="#letter-A">A — AFES, Annuaire</a></li>
-              <li><a href="#letter-B">B — Bazar</a></li>
-              <li><a href="#letter-C">C — Charte, Commun, Communauté, COPIL, Cycle</a></li>
-              <li><a href="#letter-E">E — e-Sol</a></li>
-              <li><a href="#letter-F">F — Fiche action, Forum, Fresque du Sol</a></li>
-              <li><a href="#letter-G">G — GIS Sol</a></li>
-              <li><a href="#letter-I">I — IPRSols</a></li>
-              <li><a href="#letter-L">L — Licence CC BY-SA</a></li>
-              <li><a href="#letter-M">M — Membre</a></li>
-              <li><a href="#letter-P">P — Pédologie</a></li>
-              <li><a href="#letter-R">R — Refersols, RMT, RNEST</a></li>
-              <li><a href="#letter-S">S — Science citoyenne, SRP Sols</a></li>
-              <li><a href="#letter-Y">Y — YesWiki</a></li>
-              <li><a href="#letter-Z">Z — ZAN</a></li>
+              <li><a href="#letter-A">A - AFES, Annuaire</a></li>
+              <li><a href="#letter-B">B - Bazar</a></li>
+              <li><a href="#letter-C">C - Charte, Commun, Communauté, COPIL, Cycle</a></li>
+              <li><a href="#letter-E">E - e-Sol</a></li>
+              <li><a href="#letter-F">F - Fiche action, Forum, Fresque du Sol</a></li>
+              <li><a href="#letter-G">G - GIS Sol</a></li>
+              <li><a href="#letter-I">I - IPRSols</a></li>
+              <li><a href="#letter-L">L - Licence CC BY-SA</a></li>
+              <li><a href="#letter-M">M - Membre</a></li>
+              <li><a href="#letter-P">P - Pédologie</a></li>
+              <li><a href="#letter-R">R - Refersols, RMT, RNEST</a></li>
+              <li><a href="#letter-S">S - Science citoyenne, SRP Sols</a></li>
+              <li><a href="#letter-Y">Y - YesWiki</a></li>
+              <li><a href="#letter-Z">Z - ZAN</a></li>
             </ul>
-          </div>
-        </div>
+        </nav>
 
       </div>
 
@@ -588,6 +546,8 @@
   </section>
 
   {{> footer }}
+
+  {{> sommaire-flottant }}
 
   <script>
     // Build alphabet filter dynamically based on present letters

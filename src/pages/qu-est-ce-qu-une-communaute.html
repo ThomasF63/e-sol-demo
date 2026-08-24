@@ -68,56 +68,6 @@
       color: var(--text-main);
     }
 
-    /* ---- Example cards ---- */
-    .qc-exemple-card {
-      padding: 26px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .qc-exemple-head {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .qc-exemple-icon {
-      width: 48px; height: 48px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .qc-exemple-head h3 {
-      font-size: 1.05rem;
-      line-height: 1.3;
-    }
-
-    .qc-exemple-card > p {
-      color: var(--text-muted);
-      font-size: 0.93rem;
-      line-height: 1.65;
-      flex-grow: 1;
-      max-width: 100%;
-    }
-
-    .qc-exemple-foot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-      font-size: 12.5px;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
     /* ---- Rôles cards ---- */
     .qc-role-card {
       padding: 26px;
@@ -376,6 +326,13 @@
     </div>
   </div>
 
+  <div class="container">
+    <nav class="toc-flottant toc-chip-seul glass-card no-hover" aria-label="Sommaire de la page" data-toc-source="section[id]">
+      <h4>Sur cette page</h4>
+      <ul></ul>
+    </nav>
+  </div>
+
   <!-- ============== DÉFINITION ============== -->
   <section class="section" id="definition">
     <div class="container">
@@ -392,7 +349,7 @@
               <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Un groupe de personnes</strong>&nbsp;: des membres qui se connaissent, échangent et avancent ensemble sur leur sujet.</span></li>
               <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Un espace de travail</strong>&nbsp;: une page dédiée sur la plateforme, des documents partagés et une catégorie sur le forum.</span></li>
               <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Une animation identifiée</strong>&nbsp;: un·e ou plusieurs animateur·rices qui accueillent, coordonnent et font vivre le groupe.</span></li>
-              <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Une fabrique de communs</strong>&nbsp;: ce qui y est produit (guides, données, méthodes) est partagé au réseau, sous licence ouverte.</span></li>
+              <li><i class="fas fa-check" style="color: var(--secondary);"></i><span><strong>Une fabrique de communs</strong>&nbsp;: ce qui y est produit (guides, données, méthodes) est partagé au réseau, le plus souvent sous licence ouverte.</span></li>
             </ul>
           </div>
         </div>
@@ -412,18 +369,42 @@
     </div>
   </section>
 
-  <!-- ============== EXEMPLES CONCRETS ============== -->
-  <section class="section section-alt" id="exemples">
+  <!-- ============== CYCLE DE VIE ============== -->
+  <section class="section section-alt" id="cycle-de-vie">
     <div class="container">
       <div class="section-header">
-        <span class="badge badge-terra mb-4">Sur le terrain</span>
-        <h2>Ce qu'on y fait, concrètement</h2>
-        <p>Quatre exemples tirés des communautés existantes, du groupe de 15 personnes au réseau de plus de 100 membres.</p>
+        <span class="badge badge-terra mb-4">Le cycle de vie</span>
+        <h2>De la naissance à l'essaimage</h2>
+        <p>Une communauté n'est pas éternelle, et ce n'est pas grave&nbsp;: elle vit au rythme de son sujet et de ses membres.</p>
       </div>
 
-      <div class="bento-grid" id="qc-exemples-grid">
-        <!-- Rempli par JS depuis communities.json -->
+      <div class="qc-cycle">
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--secondary);"><i class="fas fa-seedling"></i></div>
+          <h3>Naissance</h3>
+          <p>Une proposition portée par un·e futur·e animateur·rice, validée par le comité de pilotage. La maison est ouverte, avec sa page et sa catégorie de forum.</p>
+        </div>
+        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--primary);"><i class="fas fa-people-group"></i></div>
+          <h3>Animation</h3>
+          <p>Rencontres, discussions, accueil des nouveaux&nbsp;: l'équipe d'animation fait vivre la maison, les membres la remplissent.</p>
+        </div>
+        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--primary-light);"><i class="fas fa-hand-holding-heart"></i></div>
+          <h3>Production de communs</h3>
+          <p>La communauté laisse des traces utiles à tou·tes&nbsp;: guides, données, méthodes, ateliers, publiés sous la licence choisie par la communauté (le réseau recommande la CC BY-SA).</p>
+        </div>
+        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
+        <div class="glass-card qc-stage no-hover">
+          <div class="qc-stage-icon" style="background: var(--cat-institutionnel);"><i class="fas fa-moon"></i></div>
+          <h3>Sommeil ou essaimage</h3>
+          <p>L'activité peut ralentir&nbsp;: la communauté s'endort, ses communs restent, un réveil est toujours possible. Ou le sujet déborde&nbsp;: une partie du groupe essaime et fonde une nouvelle communauté.</p>
+        </div>
       </div>
+
+      <p class="footnote">Ce cycle décrit la vie réelle des communautés. Le cadre formel (qui constate le sommeil, comment on relance ou ferme une communauté) reste à écrire avec l'équipe d'animation.</p>
     </div>
   </section>
 
@@ -452,7 +433,7 @@
               <i class="fas fa-circle-half-stroke"></i>
             </div>
             <h3>Membre du cercle restreint&nbsp;*</h3>
-            <p>Accède en plus à des espaces réservés&nbsp;: pages en accès limité, documents de travail, co-écriture. Chaque communauté choisit d'activer ce cercle ou de s'en passer.</p>
+            <p>Accède en plus à des espaces réservés&nbsp;: pages en accès limité, documents de travail, co-écriture. Chaque communauté choisit d'activer ce cercle ou de s'en passer. Le cercle peut se prolonger sur le forum&nbsp;: une catégorie à accès restreint, où l'on entre sur permission de l'équipe d'animation.</p>
           </div>
         </div>
         <div class="col-span-4">
@@ -461,7 +442,7 @@
               <i class="fas fa-compass"></i>
             </div>
             <h3>Animateur·rice</h3>
-            <p>Accueille les nouveaux membres, valide les adhésions si la communauté a choisi ce régime, édite les pages, active ou non le cercle restreint, et veille au respect de la charte dans son périmètre.</p>
+            <p>Accueille les nouveaux membres, édite les pages, ouvre et gère le cercle restreint (c'est elle qui en accorde l'accès), veille au respect de la charte dans son périmètre.</p>
           </div>
         </div>
       </div>
@@ -471,7 +452,7 @@
           <div style="width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--primary-10); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
             <i class="fas fa-stairs"></i>
           </div>
-          <p class="text-muted" style="font-size: 0.95rem;">L'escalier des cinq niveaux de la plateforme, le schéma de la vue communauté et le détail droit par droit sont sur la page <strong>Rôles et droits</strong>.</p>
+          <p class="text-muted" style="font-size: 0.95rem;">Le sentier des cinq niveaux de la plateforme, le schéma de la vue communauté et le détail droit par droit sont sur la page <strong>Rôles et droits</strong>.</p>
         </div>
         <a href="roles-et-droits.html" class="btn btn-primary">Voir les rôles et droits <i class="fas fa-arrow-right"></i></a>
       </div>
@@ -480,61 +461,22 @@
     </div>
   </section>
 
-  <!-- ============== CYCLE DE VIE ============== -->
-  <section class="section section-alt" id="cycle-de-vie">
-    <div class="container">
-      <div class="section-header">
-        <span class="badge badge-terra mb-4">Le cycle de vie</span>
-        <h2>De la naissance à l'essaimage</h2>
-        <p>Une communauté n'est pas éternelle, et ce n'est pas grave&nbsp;: elle vit au rythme de son sujet et de ses membres.</p>
-      </div>
-
-      <div class="qc-cycle">
-        <div class="glass-card qc-stage no-hover">
-          <div class="qc-stage-icon" style="background: var(--secondary);"><i class="fas fa-seedling"></i></div>
-          <h3>Naissance</h3>
-          <p>Une proposition portée par un·e futur·e animateur·rice, validée par le comité de pilotage. La maison est ouverte, avec sa page et sa catégorie de forum.</p>
-        </div>
-        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
-        <div class="glass-card qc-stage no-hover">
-          <div class="qc-stage-icon" style="background: var(--primary);"><i class="fas fa-people-group"></i></div>
-          <h3>Animation</h3>
-          <p>Rencontres, discussions, accueil des nouveaux&nbsp;: l'animateur·rice fait vivre la maison, les membres la remplissent.</p>
-        </div>
-        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
-        <div class="glass-card qc-stage no-hover">
-          <div class="qc-stage-icon" style="background: var(--primary-light);"><i class="fas fa-hand-holding-heart"></i></div>
-          <h3>Production de communs</h3>
-          <p>La communauté laisse des traces utiles à tou·tes&nbsp;: guides, données, méthodes, ateliers, publiés sous licence ouverte (CC BY-SA).</p>
-        </div>
-        <i class="fas fa-arrow-right-long qc-cycle-arrow"></i>
-        <div class="glass-card qc-stage no-hover">
-          <div class="qc-stage-icon" style="background: var(--cat-institutionnel);"><i class="fas fa-moon"></i></div>
-          <h3>Sommeil ou essaimage</h3>
-          <p>L'activité peut ralentir&nbsp;: la communauté s'endort, ses communs restent, un réveil est toujours possible. Ou le sujet déborde&nbsp;: une partie du groupe essaime et fonde une nouvelle communauté.</p>
-        </div>
-      </div>
-
-      <p class="footnote">Ce cycle décrit la vie réelle des communautés. Le cadre formel (qui constate le sommeil, comment on relance ou ferme une communauté) reste à écrire avec l'équipe d'animation.</p>
-    </div>
-  </section>
-
   <!-- ============== REJOINDRE ============== -->
-  <section class="section" id="rejoindre">
+  <section class="section section-alt" id="rejoindre">
     <div class="container">
       <div class="section-header">
         <span class="badge badge-olive mb-4">Rejoindre</span>
-        <h2>Rejoindre une communauté, pas à pas</h2>
-        <p>Quatre gestes simples. Aucun niveau d'expertise n'est demandé, seulement l'envie de participer.</p>
+        <h2>Rejoindre une communauté&nbsp;: comment ça marche</h2>
+        <p>L'entrée dans une communauté est libre et déclarative&nbsp;: personne ne valide votre arrivée.</p>
       </div>
 
       <div class="flex flex-col gap-4" style="max-width: 860px; margin: 0 auto;">
 
         <div class="glass-card qc-step no-hover animate-in">
-          <div class="qc-step-num">1</div>
+          <div class="qc-step-num" style="font-size: 17px;"><i class="fas fa-user-plus"></i></div>
           <div class="qc-step-body">
-            <h3>Je crée mon compte e-Sol</h3>
-            <p>Si ce n'est pas déjà fait&nbsp;: l'inscription est gratuite, ouverte à toute personne intéressée par les sols, et crée votre fiche dans l'annuaire.</p>
+            <h3>À l'inscription</h3>
+            <p>Le formulaire d'inscription liste les communautés&nbsp;: cochez celles qui vous parlent, et précisez votre niveau pour chacune&nbsp;: «&nbsp;ça m'intéresse&nbsp;» ou «&nbsp;je veux participer&nbsp;».</p>
             <div class="qc-step-actions">
               <a href="inscription.html" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> M'inscrire</a>
             </div>
@@ -542,10 +484,10 @@
         </div>
 
         <div class="glass-card qc-step no-hover animate-in delay-1">
-          <div class="qc-step-num" style="background: linear-gradient(135deg, #b04510, var(--primary));">2</div>
+          <div class="qc-step-num" style="background: linear-gradient(135deg, #b04510, var(--primary)); font-size: 17px;"><i class="fas fa-door-open"></i></div>
           <div class="qc-step-body">
-            <h3>Je choisis ma communauté</h3>
-            <p>Je parcours la liste des 12 communautés, je lis les présentations, je regarde ce qui s'y passe sur le forum. Une ou deux maisons où être vraiment présent·e valent mieux que dix effleurées.</p>
+            <h3>À tout moment ensuite</h3>
+            <p>Les boutons «&nbsp;Ça m'intéresse&nbsp;» et «&nbsp;Je veux participer&nbsp;» de la page de chaque communauté suffisent, ou la modification de votre fiche annuaire&nbsp;: l'effet est le même.</p>
             <div class="qc-step-actions">
               <a href="communautes.html" class="btn btn-outline btn-sm"><i class="fas fa-people-roof"></i> Parcourir les communautés</a>
             </div>
@@ -553,33 +495,60 @@
         </div>
 
         <div class="glass-card qc-step no-hover animate-in delay-2">
-          <div class="qc-step-num" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);">3</div>
+          <div class="qc-step-num" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 14px rgba(88,99,48,0.18); font-size: 17px;"><i class="fas fa-key"></i></div>
           <div class="qc-step-body">
-            <h3>Je demande à entrer</h3>
-            <p>Selon la communauté, l'entrée est immédiate (bouton «&nbsp;Rejoindre&nbsp;» sur sa page) ou passe par un mot à l'animateur·rice, qui accueille et valide&nbsp;*. Dans les deux cas, je coche la communauté sur ma fiche annuaire.</p>
+            <h3>Les cercles restreints&nbsp;*</h3>
+            <p>Des espaces de travail au sein d'une communauté, seuls à s'ouvrir sur permission&nbsp;: adressez-vous à l'équipe d'animation, qui en accorde l'accès. La règle vaut aussi pour la catégorie de forum à accès restreint, quand la communauté en a une.</p>
           </div>
         </div>
 
-        <div class="glass-card qc-step no-hover animate-in delay-3">
-          <div class="qc-step-num" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 14px rgba(88,99,48,0.18);">4</div>
-          <div class="qc-step-body">
-            <h3>Je me présente et je participe</h3>
-            <p>Un mot de bonjour dans la catégorie de forum de la communauté, un œil aux documents partagés, et me voilà membre. La suite vient naturellement&nbsp;: discussions, rencontres, contributions.</p>
-            <div class="qc-step-actions">
-              <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i class="fas fa-comments"></i> Aller au forum</a>
-              <a href="premiers-pas.html" class="btn btn-ghost btn-sm">Voir les premiers pas</a>
+        <div class="glass-card no-hover animate-in delay-3" style="padding: 28px 32px; border: 1.5px solid var(--primary-20); background: linear-gradient(135deg, #fffcf7, var(--bg-elevated));">
+          <h3 style="font-size: 1.05rem; margin-bottom: 14px;"><i class="fas fa-bell" style="color: var(--primary);"></i> Ce qui se passe quand vous cliquez</h3>
+          <ul class="qc-critere-list">
+            <li><i class="fas fa-id-card"></i><span>Votre fiche annuaire affiche la communauté.</span></li>
+            <li><i class="fas fa-envelope"></i><span>Vous recevez ses informations&nbsp;: annonces, rencontres, avancées des travaux.</span></li>
+            <li><i class="fas fa-comment-dots"></i><span>L'équipe d'animation est notifiée de votre arrivée.</span></li>
+          </ul>
+          <p class="text-muted mt-4" style="font-size: 0.94rem; max-width: 100%;">«&nbsp;Je veux participer&nbsp;» ajoute une seule chose&nbsp;: l'équipe d'animation sait qu'elle peut vous solliciter.</p>
+        </div>
+
+        <div class="glass-card qc-def-card no-hover animate-in delay-3 mt-2">
+          <h3><i class="fas fa-shoe-prints" style="color: var(--primary);"></i> Un exemple déroulé&nbsp;: Solène rejoint la Fresque du Sol</h3>
+          <div class="qc-demarche-item">
+            <div class="qc-demarche-num">1</div>
+            <div>
+              <p style="font-size: 0.94rem;">Sur la page de la communauté <a href="communaute-detail.html?c=fresque-sol">Animateurs Fresque du Sol</a>, <a href="membre.html?m=reverdy-solene">Solène</a> clique sur «&nbsp;Je veux participer&nbsp;».</p>
             </div>
           </div>
+          <div class="qc-demarche-item">
+            <div class="qc-demarche-num">2</div>
+            <div>
+              <p style="font-size: 0.94rem;">Sa fiche annuaire affiche la communauté&nbsp;; l'équipe d'animation, notifiée, lui souhaite la bienvenue.</p>
+            </div>
+          </div>
+          <div class="qc-demarche-item">
+            <div class="qc-demarche-num">3</div>
+            <div>
+              <p style="font-size: 0.94rem;">Elle se présente dans la catégorie de forum de la Fresque.</p>
+            </div>
+          </div>
+          <div class="qc-demarche-item">
+            <div class="qc-demarche-num">4</div>
+            <div>
+              <p style="font-size: 0.94rem;">Plus tard, pour co-écrire une variante du kit d'animation, elle demande l'accès au cercle restreint&nbsp;: accordé sur permission, sur la plateforme comme sur le forum.</p>
+            </div>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-subtle); margin-top: 14px; max-width: 100%;"><i class="fas fa-circle-info" style="margin-right: 6px;"></i>Solène Reverdy est un personnage fictif de la démo, comme tous les membres cités dans ces pages.</p>
         </div>
 
       </div>
 
-      <p class="footnote">* Les deux régimes d'adhésion (entrée immédiate ou sur validation) coexistent&nbsp;; le choix appartient à chaque communauté. Le régime par défaut reste à valider avec l'équipe d'animation.</p>
+      <p class="footnote">* L'entrée est libre et déclarative dans toutes les communautés&nbsp;; seuls les cercles restreints s'ouvrent sur permission de l'équipe d'animation.</p>
     </div>
   </section>
 
   <!-- ============== PROPOSER ============== -->
-  <section class="section section-alt" id="proposer">
+  <section class="section" id="proposer">
     <div class="container">
       <div class="section-header">
         <span class="badge badge-terra mb-4">Créer</span>
@@ -595,7 +564,7 @@
               <li><i class="fas fa-check"></i><span><strong>Un sujet précis lié aux sols</strong>, qui ne recoupe pas une communauté existante (sinon, autant la rejoindre et l'enrichir).</span></li>
               <li><i class="fas fa-check"></i><span><strong>Un·e ou deux animateur·rices motivé·es</strong>, prêt·es à accueillir et à faire vivre le groupe dans la durée.</span></li>
               <li><i class="fas fa-check"></i><span><strong>Quelques membres partants</strong> dès le départ, pour que la maison ne reste pas vide.</span></li>
-              <li><i class="fas fa-check"></i><span><strong>L'envie de produire des communs</strong>, dans le cadre de la charte et de ses licences ouvertes.</span></li>
+              <li><i class="fas fa-check"></i><span><strong>L'envie de produire des communs</strong>, dans le cadre de la charte et de ses licences ouvertes recommandées.</span></li>
             </ul>
           </div>
         </div>
@@ -632,11 +601,12 @@
             <h3 style="font-size: 1.05rem; margin-bottom: 14px;"><i class="fas fa-clipboard-list" style="color: var(--primary);"></i> Checklist d'ouverture d'une communauté (proposition&nbsp;*)</h3>
             <div class="bento-grid" style="gap: 8px 24px;">
               <ul class="qc-checklist col-span-6">
+                <li><i class="fas fa-square-check"></i><span>Identifier une ou deux personnes pour l'animation.</span></li>
                 <li><i class="fas fa-square-check"></i><span>Créer la page de la communauté (présentation, objectifs, animateur·rice) et ses sous-pages.</span></li>
-                <li><i class="fas fa-square-check"></i><span>Créer le groupe de membres et régler les droits d'accès selon les trois curseurs (adhésion, cercle restreint, écriture).</span></li>
-                <li><i class="fas fa-square-check"></i><span>Ajouter la communauté à la liste des communautés et au formulaire d'inscription.</span></li>
+                <li><i class="fas fa-square-check"></i><span>Créer le groupe de membres et régler les deux curseurs (cercle restreint, écriture des pages).</span></li>
               </ul>
               <ul class="qc-checklist col-span-6">
+                <li><i class="fas fa-square-check"></i><span>Ajouter la communauté à la liste des communautés et au formulaire d'inscription.</span></li>
                 <li><i class="fas fa-square-check"></i><span>Ouvrir la catégorie dédiée sur le forum.</span></li>
                 <li><i class="fas fa-square-check"></i><span>Prévoir, si besoin, un formulaire propre à la communauté (comme le fait déjà Sols et Art).</span></li>
                 <li><i class="fas fa-square-check"></i><span>Annoncer l'ouverture au réseau&nbsp;: forum et page d'accueil.</span></li>
@@ -651,11 +621,11 @@
   </section>
 
   <!-- ============== FAQ ============== -->
-  <section class="section" id="faq">
+  <section class="section section-alt" id="faq">
     <div class="container container-narrow">
       <div class="section-header">
         <span class="badge badge-olive mb-4">Questions fréquentes</span>
-        <h2>Trois questions qui reviennent souvent</h2>
+        <h2>Quatre questions qui reviennent souvent</h2>
       </div>
 
       <div class="glass-card no-hover" style="padding: 8px 32px;">
@@ -667,6 +637,16 @@
           </button>
           <div class="qc-faq-answer">
             <p>Oui, autant que vous voulez&nbsp;: rien ne limite le nombre. Le conseil reste de commencer par une ou deux communautés où vous serez réellement présent·e&nbsp;: une participation régulière apporte plus, à vous comme au groupe, qu'une présence passive dans cinq.</p>
+          </div>
+        </div>
+
+        <div class="qc-faq-item">
+          <button class="qc-faq-question" onclick="this.parentElement.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+            «&nbsp;Ça m'intéresse&nbsp;» ou «&nbsp;je veux participer&nbsp;»&nbsp;: quelle différence&nbsp;?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="qc-faq-answer">
+            <p>Aucune différence de droits&nbsp;: les deux vous rattachent à la communauté. «&nbsp;Ça m'intéresse&nbsp;» dit&nbsp;: je reçois les informations. «&nbsp;Je veux participer&nbsp;» dit&nbsp;: je suis disponible, l'équipe d'animation peut me solliciter. On change d'avis quand on veut, en modifiant sa fiche.</p>
           </div>
         </div>
 
@@ -707,45 +687,7 @@
 
   {{> footer }}
 
-  <script>
-    // Exemples concrets : 4 communautés réelles de communities.json,
-    // avec une formulation « ce qu'on y fait » tirée de leur description.
-    const QC_EXEMPLES = [
-      { id: 'fresque-sol', activite: "Se transmettre les ficelles de l'atelier : les animateur·rices partagent leurs retours d'expérience et leurs variantes pédagogiques autour du jeu collaboratif de 50 cartes qui fait comprendre le fonctionnement des sols." },
-      { id: 'zan', activite: "Préserver les sols naturels et agricoles face à l'urbanisation : la communauté accompagne les collectivités et travaille à la définition des trajectoires « Zéro Artificialisation Nette »." },
-      { id: 'refersols', activite: "Faire vivre le répertoire national des études cartographiques de sol : les membres mutualisent leurs données et harmonisent leurs méthodes de travail." },
-      { id: 'sols-et-art', activite: "Explorer les liens entre les sols et les pratiques artistiques (photographie, peinture, sculpture, land art) pour valoriser la beauté et la diversité des sols par l'expression créative." }
-    ];
-
-    fetch('data/communities.json')
-      .then(r => r.json())
-      .then(communities => {
-        const grid = document.getElementById('qc-exemples-grid');
-        grid.innerHTML = QC_EXEMPLES.map(ex => {
-          const c = communities.find(x => x.id === ex.id);
-          if (!c) return '';
-          return `
-          <div class="col-span-6">
-            <div class="glass-card qc-exemple-card no-hover">
-              <div class="qc-exemple-head">
-                <div class="qc-exemple-icon" style="background: ${c.categoryBg}; color: ${c.categoryColor};">
-                  <i class="fas ${c.icon}"></i>
-                </div>
-                <div>
-                  <h3>${c.name}</h3>
-                  <span class="badge" style="background: white; color: ${c.categoryColor}; border: 1px solid ${c.categoryColor}30; font-size: 10px; margin-top: 4px;">${c.category}</span>
-                </div>
-              </div>
-              <p>${ex.activite}</p>
-              <div class="qc-exemple-foot">
-                <span><i class="fas fa-users" style="color: ${c.categoryColor};"></i> ${c.members} membres · ${c.resources} ressources</span>
-                <a href="communaute-detail.html?c=${c.id}" class="btn btn-ghost btn-sm" style="color: ${c.categoryColor};">Voir la communauté <i class="fas fa-arrow-right text-xs"></i></a>
-              </div>
-            </div>
-          </div>`;
-        }).join('');
-      });
-  </script>
+  {{> sommaire-flottant }}
 
 </body>
 </html>

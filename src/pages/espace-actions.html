@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>L'Espace Actions - e-Sol</title>
+  <style>
+    /* ---- Comment ça marche ---- */
+    .how-card {
+      padding: 26px 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .how-num {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 4px 14px rgba(156,63,0,0.18);
+    }
+
+    .how-card h3 { font-size: 1.05rem; }
+
+    .how-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    /* ---- Badges de statut ---- */
+    .statut-badge { font-size: 10px; }
+    .statut-proposee { background: var(--primary-10); color: var(--primary); border: 1px solid var(--primary-20); }
+    .statut-en-cours { background: var(--secondary-10); color: var(--secondary); border: 1px solid rgba(88,99,48,0.25); }
+    .statut-terminee { background: rgba(0,0,0,0.05); color: var(--text-muted); border: 1px solid rgba(0,0,0,0.08); }
+
+    /* ---- Carte vedette ---- */
+    .action-vedette {
+      padding: 36px 40px;
+      border-top: 3px solid var(--primary);
+      background: linear-gradient(160deg, rgba(156,63,0,0.05), var(--bg-elevated) 55%);
+    }
+
+    .action-vedette h2 {
+      font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+      line-height: 1.25;
+      margin: 14px 0 12px;
+    }
+
+    .action-vedette .vedette-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 68ch;
+      margin-bottom: 18px;
+    }
+
+    /* ---- Meta et chips ---- */
+    .action-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .action-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--text-subtle);
+      font-weight: 500;
+    }
+
+    .action-meta-item i { font-size: 11px; }
+
+    .action-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .action-chip {
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .commu-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 11.5px;
+    }
+
+    /* ---- Cartes de la grille ---- */
+    .action-card {
+      padding: 28px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .action-card .action-title {
+      font-size: 1.12rem;
+      line-height: 1.35;
+      margin: 12px 0 10px;
+    }
+
+    .action-card .action-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      max-width: 100%;
+      flex-grow: 1;
+      margin-bottom: 16px;
+    }
+
+    .action-card .action-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .action-referent {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .action-wrapper.hidden { display: none; }
+
+    /* ---- Filtres (patron annonces.html) ---- */
+    .type-filter {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .type-filter-btn {
+      padding: 9px 20px;
+      border-radius: var(--radius-full);
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+    }
+
+    .type-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .type-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* ---- Lien discret vers la vue équipe ---- */
+    .vue-equipe-lien {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 100%;
+    }
+    .vue-equipe-lien i { font-size: 11px; color: var(--text-subtle); margin-right: 4px; }
+
+    /* ---- Modale « Me proposer » (démo) ---- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 21, 18, 0.45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+    .modal-backdrop[hidden] { display: none; }
+
+    .modal-card {
+      width: 100%;
+      max-width: 580px;
+      background: var(--bg-surface);
+      padding: 32px;
+      position: relative;
+      animation: fadeInUp 0.35s var(--ease-out);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 1;
+    }
+    .modal-close:hover { color: var(--primary); border-color: var(--primary-20); }
+
+    .modal-card h3 { font-size: 1.25rem; line-height: 1.3; margin: 10px 0 6px; }
+    .modal-contexte { font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px; max-width: 100%; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      color: var(--text-main);
+      background: var(--bg-surface);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+    .form-textarea { resize: vertical; min-height: 90px; }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-subtle); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    .demo-note {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin: -8px 0 18px;
+      max-width: 100%;
+    }
+    .demo-note i { font-size: 10px; }
+
+    fieldset.form-group { border: none; }
+    fieldset.form-group legend { padding: 0; }
+    .check-list { display: flex; flex-direction: column; gap: 8px; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+    .check-item input { margin-top: 4px; accent-color: var(--primary); }
+
+    .suite-box {
+      margin-top: 22px;
+      padding: 18px 20px;
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+    .suite-box h4 {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .suite-box h4 i { color: var(--primary); font-size: 13px; }
+    .suite-box ol {
+      margin: 0;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .envoi-confirm {
+      margin-top: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--secondary);
+      background: var(--secondary-10);
+      border: 1px solid rgba(88, 99, 48, 0.25);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      max-width: 100%;
+    }
+    .envoi-confirm a { color: var(--secondary); text-decoration: underline; font-weight: 600; }
+    .envoi-confirm .btn { margin-top: 12px; }
+
+    @media (max-width: 768px) {
+      .action-vedette { padding: 28px 24px; }
+      .modal-backdrop { padding: 16px 10px; }
+      .modal-card { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Missions bénévoles</span>
+      <h1>L'Espace Actions</h1>
+      <p>Des missions bénévoles portées par les communautés et le réseau. Chaque fiche cherche des contributeur·rices&nbsp;: trouvez la vôtre.</p>
+    </div>
+  </div>
+
+  <!-- ===== COMMENT ÇA MARCHE ===== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid">
+        <div class="col-span-4 animate-in">
+          <div class="glass-card how-card no-hover">
+            <div class="how-num">1</div>
+            <h3>Une fiche est publiée</h3>
+            <p>Une communauté ou le réseau décrit une mission&nbsp;: ce qu'il y a à faire, le temps que ça demande, ce que ça produit.</p>
+          </div>
+        </div>
+        <div class="col-span-4 animate-in delay-1">
+          <div class="glass-card how-card no-hover">
+            <div class="how-num" style="background: linear-gradient(135deg, #b04510, var(--primary));">2</div>
+            <h3>Vous vous signalez</h3>
+            <p>Le bouton «&nbsp;Me proposer&nbsp;» ouvre un court formulaire. Votre proposition est enregistrée avec la fiche, et le ou la référent·e est prévenu·e par mail.</p>
+          </div>
+        </div>
+        <div class="col-span-4 animate-in delay-2">
+          <div class="glass-card how-card no-hover">
+            <div class="how-num" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 14px rgba(88,99,48,0.18);">3</div>
+            <h3>Vous contribuez à votre rythme</h3>
+            <p>Petites ou grandes missions, ponctuelles ou régulières&nbsp;: chacun·e donne le temps qu'il ou elle peut.</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-center text-sm text-muted mt-4" style="max-width: 100%;"><i class="fas fa-circle-info" style="color: var(--primary);"></i> Déposer une fiche ou se proposer demande un compte e-Sol. En démo, le formulaire est pré-rempli avec un profil fictif.</p>
+    </div>
+  </section>
+
+  <!-- ===== FICHE VEDETTE ===== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="glass-card action-vedette no-hover animate-in">
+        <div class="flex gap-2 flex-wrap items-center">
+          <span class="badge badge-terra statut-badge"><i class="fas fa-star" style="margin-right: 6px; font-size: 9px;"></i> À la une</span>
+          <span class="badge statut-badge statut-proposee">Proposée</span>
+          <span class="commu-chip" style="background: #f3efec; color: #8c7166;"><i class="fas fa-bullhorn"></i> AFES Communication</span>
+        </div>
+        <h2>La communauté AFES Communication cherche un·e bénévole pour animer les réseaux sociaux</h2>
+        <p class="vedette-desc">Création de contenu, publication et suivi des échanges&nbsp;: le groupe de travail Communication souhaite donner de la régularité à la présence du réseau sur les réseaux sociaux. La matière existe (actualités des communautés, événements, communs publiés), il manque une paire de mains pour la mettre en forme, en lien avec la référente qui relit avant publication.</p>
+        <div class="action-meta">
+          <div class="action-meta-item"><i class="fas fa-user"></i> Référente&nbsp;: <a href="membre.html?m=sablon-ines">Inès Sablon</a></div>
+          <div class="action-meta-item"><i class="fas fa-clock"></i> 2 à 3 h par semaine</div>
+          <div class="action-meta-item"><i class="fas fa-house-laptop"></i> À distance</div>
+          <div class="action-meta-item" id="vedette-count" hidden><i class="fas fa-hand"></i> <span></span></div>
+        </div>
+        <div class="action-chips">
+          <span class="action-chip">Aisance rédactionnelle</span>
+          <span class="action-chip">Pratique des réseaux sociaux</span>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+          <button type="button" class="btn btn-primary js-proposer" data-action="animation-reseaux-sociaux">Me proposer</button>
+          <a href="communaute-detail.html?c=afes-comm" class="btn btn-outline">Voir la communauté</a>
+        </div>
+        <p class="vue-equipe-lien"><i class="fas fa-user-gear"></i> Côté coulisses&nbsp;: <a href="espace-actions-suivi.html#animation-reseaux-sociaux">la vue équipe d'animation (démo)</a> montre comment la référente reçoit et suit les propositions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GRILLE DES FICHES ===== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 40px;">
+        <span class="badge badge-olive mb-4">Les fiches</span>
+        <h2>Toutes les actions</h2>
+        <p>Les missions ouvertes ou en cours dans les communautés, et celles déjà menées à bien.</p>
+      </div>
+
+      <div class="type-filter" id="statut-filter">
+        <button class="type-filter-btn active" data-statut="all">Toutes</button>
+        <button class="type-filter-btn" data-statut="proposee">Proposées</button>
+        <button class="type-filter-btn" data-statut="en-cours">En cours</button>
+        <button class="type-filter-btn" data-statut="terminee">Terminées</button>
+      </div>
+
+      <p class="text-center text-xs text-muted mb-6" style="max-width: 100%;"><i class="fas fa-circle-info" style="color: var(--primary);"></i> Fiches actions fictives de démonstration&nbsp;: les personnes et structures citées sont inventées&nbsp;; toute ressemblance avec des personnes réelles serait fortuite.</p>
+
+      <div class="bento-grid" id="actions-grid">
+        <div class="col-span-12 text-center text-muted py-8">Chargement des fiches actions…</div>
+      </div>
+
+      <div class="text-center text-muted py-8" id="actions-empty" style="display: none;">
+        <i class="fas fa-seedling" style="font-size: 28px; color: var(--text-subtle); margin-bottom: 12px; display: block;"></i>
+        Aucune fiche dans cette catégorie pour le moment.
+      </div>
+
+      <p class="text-center text-sm text-muted mt-6" style="max-width: 100%;"><i class="fas fa-user-gear" style="color: var(--text-subtle);"></i> Référent·e d'une action&nbsp;? <a href="espace-actions-suivi.html">Vue équipe d'animation (démo)</a>&nbsp;: les propositions reçues et leur suivi.</p>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="bento-grid items-stretch">
+        <div class="col-span-6">
+          <div class="glass-card no-hover text-center" style="border: 2px dashed var(--border-strong); background: transparent; padding: 32px; height: 100%;">
+            <i class="fas fa-plus-circle" style="font-size: 28px; color: var(--primary); margin-bottom: 12px;"></i>
+            <h4>Proposer une action</h4>
+            <p class="text-muted text-sm mb-4" style="max-width: 100%;">Votre communauté cherche des bras ou des cerveaux&nbsp;? Connectez-vous sur e-sol.fr pour déposer une fiche.</p>
+            <a href="inscription.html" class="btn btn-primary btn-sm">S'inscrire</a>
+          </div>
+        </div>
+        <div class="col-span-6">
+          <div class="glass-card no-hover text-center" style="padding: 32px; height: 100%;">
+            <i class="fas fa-bullhorn" style="font-size: 28px; color: var(--secondary); margin-bottom: 12px;"></i>
+            <h4>Plutôt une annonce&nbsp;?</h4>
+            <p class="text-muted text-sm mb-4" style="max-width: 100%;">Matériel, offres ponctuelles, demandes simples&nbsp;? C'est côté petites annonces.</p>
+            <a href="annonces.html" class="btn btn-outline btn-sm">Voir les petites annonces</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODALE « ME PROPOSER » (démo) ===== -->
+  <div class="modal-backdrop" id="proposer-backdrop" hidden>
+    <div class="modal-card glass-card no-hover" role="dialog" aria-modal="true" aria-labelledby="proposer-titre" id="proposer-modal">
+      <button type="button" class="modal-close" id="proposer-fermer" aria-label="Fermer la fenêtre"><i class="fas fa-xmark"></i></button>
+
+      <span class="badge badge-terra statut-badge">Me proposer</span>
+      <h3 id="proposer-titre">Me proposer sur cette action</h3>
+      <p class="modal-contexte" id="proposer-contexte"></p>
+
+      <form id="proposer-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="proposer-nom">Nom</label>
+            <input type="text" class="form-input" id="proposer-nom" value="Solène Reverdy">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="proposer-email">Email</label>
+            <input type="email" class="form-input" id="proposer-email" value="solene.reverdy@example.org">
+          </div>
+        </div>
+        <p class="demo-note"><i class="fas fa-circle-info"></i> Champs pré-remplis avec un profil fictif (mode démo). Sur la vraie plateforme, votre compte e-Sol les remplit pour vous.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="proposer-message">Message court</label>
+          <textarea class="form-textarea" id="proposer-message" placeholder="Deux ou trois phrases&nbsp;: qui vous êtes, pourquoi cette action vous parle…"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="proposer-dispo">Disponibilité</label>
+          <input type="text" class="form-input" id="proposer-dispo" placeholder="Ex.&nbsp;: 2 h par semaine, plutôt le soir">
+        </div>
+
+        <fieldset class="form-group" id="proposer-competences-bloc">
+          <legend class="form-label">Ce que je peux apporter</legend>
+          <div class="check-list" id="proposer-competences"></div>
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary w-full" style="justify-content: center;">
+          <i class="fas fa-paper-plane"></i> Envoyer ma proposition
+        </button>
+      </form>
+
+      <div class="envoi-confirm" id="proposer-confirm" role="status" hidden></div>
+
+      <div class="suite-box">
+        <h4><i class="fas fa-route"></i> Ce qui se passe ensuite</h4>
+        <ol>
+          <li>Votre proposition est enregistrée comme fiche liée à l'action.</li>
+          <li>Le ou la référent·e reçoit une notification par mail.</li>
+          <li>Il ou elle vous recontacte pour convenir de la suite.</li>
+          <li>Vous suivez l'avancement sur la fiche action.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  {{> footer }}
+
+  <script>
+    const VEDETTE_ID = 'animation-reseaux-sociaux';
+    const STATUT_LABELS = { 'proposee': 'Proposée', 'en-cours': 'En cours', 'terminee': 'Terminée' };
+
+    function formatDate(iso) {
+      const d = new Date(iso + 'T12:00:00');
+      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // Données partagées entre la grille et la modale
+    let ACTIONS = [];
+    let MEMBERS_BY_ID = {};
+    let COUNTS = {};
+
+    function libelleCount(n) {
+      if (n === 0) return 'Aucune proposition pour le moment';
+      if (n === 1) return '1 personne déjà proposée';
+      return n + ' personnes déjà proposées';
+    }
+
+    Promise.all([
+      fetch('data/actions.json').then(r => r.json()),
+      fetch('data/communities.json').then(r => r.json()),
+      fetch('data/members-sample.json').then(r => r.json()),
+      fetch('data/participations.json').then(r => r.json())
+    ]).then(([actions, communities, members, participations]) => {
+      const comById = {};
+      communities.forEach(c => { comById[c.id] = c; });
+      const memById = {};
+      members.forEach(m => { memById[m.id] = m; });
+
+      ACTIONS = actions;
+      MEMBERS_BY_ID = memById;
+      COUNTS = {};
+      participations.forEach(p => { COUNTS[p.action] = (COUNTS[p.action] || 0) + 1; });
+
+      // Fiche vedette : nombre de propositions déjà reçues
+      const vedetteCount = document.getElementById('vedette-count');
+      vedetteCount.querySelector('span').textContent = libelleCount(COUNTS[VEDETTE_ID] || 0);
+      vedetteCount.hidden = false;
+
+      const list = actions
+        .filter(a => a.id !== VEDETTE_ID)
+        .sort((a, b) => b.date.localeCompare(a.date));
+
+      const grid = document.getElementById('actions-grid');
+      grid.innerHTML = list.map((a, i) => {
+        const com = comById[a.communaute] || {};
+        const ref = memById[a.referent];
+        const refHtml = ref
+          ? `<a href="membre.html?m=${ref.id}">${ref.firstName} ${ref.lastName}</a>`
+          : 'Référent·e à venir';
+        const lieu = a.lieu.mode === 'présentiel'
+          ? `<i class="fas fa-location-dot"></i> ${a.lieu.ville}`
+          : `<i class="fas fa-house-laptop"></i> À distance`;
+        const lienHtml = a.lien
+          ? `<a href="${a.lien}" class="btn btn-ghost btn-sm" style="color: ${com.categoryColor || 'var(--primary)'};">Ressource liée <i class="fas fa-arrow-right text-xs"></i></a>`
+          : '';
+        const proposerHtml = a.statut === 'terminee'
+          ? ''
+          : `<button type="button" class="btn btn-primary btn-sm js-proposer" data-action="${a.id}">Me proposer</button>`;
+        const countHtml = a.statut === 'terminee'
+          ? ''
+          : `<div class="action-meta-item"><i class="fas fa-hand"></i> ${libelleCount(COUNTS[a.id] || 0)}</div>`;
+        return `
+          <div class="col-span-6 action-wrapper animate-in delay-${Math.min(i + 1, 4)}" data-statut="${a.statut}">
+            <div class="glass-card action-card">
+              <div class="flex gap-2 flex-wrap items-center">
+                <span class="badge statut-badge statut-${a.statut}">${STATUT_LABELS[a.statut] || a.statut}</span>
+                <a href="communaute-detail.html?c=${a.communaute}" class="commu-chip" style="background: ${com.categoryBg || 'var(--bg-warm)'}; color: ${com.categoryColor || 'var(--text-muted)'};">
+                  <i class="fas ${com.icon || 'fa-users'}"></i> ${com.shortName || a.communaute}
+                </a>
+              </div>
+              <h3 class="action-title">${a.titre}</h3>
+              <p class="action-desc">${a.description}</p>
+              <div class="action-meta">
+                <div class="action-meta-item"><i class="fas fa-calendar"></i> ${formatDate(a.date)}</div>
+                <div class="action-meta-item">${lieu}</div>
+                ${countHtml}
+              </div>
+              <div class="action-chips">
+                ${a.competences.map(c => `<span class="action-chip">${c}</span>`).join('')}
+              </div>
+              <div class="action-footer">
+                <div class="action-referent"><i class="fas fa-user" style="font-size: 11px;"></i> ${refHtml}</div>
+                <div class="flex gap-2 items-center flex-wrap">${lienHtml}${proposerHtml}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Filtres par statut
+      const filterBtns = document.querySelectorAll('.type-filter-btn');
+      const emptyState = document.getElementById('actions-empty');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const statut = btn.dataset.statut;
+          let visible = 0;
+          grid.querySelectorAll('.action-wrapper').forEach(w => {
+            const show = statut === 'all' || w.dataset.statut === statut;
+            w.classList.toggle('hidden', !show);
+            if (show) visible++;
+          });
+          emptyState.style.display = visible === 0 ? 'block' : 'none';
+        });
+      });
+    }).catch(() => {
+      document.getElementById('actions-grid').innerHTML =
+        '<div class="col-span-12 text-center text-muted py-8">Les fiches actions n\'ont pas pu être chargées. Réessayez depuis le site servi (les données sont dans data/actions.json).</div>';
+    });
+
+    // ---- Modale « Me proposer » (démo, accessible : focus, Échap) ----
+    const backdrop = document.getElementById('proposer-backdrop');
+    const modal = document.getElementById('proposer-modal');
+    const modalForm = document.getElementById('proposer-form');
+    const modalConfirm = document.getElementById('proposer-confirm');
+    let lastFocus = null;
+    let currentAction = null;
+
+    function openProposer(actionId) {
+      const a = ACTIONS.find(x => x.id === actionId);
+      if (!a) return;
+      currentAction = a;
+      lastFocus = document.activeElement;
+
+      document.getElementById('proposer-titre').textContent = a.titre;
+      const ref = MEMBERS_BY_ID[a.referent];
+      document.getElementById('proposer-contexte').textContent =
+        (ref ? 'Référent·e : ' + ref.firstName + ' ' + ref.lastName + '. ' : '') +
+        libelleCount(COUNTS[a.id] || 0) + '.';
+
+      // Cases à cocher construites depuis les compétences de la fiche action
+      const competences = (a.competences || []).filter(c => !/^aucun prérequis/i.test(c));
+      const bloc = document.getElementById('proposer-competences-bloc');
+      const checkList = document.getElementById('proposer-competences');
+      bloc.hidden = competences.length === 0;
+      checkList.innerHTML = competences.map(c =>
+        `<label class="check-item"><input type="checkbox"> <span>${c}</span></label>`).join('');
+
+      modalForm.hidden = false;
+      modalConfirm.hidden = true;
+      modalConfirm.innerHTML = '';
+      document.getElementById('proposer-message').value = '';
+      document.getElementById('proposer-dispo').value = '';
+
+      backdrop.hidden = false;
+      document.body.style.overflow = 'hidden';
+      document.getElementById('proposer-nom').focus();
+    }
+
+    function closeProposer() {
+      backdrop.hidden = true;
+      document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus();
+    }
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.js-proposer');
+      if (btn) openProposer(btn.dataset.action);
+    });
+    document.getElementById('proposer-fermer').addEventListener('click', closeProposer);
+    backdrop.addEventListener('mousedown', e => { if (e.target === backdrop) closeProposer(); });
+
+    document.addEventListener('keydown', e => {
+      if (backdrop.hidden) return;
+      if (e.key === 'Escape') { closeProposer(); return; }
+      if (e.key === 'Tab') {
+        // Le focus reste dans la fenêtre tant qu'elle est ouverte
+        const focusables = Array.from(modal.querySelectorAll('button, [href], input, select, textarea'))
+          .filter(el => el.offsetParent !== null);
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+        else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+      }
+    });
+
+    modalForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const a = currentAction;
+      const ref = a ? MEMBERS_BY_ID[a.referent] : null;
+      const refNom = ref ? ref.firstName + ' ' + ref.lastName : 'le ou la référent·e';
+      modalForm.hidden = true;
+      modalConfirm.innerHTML =
+        '<strong>Proposition envoyée (démo).</strong> Rien n\'est réellement enregistré ici. ' +
+        'Sur la vraie plateforme&nbsp;: votre proposition devient une fiche liée à l\'action, ' +
+        refNom + ' reçoit aussitôt une notification par mail, puis vous recontacte.<br>' +
+        '<a href="espace-actions-suivi.html#' + (a ? a.id : '') + '">Voir ce que voit l\'équipe d\'animation</a><br>' +
+        '<button type="button" class="btn btn-outline btn-sm" id="proposer-confirm-fermer">Fermer</button>';
+      modalConfirm.hidden = false;
+      modalConfirm.setAttribute('tabindex', '-1');
+      modalConfirm.focus();
+      document.getElementById('proposer-confirm-fermer').addEventListener('click', closeProposer);
+    });
+  </script>
+
+</body>
+</html>

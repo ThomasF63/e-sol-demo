@@ -160,6 +160,101 @@
       font-weight: 700;
     }
 
+    a.member-pill { text-decoration: none; transition: all 0.2s ease; }
+    a.member-pill:hover {
+      border-color: var(--primary-20);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ---- Onglet Membres : renvoi vers l'annuaire et la carte ---- */
+    .members-annuaire-cta {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .members-annuaire-cta p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      max-width: 100%;
+    }
+
+    .members-annuaire-cta .cta-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Hero : ligne animation ---- */
+    .detail-anim-line {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin: -2px 0 4px;
+    }
+    .detail-anim-line a { color: var(--primary); font-weight: 600; }
+
+    /* ---- Rejoindre : confirmation et panneau ---- */
+    .join-feedback {
+      margin-top: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--secondary);
+      background: var(--secondary-10);
+      border: 1px solid rgba(88, 99, 48, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      max-width: 640px;
+    }
+
+    .join-details {
+      margin-top: 12px;
+      max-width: 640px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .join-details summary {
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .join-details summary:hover { color: var(--primary); }
+
+    .join-details ul {
+      margin: 10px 0 0 4px;
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .join-details p { margin-top: 8px; max-width: 100%; }
+
+    /* ---- Équipe d'animation ---- */
+    .anim-row { display: flex; gap: 12px; align-items: center; }
+
+    .anim-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .anim-row a { color: var(--text-main); font-weight: 600; font-size: 14px; }
+    .anim-row a:hover { color: var(--primary); }
+    .anim-row .anim-role { font-size: 12px; color: var(--text-muted); }
+
     .resource-item {
       display: flex;
       align-items: center;
@@ -214,15 +309,27 @@
           <i class="fas fa-users"></i>
         </div>
         <h1 class="detail-title" id="detail-title">Communauté</h1>
+        <p class="detail-anim-line" id="detail-anim-line" hidden></p>
         <div class="detail-meta-row" id="detail-meta">
           <div class="detail-meta-item"><i class="fas fa-tag"></i> <span id="detail-category">Catégorie</span></div>
           <div class="detail-meta-item"><i class="fas fa-users"></i> <span id="detail-members">0</span> membres</div>
           <div class="detail-meta-item"><i class="fas fa-folder-open"></i> <span id="detail-resources">0</span> ressources</div>
         </div>
         <div class="detail-actions">
-          <a href="#" class="btn btn-primary" id="detail-join-btn">Rejoindre cette communauté</a>
+          <button type="button" class="btn btn-outline" id="btn-interesse"><i class="fas fa-envelope"></i> Ça m'intéresse</button>
+          <button type="button" class="btn btn-primary" id="btn-participer"><i class="fas fa-hand"></i> Je veux participer</button>
           <a href="https://forum.e-sol.fr/" target="_blank" class="btn btn-outline"><i class="fas fa-comments"></i> Forum</a>
         </div>
+        <p class="join-feedback" id="join-feedback" role="status" hidden></p>
+        <details class="join-details">
+          <summary>Ce qui se passe quand vous cliquez</summary>
+          <ul>
+            <li>votre fiche annuaire affiche la communauté&nbsp;;</li>
+            <li>vous recevez ses informations&nbsp;;</li>
+            <li>l'équipe d'animation est notifiée de votre arrivée.</li>
+          </ul>
+          <p>«&nbsp;Je veux participer&nbsp;» ajoute une seule chose&nbsp;: l'équipe d'animation sait qu'elle peut vous solliciter. Mêmes droits dans les deux cas&nbsp;; on change d'avis en modifiant sa fiche.</p>
+        </details>
       </div>
     </div>
   </div>
@@ -282,7 +389,7 @@
               <div class="activity-dot" style="background: var(--cat-politique);"></div>
               <div>
                 <h4>Nouveau membre</h4>
-                <p>Un chercheur de l'INRAE a rejoint la communauté</p>
+                <p>Une chercheuse en science du sol a rejoint la communauté</p>
                 <span class="text-subtle text-xs mt-1" style="display: block;">Il y a 2 semaines</span>
               </div>
             </div>
@@ -290,9 +397,23 @@
 
           <!-- Members tab -->
           <div class="tab-panel" id="tab-members">
-            <p class="text-muted mb-6">Membres de cette communauté :</p>
+            <p class="text-muted mb-6">Membres de cette communauté&nbsp;:</p>
             <div class="flex flex-wrap gap-3" id="detail-members-list">
-              <!-- Sample members -->
+              <!-- Jointure avec l'annuaire fictif (members-sample.json) -->
+            </div>
+            <p class="text-subtle text-xs mt-4" style="max-width: 100%;">Annuaire fictif de démonstration&nbsp;: toute ressemblance avec des personnes réelles serait fortuite.</p>
+
+            <!-- Renvoi vers l'annuaire filtré sur cette communauté (hrefs complétés en JS) -->
+            <div class="members-annuaire-cta">
+              <p>L'annuaire complet permet de chercher, filtrer et voir la répartition sur la carte.</p>
+              <div class="cta-btns">
+                <a href="annuaire.html" class="btn btn-outline btn-sm" id="btn-annuaire-membres">
+                  <i class="fas fa-address-book"></i> Voir tous les membres dans l'annuaire
+                </a>
+                <a href="annuaire.html?vue=carte" class="btn btn-outline btn-sm" id="btn-annuaire-carte">
+                  <i class="fas fa-map-location-dot"></i> Voir sur la carte
+                </a>
+              </div>
             </div>
           </div>
 
@@ -305,7 +426,7 @@
                 </div>
                 <div style="flex-grow: 1;">
                   <h4 style="font-size: 0.95rem;">Guide de référence</h4>
-                  <p class="text-xs text-muted">Document PDF · Mis à jour Mars 2026</p>
+                  <p class="text-xs text-muted">Document PDF - Mis à jour Mars 2026</p>
                 </div>
                 <a href="#" class="btn btn-ghost btn-sm"><i class="fas fa-download"></i></a>
               </div>
@@ -325,6 +446,12 @@
 
         <!-- Sidebar -->
         <div class="col-span-4">
+          <div class="glass-card sidebar-card no-hover mb-4" id="animation-card" hidden>
+            <h4><i class="fas fa-compass text-sm"></i> L'équipe d'animation</h4>
+            <div class="flex flex-col gap-3" id="animation-list"></div>
+            <a href="contact.html" class="btn btn-outline btn-sm w-full mt-4" style="justify-content: center;">Contacter l'équipe d'animation</a>
+          </div>
+
           <div class="glass-card sidebar-card no-hover mb-4">
             <h4><i class="fas fa-link text-sm"></i> Liens Utiles</h4>
             <div class="flex flex-col gap-3">
@@ -393,7 +520,7 @@
         const c = communities.find(x => x.id === communityId) || communities[0];
 
         // Update page content
-        document.title = c.name + ' — e-Sol';
+        document.title = c.name + ' - e-Sol';
         document.getElementById('detail-title').textContent = c.name;
         document.getElementById('detail-description').textContent = c.description;
         document.getElementById('detail-category').textContent = c.category;
@@ -405,7 +532,7 @@
         avatar.innerHTML = '<i class="fas ' + c.icon + '"></i>';
         avatar.style.color = c.categoryColor;
 
-        // Update hero background — community image with subtle bottom gradient for legibility
+        // Update hero background - community image with subtle bottom gradient for legibility
         const heroBg = document.getElementById('hero-bg');
         heroBg.style.backgroundImage =
           "linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.35) 100%), url('img/communities/" + c.id + ".webp')";
@@ -416,17 +543,72 @@
         // Update link
         document.getElementById('link-live').href = c.liveUrl;
 
-        // Sample members
-        const sampleNames = ['A. Martin', 'C. Dubois', 'M. Leroy', 'P. Bernard', 'S. Thomas', 'J. Robert', 'L. Moreau', 'N. Laurent'];
-        const membersList = document.getElementById('detail-members-list');
-        const count = Math.min(c.members, 8);
-        membersList.innerHTML = sampleNames.slice(0, count).map(name => `
-          <div class="member-pill">
-            <div class="avatar-circle">${name.charAt(0)}</div>
-            ${name}
-          </div>
-        `).join('') + (c.members > 8 ? `<div class="member-pill" style="background: var(--primary-10); color: var(--primary); border-color: var(--primary-20);">+${c.members - 8} autres</div>` : '');
+        // Onglet Membres : liens vers l'annuaire pré-filtré sur cette communauté
+        document.getElementById('btn-annuaire-membres').href =
+          'annuaire.html?communaute=' + encodeURIComponent(c.id);
+        document.getElementById('btn-annuaire-carte').href =
+          'annuaire.html?communaute=' + encodeURIComponent(c.id) + '&vue=carte';
+
+        // Boutons « Ça m'intéresse » / « Je veux participer » : confirmation inline (démo)
+        const feedback = document.getElementById('join-feedback');
+        const joinMsg = {
+          interesse: "Démo - dans la vraie plateforme : votre fiche annuaire est mise à jour, vous recevez les informations de la communauté et l'équipe d'animation est notifiée.",
+          participer: "Démo - dans la vraie plateforme : votre fiche annuaire est mise à jour, l'équipe d'animation est notifiée, et elle sait qu'elle peut vous solliciter."
+        };
+        document.getElementById('btn-interesse').addEventListener('click', () => {
+          feedback.textContent = joinMsg.interesse;
+          feedback.hidden = false;
+        });
+        document.getElementById('btn-participer').addEventListener('click', () => {
+          feedback.textContent = joinMsg.participer;
+          feedback.hidden = false;
+        });
+
+        // Annuaire fictif : équipe d'animation et membres.
+        // Si le fichier ou le champ manquent, les blocs restent simplement masqués.
+        fetch('data/members-sample.json')
+          .then(r => r.json())
+          .then(members => {
+            renderAnimation(c, members);
+            renderMembers(c, members);
+          })
+          .catch(() => { /* carte animation masquée, onglet membres inchangé */ });
       });
+
+    // Carte latérale + ligne du hero « Animée par … » (défensif : rien ne s'affiche sans données)
+    function renderAnimation(c, members) {
+      if (!Array.isArray(c.animation) || c.animation.length === 0) return;
+      const team = c.animation.map(id => members.find(m => m.id === id)).filter(Boolean);
+      if (team.length === 0) return;
+
+      document.getElementById('animation-list').innerHTML = team.map(m => `
+        <div class="anim-row">
+          <div class="anim-avatar">${(m.firstName || '?')[0]}${(m.lastName || '?')[0]}</div>
+          <div>
+            <a href="membre.html?m=${m.id}">${m.firstName} ${m.lastName}</a>
+            <div class="anim-role">${m.role || ''}</div>
+          </div>
+        </div>`).join('');
+      document.getElementById('animation-card').hidden = false;
+
+      const line = document.getElementById('detail-anim-line');
+      line.innerHTML = 'Animée par ' + team.map(m =>
+        `<a href="membre.html?m=${m.id}">${m.firstName} ${m.lastName}</a>`).join(' et ');
+      line.hidden = false;
+    }
+
+    // Onglet Membres : membres fictifs rattachés à cette communauté
+    function renderMembers(c, members) {
+      const list = members.filter(m => Array.isArray(m.communities) && m.communities.includes(c.id));
+      if (list.length === 0) return;
+      const shown = list.slice(0, 12);
+      const reste = Math.max(0, (c.members || list.length) - shown.length);
+      document.getElementById('detail-members-list').innerHTML = shown.map(m => `
+        <a class="member-pill" href="membre.html?m=${m.id}">
+          <div class="avatar-circle">${(m.firstName || '?')[0]}${(m.lastName || '?')[0]}</div>
+          ${m.firstName} ${m.lastName}
+        </a>`).join('') + (reste > 0 ? `<div class="member-pill" style="background: var(--primary-10); color: var(--primary); border-color: var(--primary-20);">et ${reste} autres</div>` : '');
+    }
   </script>
 
 </body>

@@ -8,19 +8,19 @@ Source de vérité : [Charte e-sol.fr](https://e-sol.fr/?Charte).
 ```mermaid
 flowchart TB
     %% ---------- Nodes ----------
-    AFES[("<b>AFES</b><br/><i>Association porteuse</i><br/>anime · héberge · valorise")]
-    COPIL["<b>COPIL e-Sol</b><br/>AFES · GIS Sol · RMT Sols et Territoires · RNEST<br/><i>soutien : ADEME, OFB</i>"]
+    AFES[("<b>AFES</b><br/><i>Association porteuse</i><br/>anime - héberge - valorise")]
+    COPIL["<b>COPIL e-Sol</b><br/>AFES - GIS Sol - RMT Sols et Territoires - RNEST<br/><i>soutien : ADEME, OFB</i>"]
 
-    subgraph MAISONS["LES MAISONS · communautés thématiques"]
+    subgraph MAISONS["LES MAISONS - communautés thématiques"]
       direction LR
       C1["Fresque<br/>du Sol"]
       C2["Sols<br/>Forestiers"]
-      C3["ZAN ·<br/>Aménagement"]
+      C3["ZAN -<br/>Aménagement"]
       C4["Pédologie<br/>de Terrain"]
       C5["+ autres<br/>communautés"]
     end
 
-    subgraph COMMUNS["LES OUTILS PARTAGÉS — communs"]
+    subgraph COMMUNS["LES OUTILS PARTAGÉS - communs"]
       direction LR
       K1["Données<br/>&amp; cartes"]
       K2["Guides &amp;<br/>protocoles"]
@@ -28,13 +28,13 @@ flowchart TB
       K4["Outils<br/>logiciels"]
     end
 
-    MEMBRES(["<b>Membres</b><br/>chercheurs · praticiens<br/>citoyens · étudiants"])
-    SOCIETE[/"<b>Société &amp; partenaires</b><br/>institutions · public · acteurs"\]
+    MEMBRES(["<b>Membres</b><br/>chercheurs - praticiens<br/>citoyens - étudiants"])
+    SOCIETE[/"<b>Société &amp; partenaires</b><br/>institutions - public - acteurs"\]
 
     %% ---------- Relations ----------
     AFES -. "siège &amp; anime" .-> COPIL
-    COPIL == "oriente · arbitre" ==> MAISONS
-    COPIL == "valide · valorise" ==> COMMUNS
+    COPIL == "oriente - arbitre" ==> MAISONS
+    COPIL == "valide - valorise" ==> COMMUNS
 
     MEMBRES -- "rejoignent" --> MAISONS
     MAISONS == "produisent" ==> COMMUNS
@@ -71,7 +71,7 @@ flowchart TB
 
 ## Variante simplifiée (3 niveaux)
 
-À utiliser en page d'accueil YesWiki ou en pied de mail d'accueil — plus accessible que la version complète.
+À utiliser en page d'accueil YesWiki ou en pied de mail d'accueil - plus accessible que la version complète.
 
 ```mermaid
 flowchart LR

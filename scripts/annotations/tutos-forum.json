@@ -1,0 +1,31 @@
+{
+  "forum-a-accueil.png": [
+    { "type": "cadre", "zone": "se-connecter" },
+    { "type": "pastille", "zone": "se-connecter", "n": 2 }
+  ],
+  "forum-b-categories.png": [
+    { "type": "cadre", "zone": "onglet-categories" },
+    { "type": "pastille", "zone": "onglet-categories", "n": 2 },
+    { "type": "cadre", "zone": "liste-categories" },
+    { "type": "pastille", "zone": "liste-categories", "n": 3 },
+    { "type": "cadre", "zone": "sols-forestiers-lateral" },
+    { "type": "pastille", "zone": "sols-forestiers-lateral", "n": 4 }
+  ],
+  "forum-b-sujet.png": [
+    { "type": "cadre", "zone": "titre-sujet" },
+    { "type": "pastille", "zone": "titre-sujet", "n": 6 },
+    { "type": "cadre", "zone": "categorie-sujet", "decalage": { "dx": 0, "dy": 8 } },
+    { "type": "cadre", "zone": "logo" },
+    { "type": "pastille", "zone": "logo", "n": 7 }
+  ],
+  "forum-b-recherche.png": [
+    { "type": "cadre", "zone": "barre-recherche" },
+    { "type": "etiquette", "zone": "barre-recherche", "texte": "Rechercher dans tout le forum", "decalage": { "dx": 500, "dy": 0 } }
+  ],
+  "forum-c-categorie.png": [
+    { "type": "cadre", "zone": "chip-categorie" },
+    { "type": "pastille", "zone": "chip-categorie", "n": 1 },
+    { "type": "etiquette", "zone": { "x": 2330, "y": 250, "w": 170, "h": 70 }, "texte": "La cloche des niveaux d'attention apparaîtra ici, une fois connecté·e", "decalage": { "dx": -820, "dy": 160 } },
+    { "type": "fleche", "zone": { "x": 2330, "y": 250, "w": 170, "h": 70 }, "decalage": { "dx": -320, "dy": 190 } }
+  ]
+}

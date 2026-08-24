@@ -1,0 +1,74 @@
+[
+  {
+    "id": "participation-001",
+    "action": "relecture-protocole-sols-urbains",
+    "membre": "chanteloup-cecile",
+    "date": "2026-08-03",
+    "message": "Je travaille sur des friches en Normandie et j'utilise ce type de protocole sur le terrain. Partante pour relire la partie mesures.",
+    "disponibilite": "Une demi-journée fin août",
+    "statut": "retenue"
+  },
+  {
+    "id": "participation-002",
+    "action": "co-animation-fresque-lycee",
+    "membre": "solignat-bertille",
+    "date": "2026-08-05",
+    "message": "Formée à l'animation en avril, je n'ai pas encore animé seule. Un binôme en lycée agricole serait un cadre idéal pour me lancer.",
+    "disponibilite": "Les jeudis et vendredis de septembre",
+    "statut": "retenue"
+  },
+  {
+    "id": "participation-003",
+    "action": "co-animation-fresque-lycee",
+    "membre": "balivet-perrine",
+    "date": "2026-08-08",
+    "message": "J'anime la Fresque depuis deux ans, dont plusieurs fois en lycée. Je peux aussi partager mes supports adaptés au public scolaire.",
+    "disponibilite": "Selon la date retenue, à confirmer",
+    "statut": "declinee"
+  },
+  {
+    "id": "participation-004",
+    "action": "animation-reseaux-sociaux",
+    "membre": "boissenard-quitterie",
+    "date": "2026-08-12",
+    "message": "En master Sols et Environnement, je m'occupe déjà des réseaux d'une association étudiante. Je peux proposer un calendrier éditorial pour essayer.",
+    "disponibilite": "2 à 3 h par semaine, plutôt le soir",
+    "statut": "en-echange"
+  },
+  {
+    "id": "participation-005",
+    "action": "animation-reseaux-sociaux",
+    "membre": "berthomiel-anouk",
+    "date": "2026-08-14",
+    "message": "Photographe naturaliste, je peux fournir des visuels de sols et préparer des publications illustrées.",
+    "disponibilite": "Quelques heures par semaine, à distance",
+    "statut": "a-contacter"
+  },
+  {
+    "id": "participation-006",
+    "action": "relecture-protocole-sols-urbains",
+    "membre": "auberton-tristan",
+    "date": "2026-08-16",
+    "message": "Je réalise des diagnostics de sols urbains en bureau d'études. Je peux vérifier la faisabilité des mesures sur un cas réel.",
+    "disponibilite": "Une demi-journée début septembre",
+    "statut": "a-contacter"
+  },
+  {
+    "id": "participation-007",
+    "action": "animation-reseaux-sociaux",
+    "membre": "escurel-lois",
+    "date": "2026-08-17",
+    "message": "Étudiant en master et actif sur les réseaux, je peux prendre en charge la programmation des publications.",
+    "disponibilite": "1 à 2 h par semaine",
+    "statut": "a-contacter"
+  },
+  {
+    "id": "participation-008",
+    "action": "test-protocole-vers-de-terre",
+    "membre": "grandvoinet-sybille",
+    "date": "2026-09-02",
+    "message": "Enseignante en SVT, je peux tester le protocole dans le jardin du collège avec une classe de sixième.",
+    "disponibilite": "En septembre et octobre, le mercredi",
+    "statut": "a-contacter"
+  }
+]

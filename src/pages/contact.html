@@ -73,6 +73,126 @@
 
     .contact-info-card h4 { font-size: 0.95rem; margin-bottom: 4px; }
     .contact-info-card p { font-size: 0.9rem; color: var(--text-muted); max-width: 100%; line-height: 1.5; }
+
+    .contact-router { padding: 28px 32px 16px; margin-bottom: 24px; }
+    .contact-router h3 { font-size: 1.15rem; margin-bottom: 8px; }
+
+    .contact-router-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 14px 0;
+    }
+
+    .contact-router-item + .contact-router-item { border-top: 1px solid var(--border); }
+    .contact-router-item h4 { font-size: 0.95rem; margin-bottom: 2px; }
+    .contact-router-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ---- Sélecteur de destinataire ---- */
+    .dest-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) { .dest-options { grid-template-columns: 1fr; } }
+
+    .dest-option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dest-option:hover { border-color: var(--primary-20); }
+    .dest-option.active { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-10); }
+    .dest-option input { margin-top: 4px; accent-color: var(--primary); }
+    .dest-option strong { display: block; font-family: var(--font-display); font-size: 14px; }
+    .dest-option small { font-size: 12px; color: var(--text-muted); line-height: 1.45; display: block; }
+
+    .dest-communaute-bloc { margin-top: 16px; }
+
+    .dest-equipe {
+      margin-top: 14px;
+      padding: 16px 18px;
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+    .dest-equipe-intro { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; max-width: 100%; }
+    .dest-equipe-liste { display: flex; flex-direction: column; gap: 10px; }
+
+    .dest-personne {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+    }
+    .dest-personne input { accent-color: var(--primary); }
+
+    .anim-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .dest-personne-nom { font-weight: 600; font-size: 14px; color: var(--text-main); }
+    .dest-personne-role { font-size: 12px; color: var(--text-muted); }
+
+    .dest-note { font-size: 12px; color: var(--text-subtle); margin-top: 10px; max-width: 100%; }
+
+    /* ---- Encart d'envoi ---- */
+    .envoi-recap {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      max-width: 100%;
+      line-height: 1.55;
+    }
+    .envoi-recap i { color: var(--primary); font-size: 13px; margin-top: 3px; }
+    .envoi-recap strong { color: var(--text-main); }
+
+    .envoi-confirm {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--secondary);
+      background: var(--secondary-10);
+      border: 1px solid rgba(88, 99, 48, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      max-width: 100%;
+    }
+
+    .envoi-erreur {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--primary);
+      background: var(--primary-10);
+      border: 1px solid var(--primary-20);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      max-width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -91,7 +211,72 @@
     <div class="container">
       <div class="bento-grid contact-layout">
         <div class="col-span-8">
+          <div class="glass-card contact-router no-hover">
+            <h3>Qui contacter pour quoi ?</h3>
+
+            <div class="contact-router-item">
+              <div class="contact-info-icon" style="background: var(--secondary-10); color: var(--secondary);">
+                <i class="fas fa-users"></i>
+              </div>
+              <div>
+                <h4>Une question sur une communauté ?</h4>
+                <p>Écrivez directement à son équipe d'animation : <a href="#choix-destinataire" id="lien-choix-communaute">choisissez la communauté dans le formulaire ci-dessous</a>, les personnes de l'équipe apparaissent.</p>
+              </div>
+            </div>
+
+            <div class="contact-router-item">
+              <div class="contact-info-icon" style="background: var(--primary-10); color: var(--primary);">
+                <i class="fas fa-headset"></i>
+              </div>
+              <div>
+                <h4>La plateforme, un compte, une inscription ?</h4>
+                <p>L'équipe e-Sol vous répond via le formulaire ci-dessous.</p>
+              </div>
+            </div>
+
+            <div class="contact-router-item">
+              <div class="contact-info-icon" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
+                <i class="fas fa-comment-dots"></i>
+              </div>
+              <div>
+                <h4>Un avis, un bug, une idée ?</h4>
+                <p>Passez par le <a href="retour.html">formulaire de retour</a>.</p>
+              </div>
+            </div>
+          </div>
+
           <div class="glass-card contact-form no-hover">
+            <div class="form-group" id="choix-destinataire">
+              <span class="form-label">À qui écrivez-vous ? <span class="required">*</span></span>
+              <div class="dest-options">
+                <label class="dest-option active">
+                  <input type="radio" name="destinataire" value="equipe" checked>
+                  <span><strong>L'équipe e-Sol</strong>
+                  <small>Questions générales, comptes, partenariats, presse.</small></span>
+                </label>
+                <label class="dest-option">
+                  <input type="radio" name="destinataire" value="communaute">
+                  <span><strong>L'équipe d'animation d'une communauté</strong>
+                  <small>Question sur une communauté, envie d'y participer.</small></span>
+                </label>
+              </div>
+
+              <div class="dest-communaute-bloc" id="dest-communaute-bloc" hidden>
+                <label class="form-label" for="dest-communaute" style="margin-top: 4px;">Quelle communauté ?</label>
+                <select class="form-select" id="dest-communaute">
+                  <option value="">Choisir une communauté…</option>
+                </select>
+
+                <div class="dest-equipe" id="dest-equipe" hidden>
+                  <p class="dest-equipe-intro">Son équipe d'animation, à qui votre message partira. Décochez pour ne pas écrire à quelqu'un.</p>
+                  <div class="dest-equipe-liste" id="dest-equipe-liste"></div>
+                  <p class="dest-note"><i class="fas fa-lock" style="font-size: 10px;"></i> Le message part par la plateforme : les adresses des destinataires ne sont pas affichées.</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="divider" style="margin: 24px 0;">
+
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label">Nom complet <span class="required">*</span></label>
@@ -108,6 +293,7 @@
               <select class="form-select">
                 <option value="">Choisir un sujet…</option>
                 <option>Question générale sur e-Sol</option>
+                <option>Question à une communauté</option>
                 <option>Rejoindre une communauté</option>
                 <option>Proposition de partenariat</option>
                 <option>Problème technique</option>
@@ -121,9 +307,14 @@
               <textarea class="form-textarea" placeholder="Décrivez votre question ou votre proposition…"></textarea>
             </div>
 
-            <button class="btn btn-primary btn-lg w-full" style="justify-content: center;" onclick="alert('Ceci est une démonstration. Le formulaire réel est sur e-sol.fr')">
+            <p class="envoi-recap"><i class="fas fa-paper-plane"></i> <span>Votre message partira à : <strong id="envoi-recap-dest">l'équipe e-Sol (contact@e-sol.fr)</strong></span></p>
+
+            <button class="btn btn-primary btn-lg w-full" style="justify-content: center;" id="btn-envoyer">
               <i class="fas fa-paper-plane"></i> Envoyer le message
             </button>
+
+            <p class="envoi-confirm" id="envoi-confirm" role="status" hidden></p>
+            <p class="envoi-erreur" id="envoi-erreur" role="alert" hidden></p>
           </div>
         </div>
 
@@ -155,7 +346,7 @@
               </div>
               <div>
                 <h4>AFES</h4>
-                <p>Association Française pour l'Étude du Sol — <a href="https://www.afes.fr" target="_blank">afes.fr</a></p>
+                <p>Association Française pour l'Étude du Sol - <a href="https://www.afes.fr" target="_blank">afes.fr</a></p>
               </div>
             </div>
 
@@ -169,6 +360,127 @@
   </section>
 
   {{> footer }}
+
+  <script>
+    // ---- Sélecteur de destinataire : équipe e-Sol (défaut) ou équipe d'animation d'une communauté ----
+    let COMMUNITIES = [];
+    const MEMBERS_BY_ID = {};
+
+    const radios = document.querySelectorAll('input[name="destinataire"]');
+    const blocCommunaute = document.getElementById('dest-communaute-bloc');
+    const selectCommunaute = document.getElementById('dest-communaute');
+    const blocEquipe = document.getElementById('dest-equipe');
+    const listeEquipe = document.getElementById('dest-equipe-liste');
+    const recapDest = document.getElementById('envoi-recap-dest');
+    const confirmBox = document.getElementById('envoi-confirm');
+    const erreurBox = document.getElementById('envoi-erreur');
+
+    Promise.all([
+      fetch('data/communities.json').then(r => r.json()),
+      fetch('data/members-sample.json').then(r => r.json())
+    ]).then(([communities, members]) => {
+      COMMUNITIES = communities;
+      members.forEach(m => { MEMBERS_BY_ID[m.id] = m; });
+      const parNom = communities.slice().sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+      selectCommunaute.innerHTML = '<option value="">Choisir une communauté…</option>' +
+        parNom.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+    }).catch(() => {
+      // Sans données (page ouverte hors serveur), l'option « équipe e-Sol » reste utilisable.
+    });
+
+    function modeActuel() {
+      return document.querySelector('input[name="destinataire"]:checked').value;
+    }
+
+    function equipeCochee() {
+      return Array.from(listeEquipe.querySelectorAll('input[type="checkbox"]:checked'))
+        .map(cb => MEMBERS_BY_ID[cb.value]).filter(Boolean);
+    }
+
+    function joindreNoms(noms) {
+      if (noms.length <= 1) return noms.join('');
+      return noms.slice(0, -1).join(', ') + ' et ' + noms[noms.length - 1];
+    }
+
+    function majRecap() {
+      if (modeActuel() === 'equipe') {
+        recapDest.textContent = "l'équipe e-Sol (contact@e-sol.fr)";
+        return;
+      }
+      const com = COMMUNITIES.find(c => c.id === selectCommunaute.value);
+      if (!com) { recapDest.textContent = 'choisissez une communauté ci-dessus'; return; }
+      const equipe = equipeCochee();
+      if (equipe.length === 0) { recapDest.textContent = 'personne pour le moment : cochez au moins un·e destinataire'; return; }
+      recapDest.textContent = joindreNoms(equipe.map(m => m.firstName + ' ' + m.lastName)) +
+        " (équipe d'animation " + com.shortName + ')';
+    }
+
+    radios.forEach(r => r.addEventListener('change', () => {
+      document.querySelectorAll('.dest-option').forEach(o =>
+        o.classList.toggle('active', o.querySelector('input').checked));
+      blocCommunaute.hidden = modeActuel() !== 'communaute';
+      confirmBox.hidden = true;
+      erreurBox.hidden = true;
+      majRecap();
+    }));
+
+    selectCommunaute.addEventListener('change', () => {
+      const com = COMMUNITIES.find(c => c.id === selectCommunaute.value);
+      const equipe = (com && Array.isArray(com.animation))
+        ? com.animation.map(id => MEMBERS_BY_ID[id]).filter(Boolean)
+        : [];
+      if (equipe.length === 0) {
+        blocEquipe.hidden = true;
+        listeEquipe.innerHTML = '';
+        majRecap();
+        return;
+      }
+      listeEquipe.innerHTML = equipe.map(m => `
+        <label class="dest-personne">
+          <input type="checkbox" value="${m.id}" checked>
+          <span class="anim-avatar">${(m.firstName || '?')[0]}${(m.lastName || '?')[0]}</span>
+          <span><span class="dest-personne-nom">${m.firstName} ${m.lastName}</span><br>
+          <span class="dest-personne-role">${m.role || ''}</span></span>
+        </label>`).join('');
+      listeEquipe.querySelectorAll('input').forEach(cb => cb.addEventListener('change', majRecap));
+      blocEquipe.hidden = false;
+      majRecap();
+    });
+
+    // Le premier item de « Qui contacter pour quoi ? » active directement l'option communauté
+    document.getElementById('lien-choix-communaute').addEventListener('click', () => {
+      const radio = document.querySelector('input[name="destinataire"][value="communaute"]');
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change'));
+      setTimeout(() => selectCommunaute.focus(), 300);
+    });
+
+    // Envoi : confirmation inline (démo), qui rappelle le destinataire choisi
+    document.getElementById('btn-envoyer').addEventListener('click', () => {
+      confirmBox.hidden = true;
+      erreurBox.hidden = true;
+      if (modeActuel() === 'communaute') {
+        const com = COMMUNITIES.find(c => c.id === selectCommunaute.value);
+        if (!com) {
+          erreurBox.textContent = 'Choisissez d\'abord une communauté dans la liste.';
+          erreurBox.hidden = false;
+          return;
+        }
+        const equipe = equipeCochee();
+        if (equipe.length === 0) {
+          erreurBox.textContent = 'Cochez au moins une personne de l\'équipe d\'animation.';
+          erreurBox.hidden = false;
+          return;
+        }
+        confirmBox.textContent = 'Démo : rien n\'est réellement parti. Sur la vraie plateforme, votre message serait envoyé par mail à ' +
+          joindreNoms(equipe.map(m => m.firstName + ' ' + m.lastName)) +
+          ' (équipe d\'animation ' + com.shortName + '), qui vous répondrait à votre adresse.';
+      } else {
+        confirmBox.textContent = 'Démo : rien n\'est réellement parti. Sur la vraie plateforme, votre message serait envoyé à l\'équipe e-Sol (contact@e-sol.fr).';
+      }
+      confirmBox.hidden = false;
+    });
+  </script>
 
 </body>
 </html>

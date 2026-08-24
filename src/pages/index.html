@@ -85,6 +85,26 @@
       line-height: 1.7;
     }
 
+    .hero-newhere {
+      margin-top: 18px;
+      font-size: 14.5px;
+      color: var(--text-muted);
+    }
+
+    .hero-newhere a {
+      font-family: var(--font-display);
+      font-weight: 600;
+    }
+
+    .hero-newhere a i {
+      font-size: 11px;
+      transition: transform 0.3s ease;
+    }
+
+    .hero-newhere a:hover i {
+      transform: translateX(3px);
+    }
+
     .hero-visual {
       position: relative;
     }
@@ -155,6 +175,91 @@
       font-weight: 500;
     }
 
+    /* ---- GARE D'AIGUILLAGE : QUELS SONT VOS BESOINS ---- */
+    .need-card {
+      padding: 26px 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .need-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .need-icon {
+      width: 46px; height: 46px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .need-keyword {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    .need-question {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .need-links {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      align-items: flex-start;
+    }
+
+    .need-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .need-link i {
+      font-size: 11px;
+      transition: transform 0.3s ease;
+    }
+
+    .need-link:hover i {
+      transform: translateX(3px);
+    }
+
+    .need-domain {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 11.5px;
+      color: var(--text-subtle);
+    }
+
+    .need-link-sec {
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .need-card-star {
+      border-top: 3px solid var(--primary);
+      background: linear-gradient(160deg, rgba(156,63,0,0.06), var(--bg-elevated) 55%);
+    }
+
     /* ---- E-SOL EN UN COUP D'ŒIL ---- */
     .village-quote {
       font-family: var(--font-display); font-weight: 500;
@@ -173,6 +278,17 @@
     }
     .village-quote::before { margin-right: 8px; }
     .village-quote::after { margin-left: 6px; }
+
+    .vg-link {
+      display: block;
+      height: 100%;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .vg-link:hover { color: inherit; }
+
+    .vg-link .glass-card { height: 100%; }
 
     .vg-card {
       padding: 24px;
@@ -200,36 +316,17 @@
       max-width: 100%;
     }
 
-    /* ---- REJOINDRE EN QUATRE GESTES ---- */
-    .join-card {
-      padding: 26px 24px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .vg-go {
+      margin-top: auto;
+      align-self: flex-end;
+      color: var(--text-subtle);
+      font-size: 13px;
+      transition: color 0.25s ease, transform 0.25s ease;
     }
 
-    .join-num {
-      width: 46px; height: 46px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 800;
-      color: white;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      box-shadow: 0 4px 14px rgba(156,63,0,0.18);
-    }
-
-    .join-card h3 { font-size: 1.05rem; }
-
-    .join-card p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      max-width: 100%;
+    .vg-link:hover .vg-go {
+      color: var(--primary);
+      transform: translateX(4px);
     }
 
     /* ---- STATS BAR ---- */
@@ -265,56 +362,6 @@
       color: var(--text-muted);
       font-weight: 500;
       margin-top: 8px;
-    }
-
-    /* ---- PATHWAY CARDS ---- */
-    .pathway-card {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: 36px;
-    }
-
-    .pathway-icon-wrap {
-      width: 64px; height: 64px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      margin-bottom: 28px;
-      position: relative;
-    }
-
-    .pathway-card h3 {
-      margin-bottom: 12px;
-      font-size: 1.5rem;
-    }
-
-    .pathway-card p {
-      color: var(--text-muted);
-      font-size: 1rem;
-      flex-grow: 1;
-      margin-bottom: 28px;
-      line-height: 1.7;
-    }
-
-    .pathway-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-display);
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .pathway-link i {
-      transition: transform 0.3s ease;
-      font-size: 12px;
-    }
-
-    .pathway-link:hover i {
-      transform: translateX(4px);
     }
 
     /* ---- COMMUNITY PREVIEW ---- */
@@ -420,6 +467,22 @@
       position: relative;
     }
 
+    .cta-banner .cta-already {
+      margin: 28px auto 0;
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+      position: relative;
+    }
+
+    .cta-already a {
+      color: white;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .cta-already a:hover { color: rgba(255,255,255,0.85); }
+
     .btn-white {
       background: white;
       color: var(--primary);
@@ -463,9 +526,10 @@
             <h1 class="hero-title">Rendre visible<br><span class="accent">l'invisible.</span></h1>
             <p class="hero-subtitle">Le réseau e-Sol fédère chercheurs, praticiens et citoyens engagés pour la connaissance, la préservation et la régénération des sols en France.</p>
             <div class="flex gap-4 flex-wrap">
-              <a href="communautes.html" class="btn btn-primary btn-lg">Découvrir les Communautés</a>
-              <a href="village-esol.html" class="btn btn-outline btn-lg">Comment ça marche&nbsp;?</a>
+              <a href="inscription.html" class="btn btn-primary btn-lg">Créer mon compte</a>
+              <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-outline btn-lg"><i class="fas fa-comments"></i> Aller sur le forum</a>
             </div>
+            <p class="hero-newhere">Nouveau ici&nbsp;? <a href="premiers-pas.html">Faites vos premiers pas <i class="fas fa-arrow-right"></i></a></p>
           </div>
           <div class="col-span-5 animate-in delay-2">
             <div class="hero-visual">
@@ -485,8 +549,182 @@
       </div>
     </section>
 
+    <!-- ===== GARE D'AIGUILLAGE ===== -->
+    <section class="section" id="besoins">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-terra mb-4">Orientation</span>
+          <h2>Quels sont vos besoins&nbsp;?</h2>
+          <p>Neuf entrées selon ce que vous venez faire - certaines mènent dans e-Sol, d'autres chez nos partenaires.</p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- 1. Découvrir (mise en avant) -->
+          <div class="col-span-4 animate-in">
+            <div class="glass-card need-card need-card-star no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--primary-10); color: var(--primary);">
+                  <i class="fas fa-shoe-prints"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--primary);">Premiers pas</h3>
+              </div>
+              <p class="need-question">Je découvre e-Sol, par où commencer&nbsp;?</p>
+              <div class="need-links">
+                <a href="premiers-pas.html" class="need-link" style="color: var(--primary);">Faire mes premiers pas <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Échanger -->
+          <div class="col-span-4 animate-in delay-1">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--cat-politique);">Forum</h3>
+              </div>
+              <p class="need-question">Je veux échanger avec le réseau</p>
+              <div class="need-links">
+                <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-politique);">Aller sur le forum <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">forum.e-sol.fr</span></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Travailler à plusieurs -->
+          <div class="col-span-4 animate-in delay-2">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--secondary-10); color: var(--secondary);">
+                  <i class="fas fa-users-viewfinder"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--secondary);">Communautés</h3>
+              </div>
+              <p class="need-question">Je veux travailler avec d'autres sur mon sujet</p>
+              <div class="need-links">
+                <a href="communautes.html" class="need-link" style="color: var(--secondary);">Voir les 12 communautés <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Trouver une personne -->
+          <div class="col-span-4 animate-in delay-1">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--cat-institutionnel-bg); color: var(--cat-institutionnel);">
+                  <i class="fas fa-address-book"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--cat-institutionnel);">Annuaire</h3>
+              </div>
+              <p class="need-question">Je cherche une personne&nbsp;: expertise, contact</p>
+              <div class="need-links">
+                <a href="annuaire.html" class="need-link" style="color: var(--cat-institutionnel);">Consulter l'annuaire <i class="fas fa-arrow-right"></i></a>
+                <a href="https://www.gissol.fr/outils/repedo-338" target="_blank" rel="noopener" class="need-link need-link-sec">L'annuaire RéPéDo <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Outils et méthodes -->
+          <div class="col-span-4 animate-in delay-2">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--primary-10); color: var(--primary);">
+                  <i class="fas fa-screwdriver-wrench"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--primary);">Communs</h3>
+              </div>
+              <p class="need-question">Je cherche des outils et méthodes prêts à l'emploi</p>
+              <div class="need-links">
+                <a href="communs.html" class="need-link" style="color: var(--primary);">Explorer les communs <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Données et cartes -->
+          <div class="col-span-4 animate-in delay-3">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
+                  <i class="fas fa-map-location-dot"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--cat-politique);">Données et cartes</h3>
+              </div>
+              <p class="need-question">Je cherche des données et des cartes de sols</p>
+              <div class="need-links">
+                <a href="https://webapps.gissol.fr/georefersols/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-politique);">Ouvrir Géorefersols <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+                <a href="https://www.gissol.fr/donnees" target="_blank" rel="noopener" class="need-link need-link-sec">Les données du GIS Sol <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Se former -->
+          <div class="col-span-4 animate-in delay-2">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--cat-education-bg); color: var(--cat-education);">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--cat-education);">Formations</h3>
+              </div>
+              <p class="need-question">Je veux me former</p>
+              <div class="need-links">
+                <a href="https://www.afes.fr/formations/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-education);">La carte des formations <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Enseigner, sensibiliser -->
+          <div class="col-span-4 animate-in delay-3">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--cat-culture-bg); color: var(--cat-culture);">
+                  <i class="fas fa-chalkboard-user"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--cat-culture);">Pédagogie</h3>
+              </div>
+              <p class="need-question">J'enseigne, je sensibilise</p>
+              <div class="need-links">
+                <a href="https://www.afes.fr/nos-missions/reconnaitre-et-federer/promosolseduc/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-culture);">Les ressources PromoSolsEduc <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+                <a href="communaute-detail.html?c=fresque-sol" class="need-link need-link-sec">La Fresque du Sol <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9. Documentation scientifique -->
+          <div class="col-span-4 animate-in delay-4">
+            <div class="glass-card need-card no-hover">
+              <div class="need-head">
+                <div class="need-icon" style="background: var(--secondary-10); color: var(--secondary);">
+                  <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="need-keyword" style="color: var(--secondary);">Documentation</h3>
+              </div>
+              <p class="need-question">Je cherche de la documentation scientifique</p>
+              <div class="need-links">
+                <a href="https://www.afes.fr/nos-missions/valoriser/centre-de-ressources/" target="_blank" rel="noopener" class="need-link" style="color: var(--secondary);">Le centre de ressources AFES <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bandeau de repli -->
+        <div class="glass-card no-hover mt-6" style="display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 24px 32px;">
+          <div class="flex items-center gap-4">
+            <div class="need-icon" style="background: var(--primary-10); color: var(--primary);">
+              <i class="fas fa-compass"></i>
+            </div>
+            <p style="margin: 0; font-weight: 500; max-width: 100%;">Vous ne trouvez pas ce que vous cherchez&nbsp;?</p>
+          </div>
+          <div class="flex gap-3 flex-wrap">
+            <a href="contact.html" class="btn btn-outline btn-sm"><i class="fas fa-envelope"></i> Écrire à l'équipe</a>
+            <a href="retour.html" class="btn btn-ghost btn-sm"><i class="fas fa-message"></i> Donner votre avis</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== E-SOL EN UN COUP D'ŒIL ===== -->
-    <section class="section-sm">
+    <section class="section-sm" id="coup-doeil">
       <div class="container">
         <div class="section-header">
           <span class="badge badge-olive mb-4">Comprendre</span>
@@ -497,42 +735,46 @@
         <p class="village-quote">e-Sol, c'est un <span class="accent">village</span>&nbsp;: chaque communauté y a sa maison, et toutes sont bâties sur le même sol.</p>
 
         <div class="bento-grid">
-          <div class="col-span-3 animate-in">
-            <div class="glass-card vg-card no-hover">
+          <a href="qu-est-ce-qu-une-communaute.html" class="vg-link col-span-3 animate-in">
+            <div class="glass-card vg-card">
               <div class="vg-icon" style="background: var(--cat-formation-bg); color: var(--cat-formation);">
                 <i class="fas fa-house-chimney"></i>
               </div>
               <h3>Une maison par communauté</h3>
               <p>On entre dans celles qui nous concernent, et on peut en habiter plusieurs à la fois.</p>
+              <span class="vg-go"><i class="fas fa-arrow-right"></i></span>
             </div>
-          </div>
-          <div class="col-span-3 animate-in delay-1">
-            <div class="glass-card vg-card no-hover">
+          </a>
+          <a href="tutoriels-forum.html" class="vg-link col-span-3 animate-in delay-1">
+            <div class="glass-card vg-card">
               <div class="vg-icon" style="background: var(--primary-10); color: var(--primary);">
                 <i class="fas fa-comments"></i>
               </div>
               <h3>La place et son agora</h3>
               <p>On discute, on pose une question, on annonce un chantier, on répond&nbsp;: c'est le forum.</p>
+              <span class="vg-go"><i class="fas fa-arrow-right"></i></span>
             </div>
-          </div>
-          <div class="col-span-3 animate-in delay-2">
-            <div class="glass-card vg-card no-hover">
+          </a>
+          <a href="communs.html" class="vg-link col-span-3 animate-in delay-2">
+            <div class="glass-card vg-card">
               <div class="vg-icon" style="background: var(--cat-recherche-bg); color: var(--cat-recherche);">
                 <i class="fas fa-screwdriver-wrench"></i>
               </div>
               <h3>L'atelier des communs</h3>
               <p>Protocoles, données, kits pédagogiques&nbsp;: ce que les communautés produisent pour tout le monde.</p>
+              <span class="vg-go"><i class="fas fa-arrow-right"></i></span>
             </div>
-          </div>
-          <div class="col-span-3 animate-in delay-3">
-            <div class="glass-card vg-card no-hover">
+          </a>
+          <a href="charte.html" class="vg-link col-span-3 animate-in delay-3">
+            <div class="glass-card vg-card">
               <div class="vg-icon" style="background: rgba(107,92,84,0.15); color: #4a3728;">
                 <i class="fas fa-layer-group"></i>
               </div>
               <h3>Le sol&nbsp;: la charte</h3>
               <p>Ce sur quoi tout est bâti&nbsp;: la charte, les valeurs, les licences ouvertes.</p>
+              <span class="vg-go"><i class="fas fa-arrow-right"></i></span>
             </div>
-          </div>
+          </a>
         </div>
 
         <div class="flex justify-center mt-8">
@@ -542,7 +784,7 @@
     </section>
 
     <!-- ===== STATS ===== -->
-    <section class="stats-bar">
+    <section class="stats-bar" id="chiffres">
       <div class="container">
         <div class="stats-grid">
           <div class="stat-item animate-in">
@@ -565,60 +807,8 @@
       </div>
     </section>
 
-    <!-- ===== PATHWAYS ===== -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <span class="badge badge-olive mb-4">Explorer</span>
-          <h2>Trois chemins dans le village</h2>
-          <p>Rejoindre une maison, contribuer à l'atelier, prendre part à ce qui se fait autour&nbsp;: trois entrées selon ce que vous venez faire.</p>
-        </div>
-
-        <div class="bento-grid">
-          <div class="col-span-4 animate-in">
-            <div class="glass-card pathway-card">
-              <div class="pathway-icon-wrap" style="background: var(--primary-10); color: var(--primary);">
-                <i class="fas fa-users-viewfinder"></i>
-              </div>
-              <h3>Les maisons&nbsp;: les communautés</h3>
-              <p>Rejoignez des groupes thématiques pour échanger, partager et construire des projets sur la Fresque du Sol, le ZAN, les sols forestiers et plus encore.</p>
-              <a href="communautes.html" class="pathway-link" style="color: var(--primary);">
-                Voir les communautés <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-span-4 animate-in delay-1">
-            <div class="glass-card pathway-card" style="border-top: 3px solid var(--secondary);">
-              <div class="pathway-icon-wrap" style="background: var(--secondary-10); color: var(--secondary);">
-                <i class="fas fa-hand-holding-heart"></i>
-              </div>
-              <h3>L'atelier&nbsp;: les communs</h3>
-              <p>Découvrez et participez à la création de ressources partagées : outils, données cartographiques, kits pédagogiques et protocoles de terrain.</p>
-              <a href="communs.html" class="pathway-link" style="color: var(--secondary);">
-                Découvrir les communs <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-span-4 animate-in delay-2">
-            <div class="glass-card pathway-card">
-              <div class="pathway-icon-wrap" style="background: var(--cat-politique-bg); color: var(--cat-politique);">
-                <i class="fas fa-rocket"></i>
-              </div>
-              <h3>Les chemins&nbsp;: passer à l'action</h3>
-              <p>Inscrivez-vous, rejoignez le forum, proposez des annonces ou devenez contributeur actif de la plateforme collaborative.</p>
-              <a href="participer.html" class="pathway-link" style="color: var(--cat-politique);">
-                Comment participer <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ===== FEATURED COMMUNITIES ===== -->
-    <section class="section section-alt">
+    <section class="section section-alt" id="communautes">
       <div class="container">
         <div class="section-header">
           <span class="badge badge-terra mb-4">Communautés</span>
@@ -637,119 +827,8 @@
       </div>
     </section>
 
-    <!-- ===== REJOINDRE EN QUATRE GESTES ===== -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <span class="badge badge-terra mb-4">Rejoindre</span>
-          <h2>Rejoindre une communauté, en quatre gestes</h2>
-          <p>Aucun niveau d'expertise n'est demandé, seulement l'envie de participer.</p>
-        </div>
-
-        <div class="bento-grid">
-          <div class="col-span-3 animate-in">
-            <div class="glass-card join-card no-hover">
-              <div class="join-num">1</div>
-              <h3>Je crée mon compte e-Sol</h3>
-              <p>L'inscription est gratuite, ouverte à toute personne intéressée par les sols, et crée votre fiche dans l'annuaire.</p>
-            </div>
-          </div>
-          <div class="col-span-3 animate-in delay-1">
-            <div class="glass-card join-card no-hover">
-              <div class="join-num" style="background: linear-gradient(135deg, #b04510, var(--primary));">2</div>
-              <h3>Je choisis ma communauté</h3>
-              <p>Je parcours la liste des 12 communautés, je lis les présentations. Une ou deux maisons où être vraiment présent·e valent mieux que dix effleurées.</p>
-            </div>
-          </div>
-          <div class="col-span-3 animate-in delay-2">
-            <div class="glass-card join-card no-hover">
-              <div class="join-num" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);">3</div>
-              <h3>Je demande à entrer</h3>
-              <p>Selon la communauté, l'entrée est immédiate ou passe par un mot à l'animateur·rice, qui accueille et valide. Dans les deux cas, je coche la communauté sur ma fiche annuaire.</p>
-            </div>
-          </div>
-          <div class="col-span-3 animate-in delay-3">
-            <div class="glass-card join-card no-hover">
-              <div class="join-num" style="background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 14px rgba(88,99,48,0.18);">4</div>
-              <h3>Je me présente et je participe</h3>
-              <p>Un mot de bonjour dans la catégorie de forum de la communauté, un œil aux documents partagés, et me voilà membre.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex justify-center mt-8">
-          <a href="qu-est-ce-qu-une-communaute.html#rejoindre" class="btn btn-outline">Le pas à pas détaillé <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== QUICK LINKS (mirrors current homepage) ===== -->
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <span class="badge badge-olive mb-4">Accès Rapide</span>
-          <h2>Trouver ce que vous cherchez</h2>
-          <p>Les raccourcis essentiels vers les ressources les plus demandées.</p>
-        </div>
-
-        <div class="bento-grid">
-          <div class="col-span-6 animate-in">
-            <div class="glass-card no-hover flex gap-6 items-center" style="padding: 24px 28px;">
-              <div class="pathway-icon-wrap" style="background: var(--primary-10); color: var(--primary); flex-shrink: 0; margin-bottom: 0; width: 52px; height: 52px; font-size: 20px;">
-                <i class="fas fa-address-book"></i>
-              </div>
-              <div>
-                <h4 class="mb-1">Annuaire des Membres</h4>
-                <p class="text-muted text-sm mb-2" style="max-width: 100%;">238 experts, chercheurs et praticiens à travers la France.</p>
-                <a href="annuaire.html" class="pathway-link text-sm" style="color: var(--primary);">Consulter <i class="fas fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-span-6 animate-in delay-1">
-            <div class="glass-card no-hover flex gap-6 items-center" style="padding: 24px 28px;">
-              <div class="pathway-icon-wrap" style="background: var(--secondary-10); color: var(--secondary); flex-shrink: 0; margin-bottom: 0; width: 52px; height: 52px; font-size: 20px;">
-                <i class="fas fa-book-open"></i>
-              </div>
-              <div>
-                <h4 class="mb-1">Bibliographie Scientifique</h4>
-                <p class="text-muted text-sm mb-2" style="max-width: 100%;">Centre de ressources de l'AFES pour la recherche sur les sols.</p>
-                <a href="https://www.afes.fr/nos-missions/valoriser/centre-de-ressources/" target="_blank" class="pathway-link text-sm" style="color: var(--secondary);">Accéder <i class="fas fa-arrow-up-right-from-square"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-span-6 animate-in delay-2">
-            <div class="glass-card no-hover flex gap-6 items-center" style="padding: 24px 28px;">
-              <div class="pathway-icon-wrap" style="background: var(--cat-politique-bg); color: var(--cat-politique); flex-shrink: 0; margin-bottom: 0; width: 52px; height: 52px; font-size: 20px;">
-                <i class="fas fa-map-location-dot"></i>
-              </div>
-              <div>
-                <h4 class="mb-1">Données Cartographiques</h4>
-                <p class="text-muted text-sm mb-2" style="max-width: 100%;">Répertoire Refersols et données centralisées par le GIS Sol.</p>
-                <a href="https://webapps.gissol.fr/georefersols/" target="_blank" class="pathway-link text-sm" style="color: var(--cat-politique);">Explorer <i class="fas fa-arrow-up-right-from-square"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-span-6 animate-in delay-3">
-            <div class="glass-card no-hover flex gap-6 items-center" style="padding: 24px 28px;">
-              <div class="pathway-icon-wrap" style="background: var(--cat-education-bg); color: var(--cat-education); flex-shrink: 0; margin-bottom: 0; width: 52px; height: 52px; font-size: 20px;">
-                <i class="fas fa-graduation-cap"></i>
-              </div>
-              <div>
-                <h4 class="mb-1">Formations en Sciences du Sol</h4>
-                <p class="text-muted text-sm mb-2" style="max-width: 100%;">Carte interactive AFES et communauté PromoSolsTerrain.</p>
-                <a href="https://www.afes.fr/formations/" target="_blank" class="pathway-link text-sm" style="color: var(--cat-education);">Découvrir <i class="fas fa-arrow-up-right-from-square"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ===== CTA ===== -->
-    <section class="section-sm">
+    <section class="section-sm" id="inscription-cta">
       <div class="container">
         <div class="cta-banner">
           <h2>Rejoignez le réseau e-Sol</h2>
@@ -760,6 +839,7 @@
               <i class="fas fa-comments"></i> Accéder au Forum
             </a>
           </div>
+          <p class="cta-already">Déjà inscrit·e&nbsp;? <a href="premiers-pas.html">Continuez avec les premiers pas</a></p>
         </div>
       </div>
     </section>

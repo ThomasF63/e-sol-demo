@@ -285,7 +285,7 @@ async function capturerElement(page, { url, css, selecteur, viewport }) {
     ok++;
   } catch (e) { console.log('ECHEC premiers-pas-jalons.png : ' + e.message.split('\n')[0]); }
 
-  // 3. L'escalier des cinq niveaux : le SVG seul, sorti de son cadre décoratif,
+  // 3. Le sentier des cinq niveaux : le SVG seul, sorti de son cadre décoratif,
   // 600 px rendus au facteur 2, soit 1200 px de large.
   try {
     const buffer = await capturerElement(page, {

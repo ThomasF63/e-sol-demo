@@ -74,6 +74,13 @@
       font-weight: 700;
     }
 
+    a.contributor-chip { text-decoration: none; transition: all 0.2s ease; }
+    a.contributor-chip:hover {
+      border-color: var(--primary-20);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
     /* Usage guide */
     .usage-step {
       display: flex;
@@ -128,6 +135,12 @@
     .license-badge i { font-size: 20px; color: var(--secondary); }
     .license-badge .label { font-size: 12px; color: var(--text-subtle); }
     .license-badge .value { font-size: 14px; font-weight: 600; }
+    .license-badge .note {
+      font-size: 11.5px;
+      color: var(--text-subtle);
+      line-height: 1.45;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -185,6 +198,7 @@
             <div class="commun-section">
               <h3><i class="fas fa-users" style="color: var(--primary);"></i> Contributeurs</h3>
               <div class="flex gap-2 flex-wrap" id="contributors-list"></div>
+              <p class="text-subtle text-xs mt-3" style="max-width: 100%;">Liste fictive de démonstration&nbsp;: les personnes présentées sont inventées.</p>
             </div>
 
           </div>
@@ -197,11 +211,11 @@
             <div class="glass-card no-hover" style="padding: 24px;">
               <h4 style="font-size: 0.95rem; margin-bottom: 16px;"><i class="fas fa-circle-info text-sm" style="color: var(--primary);"></i> Fiche technique</h4>
               <div class="sidebar-info">
-                <div class="info-row"><span class="label">Format</span><span class="value" id="info-format">—</span></div>
-                <div class="info-row"><span class="label">Contributeurs</span><span class="value" id="info-contributors">—</span></div>
-                <div class="info-row"><span class="label">Statut</span><span class="value" id="info-status">—</span></div>
-                <div class="info-row"><span class="label">Mis à jour</span><span class="value" id="info-updated">—</span></div>
-                <div class="info-row"><span class="label">Communauté</span><span class="value" id="info-community">—</span></div>
+                <div class="info-row"><span class="label">Format</span><span class="value" id="info-format">-</span></div>
+                <div class="info-row"><span class="label">Contributeurs</span><span class="value" id="info-contributors">-</span></div>
+                <div class="info-row"><span class="label">Statut</span><span class="value" id="info-status">-</span></div>
+                <div class="info-row"><span class="label">Mis à jour</span><span class="value" id="info-updated">-</span></div>
+                <div class="info-row"><span class="label">Communauté</span><span class="value" id="info-community">-</span></div>
               </div>
             </div>
 
@@ -210,6 +224,7 @@
               <div>
                 <div class="label">Licence</div>
                 <div class="value">Creative Commons BY-SA 4.0</div>
+                <div class="note">Choisie par la communauté&nbsp;; le réseau recommande la CC BY-SA.</div>
               </div>
             </div>
 
@@ -243,7 +258,7 @@
         const c = communs.find(x => x.id === communId) || communs[0];
 
         // Title & description
-        document.title = c.title + ' — e-Sol';
+        document.title = c.title + ' - e-Sol';
         document.getElementById('commun-title').textContent = c.title;
         document.getElementById('commun-desc').textContent = c.description;
 
@@ -267,37 +282,60 @@
         document.getElementById('info-contributors').textContent = c.contributors;
         document.getElementById('info-updated').textContent = c.updatedAt;
 
-        const statusEl = document.getElementById('info-status');
-        const statusClass = c.status === 'Actif' ? 'color: var(--secondary)' : c.status === 'En révision' ? 'color: var(--primary)' : 'color: var(--text-subtle)';
-        statusEl.innerHTML = `<span style="${statusClass}; font-weight: 700;">${c.status}</span>`;
+        // Statut : libellés alignés sur le cycle de vie d'un commun
+        // (proposition → brouillon → en révision → actif → archivé)
+        const CYCLE = {
+          'proposition': { label: 'Proposition', style: 'color: var(--text-subtle)' },
+          'brouillon':   { label: 'Brouillon',   style: 'color: var(--text-subtle)' },
+          'en révision': { label: 'En révision', style: 'color: var(--primary)' },
+          'actif':       { label: 'Actif',       style: 'color: var(--secondary)' },
+          'archivé':     { label: 'Archivé',     style: 'color: var(--text-subtle)' }
+        };
+        const etat = CYCLE[(c.status || '').toLowerCase()] || { label: c.status || '-', style: 'color: var(--text-subtle)' };
+        document.getElementById('info-status').innerHTML = `<span style="${etat.style}; font-weight: 700;">${etat.label}</span>`;
 
-        // Community link
+        // Communauté porteuse : nom réel via communities.json
+        // (repli : id brut si la jointure échoue ; mention dédiée si commun du réseau)
         const communityEl = document.getElementById('info-community');
         if (c.communityId) {
           communityEl.innerHTML = `<a href="communaute-detail.html?c=${c.communityId}" style="color: var(--primary); font-weight: 600;">${c.communityId}</a>`;
+          fetch('data/communities.json')
+            .then(r => r.json())
+            .then(communities => {
+              const com = communities.find(x => x.id === c.communityId);
+              if (com) {
+                communityEl.innerHTML = `<a href="communaute-detail.html?c=${com.id}" style="color: var(--primary); font-weight: 600;">${com.shortName || com.name}</a>`;
+              }
+            })
+            .catch(() => {});
         } else {
-          communityEl.textContent = 'Transversal';
+          communityEl.innerHTML = '<span style="font-weight: 500; color: var(--text-muted); text-align: right;">Commun du réseau, sans communauté attitrée</span>';
         }
 
-        // Contributors (generated from count)
-        const names = ['A. Martin', 'C. Dubois', 'M. Leroy', 'P. Bernard', 'S. Thomas', 'J. Robert', 'L. Moreau', 'N. Laurent', 'V. Petit', 'F. Garcia'];
+        // Contributeurs : membres fictifs de l'annuaire de démonstration
+        // (membres de la communauté porteuse ; membres du réseau pour un commun sans communauté)
         const contributorsList = document.getElementById('contributors-list');
-        const shown = Math.min(c.contributors, 8);
-        for (let i = 0; i < shown; i++) {
-          const name = names[i % names.length];
-          const initials = name.split('. ')[0] + name.split('. ')[1][0];
-          contributorsList.innerHTML += `
-            <span class="contributor-chip">
-              <span class="avatar">${name[0]}${name.split(' ')[1][0]}</span>
-              ${name}
-            </span>`;
-        }
-        if (c.contributors > shown) {
-          contributorsList.innerHTML += `
-            <span class="contributor-chip" style="background: var(--primary-10); color: var(--primary); border-color: transparent;">
-              +${c.contributors - shown} autres
-            </span>`;
-        }
+        fetch('data/members-sample.json')
+          .then(r => r.json())
+          .then(members => {
+            let pool = c.communityId
+              ? members.filter(m => Array.isArray(m.communities) && m.communities.includes(c.communityId))
+              : members;
+            if (pool.length === 0) pool = members;
+            const shown = pool.slice(0, Math.min(c.contributors, 8));
+            const reste = Math.max(0, c.contributors - shown.length);
+            contributorsList.innerHTML = shown.map(m => `
+              <a class="contributor-chip" href="membre.html?m=${m.id}">
+                <span class="avatar">${(m.firstName || '?')[0]}${(m.lastName || '?')[0]}</span>
+                ${m.firstName} ${m.lastName}
+              </a>`).join('') + (reste > 0 ? `
+              <span class="contributor-chip" style="background: var(--primary-10); color: var(--primary); border-color: transparent;">
+                et ${reste} autres
+              </span>` : '');
+          })
+          .catch(() => {
+            contributorsList.innerHTML = `<span class="text-muted" style="font-size: 13px;">${c.contributors} contributeur·rices au sein du réseau.</span>`;
+          });
 
         // About icon color
         document.querySelector('#about-icon i').style.color = c.categoryColor;

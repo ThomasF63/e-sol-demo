@@ -54,7 +54,7 @@
   {
     "id": "forum-a-rejoindre",
     "titre": "Rejoindre le forum et se connecter",
-    "description": "Créer son compte forum (distinct du compte plateforme), confirmer son adresse e-mail et savoir se reconnecter.",
+    "description": "Se connecter au forum avec son compte e-Sol (connexion unifiée) et savoir se reconnecter ensuite.",
     "type": "tutoriel",
     "public": "nouveau",
     "outil": "forum",
@@ -63,7 +63,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-a",
-    "serie": "Série forum · fiche A",
+    "serie": "Série forum - fiche A",
     "icone": "fa-right-to-bracket",
     "motscles": "forum compte inscription connexion discourse mot de passe",
     "ordre": 4
@@ -80,7 +80,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-b",
-    "serie": "Série forum · fiche B",
+    "serie": "Série forum - fiche B",
     "icone": "fa-sitemap",
     "motscles": "forum categorie sujet reponse etiquette organisation navigation",
     "ordre": 5
@@ -97,7 +97,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-c",
-    "serie": "Série forum · fiche C",
+    "serie": "Série forum - fiche C",
     "icone": "fa-bell",
     "motscles": "forum suivre cloche notification categorie surveille",
     "ordre": 6
@@ -114,7 +114,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-d",
-    "serie": "Série forum · fiche D",
+    "serie": "Série forum - fiche D",
     "icone": "fa-pen-to-square",
     "motscles": "forum poster sujet titre publier question ecrire",
     "ordre": 7
@@ -131,7 +131,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-e",
-    "serie": "Série forum · fiche E",
+    "serie": "Série forum - fiche E",
     "icone": "fa-reply",
     "motscles": "forum repondre citer citation mention arobase",
     "ordre": 8
@@ -148,7 +148,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-f",
-    "serie": "Série forum · fiche F",
+    "serie": "Série forum - fiche F",
     "icone": "fa-envelope",
     "motscles": "forum message prive direct mp conversation",
     "ordre": 9
@@ -165,7 +165,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-g",
-    "serie": "Série forum · fiche G",
+    "serie": "Série forum - fiche G",
     "icone": "fa-sliders",
     "motscles": "forum notification email resume preferences reglages",
     "ordre": 10
@@ -219,7 +219,7 @@
     "statut": "a-venir",
     "lien": null,
     "en_attendant": { "lien": "glossaire.html#term-cycle", "libelle": "En attendant : la définition au glossaire" },
-    "serie": "Plan guides · phase 4",
+    "serie": "Plan guides - phase 4",
     "icone": "fa-recycle",
     "motscles": "commun cycle vie statut brouillon revision actif workflow",
     "ordre": 13
@@ -236,7 +236,7 @@
     "format": "texte",
     "statut": "disponible",
     "lien": "tutoriels-forum.html#fiche-h",
-    "serie": "Série forum · fiche H",
+    "serie": "Série forum - fiche H",
     "icone": "fa-user-gear",
     "motscles": "forum animer moderer epingler accueillir relancer animateur animatrice",
     "ordre": 14
@@ -272,7 +272,7 @@
     "statut": "a-venir",
     "lien": null,
     "en_attendant": { "lien": "qu-est-ce-qu-une-communaute.html#proposer", "libelle": "En attendant : comment proposer une communauté" },
-    "serie": "Plan guides · phase 3",
+    "serie": "Plan guides - phase 3",
     "icone": "fa-door-open",
     "motscles": "communaute creer ouvrir proposer copil cadrage",
     "ordre": 16

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  {{> head }}
+  <title>Suivi des propositions - Vue équipe d'animation - e-Sol</title>
+  <style>
+    /* ---- Bandeau « aperçu » ---- */
+    .apercu-bandeau {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 20px;
+      background: var(--primary-10);
+      border: 1px solid var(--primary-20);
+      border-radius: var(--radius-md);
+      margin-bottom: 32px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+    .apercu-bandeau i { color: var(--primary); font-size: 16px; margin-top: 3px; }
+    .apercu-bandeau p { max-width: 100%; }
+
+    /* ---- Badges de statut d'action (patron espace-actions) ---- */
+    .statut-badge { font-size: 10px; }
+    .statut-proposee { background: var(--primary-10); color: var(--primary); border: 1px solid var(--primary-20); }
+    .statut-en-cours { background: var(--secondary-10); color: var(--secondary); border: 1px solid rgba(88,99,48,0.25); }
+
+    .commu-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 11.5px;
+    }
+
+    /* ---- Bloc action ---- */
+    .suivi-action { padding: 28px; margin-bottom: 24px; }
+    .suivi-action h3 { font-size: 1.15rem; line-height: 1.35; margin: 12px 0 6px; }
+    .suivi-referent { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; max-width: 100%; }
+
+    .prop-count {
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* ---- Ligne proposition ---- */
+    .prop-list { list-style: none; display: flex; flex-direction: column; }
+    .prop-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 18px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .anim-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-10), var(--secondary-10));
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .prop-main { flex: 1; min-width: 220px; }
+    .prop-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+    .prop-head a { color: var(--text-main); font-weight: 600; font-size: 14.5px; }
+    .prop-head a:hover { color: var(--primary); }
+    .prop-role { font-size: 12px; color: var(--text-muted); }
+    .prop-date { font-size: 12px; color: var(--text-subtle); }
+
+    .prop-message {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 6px 0 6px;
+      max-width: 100%;
+    }
+    .prop-dispo { font-size: 12.5px; color: var(--text-subtle); max-width: 100%; }
+    .prop-dispo i { font-size: 11px; margin-right: 4px; }
+
+    /* ---- Statut de traitement ---- */
+    .prop-statut { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+
+    .statut-select {
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 12.5px;
+      cursor: pointer;
+      outline: none;
+      transition: box-shadow 0.2s ease;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      color: var(--text-main);
+    }
+    .statut-select:focus { box-shadow: 0 0 0 4px var(--primary-10); }
+    .statut-select.val-a-contacter { border-color: var(--primary-20); color: var(--primary); background: var(--primary-10); }
+    .statut-select.val-en-echange { border-color: rgba(78,78,136,0.3); color: var(--cat-politique); background: var(--cat-politique-bg); }
+    .statut-select.val-retenue { border-color: rgba(88,99,48,0.3); color: var(--secondary); background: var(--secondary-10); }
+    .statut-select.val-declinee { border-color: rgba(0,0,0,0.12); color: var(--text-muted); background: rgba(0,0,0,0.04); }
+
+    .statut-confirm {
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--secondary);
+      background: var(--secondary-10);
+      border: 1px solid rgba(88, 99, 48, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      max-width: 240px;
+      text-align: right;
+    }
+
+    /* ---- Colonne latérale ---- */
+    .aside-card { padding: 24px; margin-bottom: 20px; }
+    .aside-card h3 { font-size: 1.02rem; margin-bottom: 12px; }
+    .aside-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .aside-card ul li { display: flex; gap: 10px; align-items: flex-start; }
+    .aside-card ul li i { color: var(--primary); font-size: 12px; margin-top: 4px; flex-shrink: 0; }
+
+    .legende-item { display: flex; gap: 10px; align-items: baseline; font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+    .legende-item + .legende-item { margin-top: 8px; }
+    .legende-puce {
+      flex-shrink: 0;
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+      .prop-row { flex-wrap: wrap; }
+      .prop-statut { align-items: flex-start; width: 100%; }
+      .statut-confirm { text-align: left; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  {{> header }}
+
+  <div class="page-hero">
+    <div class="container">
+      <span class="badge badge-terra mb-4">Vue équipe d'animation</span>
+      <h1>Suivi des propositions</h1>
+      <p>Les personnes qui se sont proposées sur vos fiches actions, action par action&nbsp;: qui, quand, pour quoi faire, et où en est chaque proposition.</p>
+    </div>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+
+      <div class="apercu-bandeau" role="note">
+        <i class="fas fa-eye"></i>
+        <p><strong>Aperçu de ce que verra l'équipe d'animation.</strong> Sur la vraie plateforme, cette vue est réservée aux référent·es et aux équipes d'animation des actions. Vous la voyez ici librement parce que c'est une maquette&nbsp;: les propositions sont fictives et les changements de statut ne sont pas enregistrés.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-8">
+          <p class="text-sm text-muted mb-4" id="suivi-resume" style="max-width: 100%;">Chargement des propositions…</p>
+          <div id="suivi-liste"></div>
+        </div>
+
+        <div class="col-span-4">
+          <div class="glass-card no-hover aside-card">
+            <h3><i class="fas fa-bell" style="color: var(--primary); font-size: 14px;"></i> Comment vous êtes informé·e</h3>
+            <ul>
+              <li><i class="fas fa-envelope"></i> À chaque nouvelle proposition, vous recevez une notification par mail.</li>
+              <li><i class="fas fa-table-list"></i> La liste ci-contre est votre tableau de suivi&nbsp;: tout y reste rassemblé, rien ne se perd dans les boîtes mail.</li>
+              <li><i class="fas fa-people-arrows"></i> Changer le statut d'une proposition garde l'équipe coordonnée&nbsp;: chacun·e voit qui a déjà été recontacté·e.</li>
+            </ul>
+          </div>
+
+          <div class="glass-card no-hover aside-card">
+            <h3>Les quatre statuts</h3>
+            <div class="legende-item"><span class="legende-puce" style="background: var(--primary-10); color: var(--primary);">À contacter</span> La proposition vient d'arriver, personne n'a encore répondu.</div>
+            <div class="legende-item"><span class="legende-puce" style="background: var(--cat-politique-bg); color: var(--cat-politique);">En échange</span> Quelqu'un de l'équipe a répondu, la discussion est en cours.</div>
+            <div class="legende-item"><span class="legende-puce" style="background: var(--secondary-10); color: var(--secondary);">Retenue</span> C'est parti&nbsp;: la personne participe à l'action.</div>
+            <div class="legende-item"><span class="legende-puce" style="background: rgba(0,0,0,0.05); color: var(--text-muted);">Déclinée</span> Pas de suite cette fois&nbsp;; la personne en est informée.</div>
+          </div>
+
+          <div class="glass-card no-hover aside-card">
+            <h3>Côté participant·e</h3>
+            <p class="text-sm text-muted" style="max-width: 100%; line-height: 1.6;">Ces propositions arrivent depuis le bouton «&nbsp;Me proposer&nbsp;» des fiches actions.</p>
+            <a href="espace-actions.html" class="btn btn-outline btn-sm mt-3"><i class="fas fa-arrow-left"></i> Retour à l'Espace Actions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    const STATUT_ACTION_LABELS = { 'proposee': 'Proposée', 'en-cours': 'En cours', 'terminee': 'Terminée' };
+    const STATUTS_TRAITEMENT = [
+      { id: 'a-contacter', label: 'À contacter' },
+      { id: 'en-echange', label: 'En échange' },
+      { id: 'retenue', label: 'Retenue' },
+      { id: 'declinee', label: 'Déclinée' }
+    ];
+
+    function formatDate(iso) {
+      const d = new Date(iso + 'T12:00:00');
+      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    Promise.all([
+      fetch('data/actions.json').then(r => r.json()),
+      fetch('data/communities.json').then(r => r.json()),
+      fetch('data/members-sample.json').then(r => r.json()),
+      fetch('data/participations.json').then(r => r.json())
+    ]).then(([actions, communities, members, participations]) => {
+      const comById = {};
+      communities.forEach(c => { comById[c.id] = c; });
+      const memById = {};
+      members.forEach(m => { memById[m.id] = m; });
+      const actById = {};
+      actions.forEach(a => { actById[a.id] = a; });
+
+      // Propositions groupées par action, les plus récentes d'abord
+      const parAction = {};
+      participations.forEach(p => {
+        (parAction[p.action] = parAction[p.action] || []).push(p);
+      });
+      Object.values(parAction).forEach(list => list.sort((a, b) => b.date.localeCompare(a.date)));
+
+      const actionsAvecProps = Object.keys(parAction)
+        .filter(id => actById[id])
+        .sort((a, b) => parAction[b][0].date.localeCompare(parAction[a][0].date));
+
+      document.getElementById('suivi-resume').textContent =
+        participations.length + ' propositions reçues sur ' + actionsAvecProps.length + ' actions. Les plus récentes d\'abord.';
+
+      const html = actionsAvecProps.map(actionId => {
+        const a = actById[actionId];
+        const com = comById[a.communaute] || {};
+        const ref = memById[a.referent];
+        const props = parAction[actionId];
+
+        const lignes = props.map(p => {
+          const m = memById[p.membre];
+          if (!m) return '';
+          const initiales = (m.firstName || '?')[0] + (m.lastName || '?')[0];
+          const options = STATUTS_TRAITEMENT.map(s =>
+            `<option value="${s.id}" ${s.id === p.statut ? 'selected' : ''}>${s.label}</option>`).join('');
+          return `
+            <li class="prop-row">
+              <div class="anim-avatar">${initiales}</div>
+              <div class="prop-main">
+                <div class="prop-head">
+                  <a href="membre.html?m=${m.id}">${m.firstName} ${m.lastName}</a>
+                  <span class="prop-role">${m.role || ''}</span>
+                  <span class="prop-date">le ${formatDate(p.date)}</span>
+                </div>
+                <p class="prop-message">«&nbsp;${p.message}&nbsp;»</p>
+                <p class="prop-dispo"><i class="fas fa-clock"></i> ${p.disponibilite}</p>
+              </div>
+              <div class="prop-statut">
+                <label class="sr-only" for="statut-${p.id}">Statut de la proposition de ${m.firstName} ${m.lastName}</label>
+                <select class="statut-select val-${p.statut}" id="statut-${p.id}">${options}</select>
+                <p class="statut-confirm" role="status" hidden></p>
+              </div>
+            </li>`;
+        }).join('');
+
+        return `
+          <div class="glass-card no-hover suivi-action" id="${a.id}">
+            <div class="flex gap-2 flex-wrap items-center">
+              <span class="badge statut-badge statut-${a.statut}">${STATUT_ACTION_LABELS[a.statut] || a.statut}</span>
+              <a href="communaute-detail.html?c=${a.communaute}" class="commu-chip" style="background: ${com.categoryBg || 'var(--bg-warm)'}; color: ${com.categoryColor || 'var(--text-muted)'};">
+                <i class="fas ${com.icon || 'fa-users'}"></i> ${com.shortName || a.communaute}
+              </a>
+              <span class="prop-count">${props.length} proposition${props.length > 1 ? 's' : ''}</span>
+            </div>
+            <h3>${a.titre}</h3>
+            <p class="suivi-referent"><i class="fas fa-user" style="font-size: 11px;"></i> Référent·e&nbsp;: ${ref ? `<a href="membre.html?m=${ref.id}">${ref.firstName} ${ref.lastName}</a>` : 'à venir'}</p>
+            <ul class="prop-list">${lignes}</ul>
+          </div>`;
+      }).join('');
+
+      document.getElementById('suivi-liste').innerHTML = html;
+
+      // Changement de statut : local, avec confirmation inline (démo)
+      document.querySelectorAll('.statut-select').forEach(select => {
+        select.addEventListener('change', () => {
+          STATUTS_TRAITEMENT.forEach(s => select.classList.remove('val-' + s.id));
+          select.classList.add('val-' + select.value);
+          const confirm = select.parentElement.querySelector('.statut-confirm');
+          confirm.textContent = 'Statut mis à jour (démo, changement local). Sur la vraie plateforme, il est enregistré sur la fiche et toute l\'équipe le voit.';
+          confirm.hidden = false;
+        });
+      });
+
+      // Arrivée depuis un lien ancré (fiche vedette, confirmation de la modale)
+      if (location.hash) {
+        const cible = document.getElementById(location.hash.slice(1));
+        if (cible) cible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }).catch(() => {
+      document.getElementById('suivi-resume').textContent = '';
+      document.getElementById('suivi-liste').innerHTML =
+        '<div class="text-center text-muted py-8">Les propositions n\'ont pas pu être chargées. Réessayez depuis le site servi (les données sont dans data/participations.json).</div>';
+    });
+  </script>
+
+</body>
+</html>

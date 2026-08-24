@@ -139,7 +139,7 @@
       <div class="profile-info" id="profile-info">
         <div class="profile-avatar" id="profile-avatar">SR</div>
         <h1 class="profile-name" id="profile-name">Solène Reverdy</h1>
-        <p class="profile-role" id="profile-role">Pédologue consultante — Cabinet Pédoconseil</p>
+        <p class="profile-role" id="profile-role">Pédologue consultante - Cabinet Pédoconseil</p>
         <div class="profile-tags" id="profile-tags"></div>
       </div>
     </div>
@@ -177,10 +177,10 @@
           <div class="flex flex-col gap-4">
             <div class="glass-card no-hover" style="padding: 24px;">
               <h4 style="font-size: 0.95rem; margin-bottom: 16px;"><i class="fas fa-id-card text-sm" style="color: var(--primary);"></i> Informations</h4>
-              <div class="info-row"><span class="label">Organisation</span><span class="value" id="info-org">—</span></div>
-              <div class="info-row"><span class="label">Région</span><span class="value" id="info-region">—</span></div>
-              <div class="info-row"><span class="label">Membre depuis</span><span class="value" id="info-since">—</span></div>
-              <div class="info-row"><span class="label">Communautés</span><span class="value" id="info-comm-count">—</span></div>
+              <div class="info-row"><span class="label">Organisation</span><span class="value" id="info-org">-</span></div>
+              <div class="info-row"><span class="label">Région</span><span class="value" id="info-region">-</span></div>
+              <div class="info-row"><span class="label">Membre depuis</span><span class="value" id="info-since">-</span></div>
+              <div class="info-row"><span class="label">Communautés</span><span class="value" id="info-comm-count">-</span></div>
             </div>
 
             <div class="glass-card no-hover" style="padding: 24px;">
@@ -223,10 +223,10 @@
       communities.forEach(c => { commById[c.id] = c; });
       const commName = (id) => (commById[id] ? commById[id].name : id);
 
-      document.title = m.firstName + ' ' + m.lastName + ' — e-Sol';
+      document.title = m.firstName + ' ' + m.lastName + ' - e-Sol';
       document.getElementById('profile-avatar').textContent = m.firstName[0] + m.lastName[0];
       document.getElementById('profile-name').textContent = m.firstName + ' ' + m.lastName;
-      document.getElementById('profile-role').textContent = m.role + ' — ' + m.organization;
+      document.getElementById('profile-role').textContent = m.role + ' - ' + m.organization;
 
       // Badges communautés
       document.getElementById('profile-tags').innerHTML = m.communities.map((id, i) =>
@@ -236,7 +236,7 @@
       // Bio : personnalisée si fournie, sinon générée à partir du profil
       const commList = m.communities.map(commName).join(', ');
       document.getElementById('profile-bio').textContent = m.bio ||
-        `${m.role} — ${m.organization}. Membre du réseau e-Sol en ${m.region} (${m.city}). ` +
+        `${m.role} - ${m.organization}. Membre du réseau e-Sol en ${m.region} (${m.city}). ` +
         `Participe ${m.communities.length > 1 ? 'aux communautés' : 'à la communauté'} : ${commList}.`;
 
       // Cartes communautés

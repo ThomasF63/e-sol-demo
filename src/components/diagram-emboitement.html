@@ -1,0 +1,38 @@
+<!-- FICHIER GÉNÉRÉ par scripts/generate-diagrams.js depuis diagram-roles-droits.md - ne pas éditer à la main -->
+<div class="mermaid">
+%%{init: {"flowchart": {"rankSpacing": 26, "nodeSpacing": 30, "padding": 8}}}%%
+flowchart TB
+    subgraph NIV5["5 - ADMINISTRATEUR·RICE DE LA PLATEFORME"]
+      direction TB
+      D5["+ comptes, groupes et droits d'accès&lt;br/&gt;+ formulaires et statuts reconnus&lt;br/&gt;+ peut tout éditer ou supprimer (dernier recours)"]
+      subgraph NIV4["4 - ANIMATEUR·RICE DE COMMUNAUTÉ"]
+        direction TB
+        D4["+ accueillir les nouveaux membres&lt;br/&gt;+ éditer les pages&lt;br/&gt;+ gérer le cercle restreint*&lt;br/&gt;+ modérer son périmètre"]
+        subgraph NIV3["3 - MEMBRE D'UNE COMMUNAUTÉ"]
+          direction TB
+          D3["+ participer aux espaces de ses communautés :&lt;br/&gt;documents, discussions, sous-pages&lt;br/&gt;+ accéder au cercle restreint si activé*"]
+          subgraph NIV2["2 - MEMBRE INSCRIT·E"]
+            direction TB
+            D2["+ tenir sa fiche annuaire, commenter&lt;br/&gt;+ créer fiches action, petites annonces&lt;br/&gt;+ rejoindre des communautés"]
+            subgraph NIV1["1 - VISITEUR·EUSE NON INSCRIT·E"]
+              D1["consulter les pages publiques et l'annuaire&lt;br/&gt;lire le forum - s'inscrire"]
+            end
+          end
+        end
+      end
+    end
+
+    D5 ~~~ NIV4
+    D4 ~~~ NIV3
+    D3 ~~~ NIV2
+    D2 ~~~ NIV1
+
+    classDef droits fill:#fdfbf9,stroke:#b09570,color:#1a1512,stroke-width:1px
+    class D1,D2,D3,D4,D5 droits
+
+    style NIV1 fill:#fdfbf9,stroke:#8c7166,stroke-width:1.5px,color:#1a1512
+    style NIV2 fill:#eeeef8,stroke:#4e4e88,stroke-width:1.5px,color:#3d3d5c
+    style NIV3 fill:#ffdbcc,stroke:#9c3f00,stroke-width:1.5px,color:#7a3000
+    style NIV4 fill:#dbe9a9,stroke:#586330,stroke-width:1.5px,color:#3d4d1f
+    style NIV5 fill:#9c3f00,stroke:#7a3000,stroke-width:2px,color:#fdfbf9
+</div>

@@ -1,0 +1,298 @@
+<!-- ============================================================
+     Sommaire flottant réutilisable
+     ============================================================
+     À inclure en FIN de body (directive d'inclusion sommaire-flottant ;
+     ne pas écrire le motif littéral ici : build.js le re-substituerait
+     récursivement). S'active sur tout nav.toc-flottant présent dans la
+     page.
+
+     Deux modes :
+     - liste fournie : le nav contient déjà un <ul> de liens d'ancres
+       rédigé par la page (pastilles-lettres .toc-lettre, items
+       numérotés...) ; le script se contente de câbler la mise en
+       évidence de la section visible ;
+     - auto : nav.toc-flottant[data-toc-source="section[id]"] avec un
+       <ul> vide ; le script construit un item par élément trouvé, en
+       reprenant le texte de son h2 (ou h3).
+
+     Épinglage : le nav doit être ENFANT DIRECT de la .bento-grid, avec
+     sa classe col-span-3. La grille a align-items: start : l'item garde
+     sa hauteur naturelle et coulisse dans sa rangée, dont la hauteur est
+     donnée par la colonne de contenu. Un div intermédiaire ne ferait que
+     la hauteur du sommaire : aucune amplitude de défilement (c'était la
+     panne d'origine des sommaires épinglés).
+
+     Mobile (moins de 900 px) : la liste est repliée derrière un bouton
+     « Sommaire » en bas à droite, qui ouvre le même nav en panneau.
+     Sans JavaScript, la liste reste affichée en statique dans la page.
+     ============================================================ -->
+<style>
+  nav.toc-flottant {
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+    max-height: calc(100vh - var(--header-height) - 48px);
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  nav.toc-flottant h4 {
+    font-family: var(--font-display);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-subtle);
+    margin-bottom: 12px;
+  }
+
+  nav.toc-flottant ul { list-style: none; margin: 0; padding: 0; }
+
+  nav.toc-flottant li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-xs);
+    font-size: 13px;
+    color: var(--text-muted);
+    transition: background 0.2s ease, color 0.2s ease;
+    line-height: 1.35;
+  }
+
+  nav.toc-flottant li a:hover { background: var(--primary-10); color: var(--primary); }
+
+  nav.toc-flottant li a.active {
+    background: var(--primary-10);
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Pastille-lettre (ou chiffre) optionnelle en tête d'item */
+  nav.toc-flottant .toc-lettre {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary-10);
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  /* Pied de sommaire optionnel (lien retour, etc.) */
+  nav.toc-flottant .toc-pied {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Les sauts d'ancre atterrissent sous l'en-tête fixe */
+  [id] { scroll-margin-top: calc(var(--header-height) + 24px); }
+
+  /* ---- Mobile : bouton « Sommaire » et panneau ---- */
+  .toc-chip {
+    display: none;
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    z-index: 1100;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 14px rgba(156, 63, 0, 0.25);
+    cursor: pointer;
+  }
+
+  .toc-fermer { display: none; }
+
+  /* Panneau ouvert : mobile, et variante « chip seul » à toutes largeurs.
+     Les classes html.toc-flottant-js ne s'appliquent que si le script a
+     tourné : sans JavaScript, la liste reste visible en statique. */
+  html.toc-flottant-js nav.toc-flottant.toc-ouvert {
+    display: block;
+    position: fixed;
+    top: auto;
+    right: 18px;
+    bottom: 78px;
+    left: auto;
+    width: min(320px, calc(100vw - 36px));
+    max-height: 70vh;
+    overflow-y: auto;
+    z-index: 1101;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 20px;
+  }
+
+  html.toc-flottant-js nav.toc-flottant.toc-ouvert .toc-fermer {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-10);
+    color: var(--primary);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* Variante « chip seul » (pages sans colonne latérale) : le sommaire ne
+     vit que derrière le bouton flottant, quelle que soit la largeur. */
+  html.toc-flottant-js .toc-chip.toc-chip-visible { display: inline-flex; }
+  html.toc-flottant-js nav.toc-flottant.toc-chip-seul:not(.toc-ouvert) { display: none; }
+
+  @media (max-width: 900px) {
+    html.toc-flottant-js .toc-chip { display: inline-flex; }
+    html.toc-flottant-js nav.toc-flottant:not(.toc-ouvert) { display: none; }
+  }
+</style>
+<script>
+(function () {
+  var racine = document.documentElement;
+  var navs = Array.prototype.slice.call(document.querySelectorAll('nav.toc-flottant'));
+  if (!navs.length) return;
+  racine.classList.add('toc-flottant-js');
+
+  // Décalage sous l'en-tête fixe, lu depuis le thème (--header-height).
+  var hauteurEntete = 72;
+  function lireOffset() {
+    var n = parseFloat(getComputedStyle(racine).getPropertyValue('--header-height'));
+    if (!isNaN(n)) hauteurEntete = n;
+    return hauteurEntete + 24;
+  }
+
+  /* ---- Mobile : bouton « Sommaire » et panneau (le même nav) ---- */
+  function installerPanneau(nav) {
+    nav.setAttribute('tabindex', '-1');
+
+    var chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'toc-chip';
+    chip.setAttribute('aria-expanded', 'false');
+    chip.setAttribute('aria-controls', nav.id);
+    chip.innerHTML = '<i class="fas fa-list" aria-hidden="true"></i> Sommaire';
+    if (nav.classList.contains('toc-chip-seul')) chip.classList.add('toc-chip-visible');
+    document.body.appendChild(chip);
+
+    var fermer = document.createElement('button');
+    fermer.type = 'button';
+    fermer.className = 'toc-fermer';
+    fermer.setAttribute('aria-label', 'Fermer le sommaire');
+    fermer.innerHTML = '<i class="fas fa-xmark" aria-hidden="true"></i>';
+    nav.insertBefore(fermer, nav.firstChild);
+
+    function ouvrir() {
+      nav.classList.add('toc-ouvert');
+      chip.setAttribute('aria-expanded', 'true');
+      nav.focus({ preventScroll: true });
+    }
+    function clore(refocaliser) {
+      if (!nav.classList.contains('toc-ouvert')) return;
+      nav.classList.remove('toc-ouvert');
+      chip.setAttribute('aria-expanded', 'false');
+      if (refocaliser) chip.focus({ preventScroll: true });
+    }
+
+    chip.addEventListener('click', function () {
+      if (nav.classList.contains('toc-ouvert')) clore(true); else ouvrir();
+    });
+    fermer.addEventListener('click', function () { clore(true); });
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) clore(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') clore(true);
+    });
+  }
+
+  /* ---- Recensement des navs : construction auto puis liens-cibles ---- */
+  var groupes = [];
+  navs.forEach(function (nav, i) {
+    if (!nav.id) nav.id = 'sommaire-flottant-' + (i + 1);
+
+    var liste = nav.querySelector('ul');
+    var source = nav.getAttribute('data-toc-source');
+    if (source && liste && !liste.children.length) {
+      document.querySelectorAll(source).forEach(function (el) {
+        if (!el.id) return;
+        var titre = el.querySelector('h2, h3');
+        var a = document.createElement('a');
+        a.href = '#' + el.id;
+        a.textContent = (titre ? titre.textContent : el.id).trim();
+        var li = document.createElement('li');
+        li.appendChild(a);
+        liste.appendChild(li);
+      });
+    }
+
+    var liens = [];
+    nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var cible = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+      if (cible) liens.push({ a: a, cible: cible });
+    });
+    groupes.push({ nav: nav, liens: liens });
+    installerPanneau(nav);
+  });
+
+  /* ---- Spy unique : la section visible est mise en évidence ---- */
+  function majSpy() {
+    var offset = lireOffset() + 8;
+    var enBas = window.innerHeight + window.scrollY >= racine.scrollHeight - 2;
+    groupes.forEach(function (g) {
+      if (!g.liens.length) return;
+      var actif = g.liens[0];
+      g.liens.forEach(function (l) {
+        // Une cible masquée (section filtrée du glossaire...) est ignorée.
+        if (l.cible.offsetParent === null) return;
+        if (l.cible.getBoundingClientRect().top <= offset) actif = l;
+      });
+      if (enBas) actif = g.liens[g.liens.length - 1];
+      g.liens.forEach(function (l) {
+        l.a.classList.toggle('active', l === actif);
+        if (l === actif) l.a.setAttribute('aria-current', 'true');
+        else l.a.removeAttribute('aria-current');
+      });
+    });
+  }
+  var spyPlanifie = false;
+  function planifierSpy() {
+    if (spyPlanifie) return;
+    spyPlanifie = true;
+    requestAnimationFrame(function () { spyPlanifie = false; majSpy(); });
+  }
+  window.addEventListener('scroll', planifierSpy, { passive: true });
+  window.addEventListener('resize', planifierSpy, { passive: true });
+
+  /* ---- Saut d'ancre : défilement calculé plutôt que saut natif,
+          fiable même quand le navigateur n'applique pas le saut au
+          chargement ---- */
+  function sauterVersAncre() {
+    var cible = location.hash.length > 1 &&
+      document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (!cible) return;
+    var haut = cible.getBoundingClientRect().top + window.scrollY - lireOffset();
+    window.scrollTo({ top: haut, behavior: 'instant' });
+  }
+  window.addEventListener('load', function () { sauterVersAncre(); majSpy(); });
+  window.addEventListener('hashchange', function () { sauterVersAncre(); majSpy(); });
+
+  majSpy();
+})();
+</script>

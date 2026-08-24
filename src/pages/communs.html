@@ -134,6 +134,156 @@
       color: var(--text-subtle);
       font-weight: 500;
     }
+
+    /* ---- D'où viennent les communs ---- */
+    .origine-card {
+      padding: 26px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .origine-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .origine-card h3 { font-size: 1.1rem; }
+
+    .origine-card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.65;
+      max-width: 100%;
+      flex-grow: 1;
+    }
+
+    /* ---- Cycle de vie d'un commun ---- */
+    .cycle-bande {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .cycle-etape {
+      flex: 1;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Progression colorée dans les tokens du thème, alignée sur les badges de statut */
+    .cycle-etape-proposition { --etape: var(--text-muted); }
+    .cycle-etape-brouillon   { --etape: var(--primary-light); }
+    .cycle-etape-revision    { --etape: var(--primary); }
+    .cycle-etape-actif       { --etape: var(--secondary); }
+    .cycle-etape-archive     { --etape: var(--cat-institutionnel); }
+
+    .cycle-etape-icone {
+      position: relative;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--etape);
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 6px 16px rgba(26, 21, 18, 0.14);
+    }
+
+    .cycle-etape-num {
+      position: absolute;
+      top: -5px; right: -8px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--etape);
+      color: var(--etape);
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 11.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cycle-etape h3 {
+      font-size: 1.15rem;
+      color: var(--etape);
+    }
+
+    .cycle-etape p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    /* L'étape « actif » est celle que vise tout commun : mise en valeur */
+    .cycle-etape.cycle-etape-actif {
+      border-top: 3px solid var(--secondary);
+      background: linear-gradient(160deg, rgba(88, 99, 48, 0.09), var(--bg-elevated) 55%);
+    }
+
+    .cycle-fleche {
+      align-self: center;
+      color: var(--primary);
+      opacity: 0.45;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .cycle-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .cycle-note .status-badge { margin: 0 2px; }
+
+    @media (max-width: 900px) {
+      .cycle-bande { flex-direction: column; }
+      .cycle-fleche { transform: rotate(90deg); }
+    }
+
+    /* ---- Proposer un commun ---- */
+    .proposer-pas {
+      padding: 26px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .proposer-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--primary-10);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .proposer-pas h3 { font-size: 1.1rem; }
+
+    .proposer-pas p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.65;
+      max-width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -152,6 +302,94 @@
     {{> illustration-communs }}
   </div>
 
+  <!-- D'où viennent les communs -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Trois chemins</span>
+        <h2>D'où viennent les communs</h2>
+        <p>Un commun ne naît pas sur commande. Trois chemins mènent à cette page, chacun illustré par un commun déjà là.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-4">
+          <div class="glass-card origine-card no-hover">
+            <div class="origine-icon" style="background: var(--primary-10); color: var(--primary);">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <h3>Il existait déjà</h3>
+            <p>Un outil du réseau devient visible sur la plateforme, sans communauté constituée autour. Le glossaire collaboratif des sciences du sol est arrivé ainsi&nbsp;: il vit comme commun du réseau, sans communauté attitrée.</p>
+            <a href="commun-detail.html?c=glossaire-sols" class="btn btn-ghost btn-sm" style="align-self: flex-start;">Voir le glossaire <i class="fas fa-arrow-right text-xs"></i></a>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card origine-card no-hover">
+            <div class="origine-icon" style="background: var(--secondary-10); color: var(--secondary);">
+              <i class="fas fa-people-group"></i>
+            </div>
+            <h3>Une communauté le fait naître en chemin</h3>
+            <p>Un besoin identifié en travaillant ensemble. Le kit open source de la Fresque du Sol est né comme ça&nbsp;: les animateur·rices voulaient un support partagé, leur communauté l'a construit.</p>
+            <a href="commun-detail.html?c=fresque-kit" class="btn btn-ghost btn-sm" style="align-self: flex-start;">Voir le kit <i class="fas fa-arrow-right text-xs"></i></a>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card origine-card no-hover">
+            <div class="origine-icon" style="background: var(--cat-education-bg); color: var(--cat-education);">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h3>Une idée cherche ses contributeur·rices</h3>
+            <p>Une personne propose, le réseau relaie. Le guide de pédologie de terrain suit ce chemin&nbsp;: encore à l'état de brouillon, il avance à mesure que les contributions arrivent.</p>
+            <a href="commun-detail.html?c=guide-terrain-pedologie" class="btn btn-ghost btn-sm" style="align-self: flex-start;">Voir le guide <i class="fas fa-arrow-right text-xs"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Le cycle de vie d'un commun -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-olive mb-4">Cinq états</span>
+        <h2>Le cycle de vie d'un commun</h2>
+        <p>De l'idée à la maintenance, chaque commun suit le même parcours.</p>
+      </div>
+
+      <div class="cycle-bande">
+        <div class="glass-card cycle-etape cycle-etape-proposition no-hover">
+          <div class="cycle-etape-icone"><i class="fas fa-lightbulb"></i><span class="cycle-etape-num">1</span></div>
+          <h3>Proposition</h3>
+          <p>Un·e membre propose une idée au réseau, sur le forum ou auprès de l'équipe d'animation.</p>
+        </div>
+        <i class="fas fa-arrow-right-long cycle-fleche"></i>
+        <div class="glass-card cycle-etape cycle-etape-brouillon no-hover">
+          <div class="cycle-etape-icone"><i class="fas fa-pen-ruler"></i><span class="cycle-etape-num">2</span></div>
+          <h3>Brouillon</h3>
+          <p>Les premier·ères contributeur·rices bâtissent une version de travail, encore incomplète.</p>
+        </div>
+        <i class="fas fa-arrow-right-long cycle-fleche"></i>
+        <div class="glass-card cycle-etape cycle-etape-revision no-hover">
+          <div class="cycle-etape-icone"><i class="fas fa-magnifying-glass"></i><span class="cycle-etape-num">3</span></div>
+          <h3>En révision</h3>
+          <p>La communauté relit, teste et consolide la ressource avant de la publier.</p>
+        </div>
+        <i class="fas fa-arrow-right-long cycle-fleche"></i>
+        <div class="glass-card cycle-etape cycle-etape-actif no-hover">
+          <div class="cycle-etape-icone"><i class="fas fa-circle-check"></i><span class="cycle-etape-num">4</span></div>
+          <h3>Actif</h3>
+          <p>Le commun est publié&nbsp;: tout le réseau l'utilise, ses contributeur·rices le maintiennent.</p>
+        </div>
+        <i class="fas fa-arrow-right-long cycle-fleche"></i>
+        <div class="glass-card cycle-etape cycle-etape-archive no-hover">
+          <div class="cycle-etape-icone"><i class="fas fa-box-archive"></i><span class="cycle-etape-num">5</span></div>
+          <h3>Archivé</h3>
+          <p>Le commun n'est plus maintenu&nbsp;: il reste consultable, rien ne se perd.</p>
+        </div>
+      </div>
+      <p class="cycle-note">Sur les cartes ci-dessous, le badge <span class="status-badge status-brouillon">Brouillon</span> <span class="status-badge status-revision">En révision</span> ou <span class="status-badge status-actif">Actif</span> indique où en est chaque commun dans ce cycle.</p>
+    </div>
+  </section>
+
   <section class="section-sm">
     <div class="container">
       <div class="filter-bar" id="filter-bar"></div>
@@ -160,20 +398,42 @@
     </div>
   </section>
 
-  <!-- Propose CTA -->
+  <!-- Proposer un commun -->
   <section class="section-sm">
     <div class="container">
-      <div class="glass-card no-hover flex items-center justify-between gap-8" style="border: 2px dashed var(--border-strong); padding: 32px 40px; flex-wrap: wrap;">
-        <div class="flex items-center gap-6">
-          <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--secondary-10); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">
-            <i class="fas fa-seedling"></i>
-          </div>
-          <div>
-            <h3 style="font-size: 1.3rem; margin-bottom: 4px;">Proposer un nouveau Commun</h3>
-            <p class="text-muted" style="font-size: 0.95rem; max-width: 500px;">Vous avez un outil, un jeu de données, un guide à partager ? Créez un nouveau Commun pour le réseau.</p>
+      <div class="section-header">
+        <span class="badge badge-terra mb-4">Proposer</span>
+        <h2>Proposer un commun&nbsp;: le réseau cadre, vous menez</h2>
+        <p>Vous avez un outil, un jeu de données, un guide à partager&nbsp;? Trois pas suffisent.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="col-span-4">
+          <div class="glass-card proposer-pas no-hover">
+            <div class="proposer-num">1</div>
+            <h3>Vous en parlez</h3>
+            <p>Un fil sur le forum pour sonder les intéressé·es, ou un message à l'équipe&nbsp;: la ressource, ce qu'elle apporte, ce qui existe déjà.</p>
           </div>
         </div>
-        <a href="participer.html" class="btn btn-secondary">Contribuer <i class="fas fa-arrow-right"></i></a>
+        <div class="col-span-4">
+          <div class="glass-card proposer-pas no-hover">
+            <div class="proposer-num">2</div>
+            <h3>e-Sol donne le cadre</h3>
+            <p>Une fiche descriptive, une visibilité sur cette page, une licence au choix des contributeur·rices (le réseau recommande la CC BY-SA). Le réseau facilite, il n'organise pas le travail à votre place.</p>
+          </div>
+        </div>
+        <div class="col-span-4">
+          <div class="glass-card proposer-pas no-hover">
+            <div class="proposer-num">3</div>
+            <h3>Vous restez à la manœuvre</h3>
+            <p>Les contributeur·rices s'organisent librement&nbsp;; le commun avance de brouillon à actif à son rythme.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 justify-center flex-wrap mt-8">
+        <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-primary"><i class="fas fa-comments"></i> En parler sur le forum</a>
+        <a href="contact.html" class="btn btn-outline"><i class="fas fa-envelope"></i> Écrire à l'équipe</a>
       </div>
     </div>
   </section>
