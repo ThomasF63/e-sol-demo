@@ -6,10 +6,10 @@
 
   <style>
     /* ---- Hero illustration frame ---- */
+    /* Pleine largeur du conteneur de contenu (même largeur que les étapes en dessous). */
     .pp-illustration {
-      max-width: 760px;
       margin: 0 auto;
-      padding: 16px 24px;
+      padding: 8px 0 16px;
     }
     .pp-illustration svg {
       width: 100%;
@@ -43,9 +43,9 @@
     }
 
     .pp-step-1 .pp-step-num { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
-    .pp-step-2 .pp-step-num { background: linear-gradient(135deg, #b04510, var(--primary)); }
-    .pp-step-3 .pp-step-num { background: linear-gradient(135deg, var(--primary-light), #d56a26); }
-    .pp-step-4 .pp-step-num { background: linear-gradient(135deg, #6b5c54, #8c7166); box-shadow: 0 4px 16px rgba(107,92,84,0.2); }
+    .pp-step-2 .pp-step-num { background: linear-gradient(135deg, #6b5c54, #8c7166); box-shadow: 0 4px 16px rgba(107,92,84,0.2); }
+    .pp-step-3 .pp-step-num { background: linear-gradient(135deg, #b04510, var(--primary)); }
+    .pp-step-4 .pp-step-num { background: linear-gradient(135deg, var(--primary-light), #d56a26); }
     .pp-step-5 .pp-step-num { background: linear-gradient(135deg, var(--secondary), #6e7a3d); box-shadow: 0 4px 16px rgba(88,99,48,0.2); }
 
     .pp-step-body { flex-grow: 1; }
@@ -127,6 +127,46 @@
     }
 
     .pp-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ---- Figures : captures annotées du site réel (patron .tf-figure) ---- */
+    .pp-note-captures {
+      font-size: 0.82rem;
+      color: var(--text-subtle);
+      margin: 14px 0 -4px;
+    }
+
+    .pp-figure {
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--bg-warm);
+      margin: 16px 0 20px;
+      padding: 10px;
+    }
+
+    .pp-figure img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-xs);
+    }
+
+    .pp-figure figcaption {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      line-height: 1.5;
+      padding: 10px 6px 2px;
+    }
+
+    .pp-figure figcaption strong { color: var(--text-muted); }
+
+    /* Le formulaire d'inscription est capturé en pleine page (très haut) :
+       il défile dans un cadre borné plutôt que d'étirer la page. */
+    .pp-figure-defilante .pp-figure-cadre {
+      max-height: 560px;
+      overflow-y: auto;
+      border-radius: var(--radius-xs);
+    }
 
     /* ---- New member FAQ ---- */
     .pp-faq-item {
@@ -241,11 +281,11 @@
         <div class="col-span-8">
           <div class="pp-steps-wrapper flex flex-col gap-4">
 
-            <!-- Step 1 -->
-            <div class="glass-card pp-step pp-step-1 no-hover animate-in">
+            <!-- Step 1 : profil -->
+            <div class="glass-card pp-step pp-step-1 no-hover animate-in" id="etape-1">
               <div class="pp-step-num">1</div>
               <div class="pp-step-body">
-                <span class="pp-step-tag">5 min · le profil</span>
+                <span class="pp-step-tag">5 min - le profil</span>
                 <h3>Je complète ma fiche personnelle</h3>
                 <p>L'inscription crée votre clef. Compléter le profil vous rend visible dans l'annuaire et permet aux autres membres de comprendre ce que vous apportez au village.</p>
                 <ul class="pp-checklist">
@@ -254,72 +294,39 @@
                   <li><i class="fas fa-check-circle"></i> Spécialités &amp; mots-clés (pédologie, télédétection, agroécologie, médiation…)</li>
                   <li><i class="fas fa-check-circle"></i> Ce que vous cherchez et ce que vous pouvez apporter</li>
                 </ul>
+                <p class="pp-note-captures">Les captures montrent le site e-sol.fr actuel.</p>
+                <figure class="pp-figure pp-figure-defilante">
+                  <div class="pp-figure-cadre">
+                    <img src="img/tutos/plateforme/esol-inscription.png" width="1280" height="4047" loading="lazy" alt="Formulaire d'inscription d'e-sol.fr, capture complète à faire défiler : les repères 1 à 4 suivent la liste ci-dessus (1 la photo de profil, 2 la structure, 3 les spécialités, 4 ce que vous partagez et cherchez) ; tout en bas, la case charte est encadrée.">
+                  </div>
+                  <figcaption>Le formulaire d'inscription, qui crée votre fiche : les repères <strong>1 à 4</strong> suivent la liste ci-dessus (faites défiler la capture). Tout en bas, encadrée, la case charte : elle vous attend à l'étape 2.</figcaption>
+                </figure>
                 <div class="pp-buttons">
                   <a href="inscription.html" class="btn btn-primary btn-sm"><i class="fas fa-user-pen"></i> Compléter mon profil</a>
                   <a href="annuaire.html" class="btn btn-outline btn-sm">Voir l'annuaire</a>
                 </div>
                 <div class="pp-step-tip">
-                  <strong>Astuce</strong> — pas besoin d'écrire un CV. Trois lignes claires sur ce qui vous anime suffisent largement à amorcer les premières rencontres.
+                  <strong>Astuce</strong> - pas besoin d'écrire un CV. Trois lignes claires sur ce qui vous anime suffisent largement à amorcer les premières rencontres.
                 </div>
               </div>
             </div>
 
-            <!-- Step 2 -->
-            <div class="glass-card pp-step pp-step-2 no-hover animate-in delay-1">
+            <!-- Step 2 : charte -->
+            <div class="glass-card pp-step pp-step-2 no-hover animate-in delay-1" id="etape-2">
               <div class="pp-step-num">2</div>
               <div class="pp-step-body">
-                <span class="pp-step-tag">10 min · les maisons</span>
-                <h3>Je choisis 1 ou 2 communautés</h3>
-                <p>Chaque communauté a sa maison dans le village. Ne cherchez pas à être partout : choisir une ou deux maisons où vous serez régulièrement actif·ve vaut mieux qu'en effleurer dix.</p>
-                <ul class="pp-checklist">
-                  <li><i class="fas fa-check-circle"></i> Je lis la présentation de la communauté qui m'intéresse</li>
-                  <li><i class="fas fa-check-circle"></i> Je repère le ou la référent·e et les habitué·e·s</li>
-                  <li><i class="fas fa-check-circle"></i> Je rejoins (bouton « rejoindre » ou demande à l'animateur·rice)</li>
-                </ul>
-                <div class="pp-buttons">
-                  <a href="communautes.html" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #b04510, var(--primary));"><i class="fas fa-house-chimney"></i> Parcourir les maisons</a>
-                  <a href="village-esol.html" class="btn btn-outline btn-sm">Revoir le village</a>
-                </div>
-                <div class="pp-step-tip">
-                  <strong>Astuce</strong> — vous ne savez pas par où commencer&nbsp;? La <a href="communaute-detail.html?c=fresque-sol">Fresque du Sol</a> est une excellente porte d'entrée transverse, surtout si vous découvrez le réseau.
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="glass-card pp-step pp-step-3 no-hover animate-in delay-2">
-              <div class="pp-step-num">3</div>
-              <div class="pp-step-body">
-                <span class="pp-step-tag">5 min · le forum</span>
-                <h3>Je dis bonjour sur le forum</h3>
-                <p>Le forum, c'est l'agora du village, la place où tout le monde passe. Y poster un mot de présentation, c'est ouvrir la première conversation et rendre tangible votre arrivée dans le village.</p>
-                <ul class="pp-checklist">
-                  <li><i class="fas fa-check-circle"></i> Je crée mon compte forum (compte distinct de la plateforme, 2 minutes : voir la <a href="tutoriels-forum.html#fiche-a">fiche A</a>)</li>
-                  <li><i class="fas fa-check-circle"></i> J'ouvre un message « Bonjour, je suis… »</li>
-                  <li><i class="fas fa-check-circle"></i> Je lis quelques fils récents pour sentir la dynamique en cours</li>
-                </ul>
-                <div class="pp-buttons">
-                  <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);"><i class="fas fa-comments"></i> Aller au forum</a>
-                  <a href="tutoriels-forum.html" class="btn btn-outline btn-sm">Le forum, pas à pas</a>
-                </div>
-                <div class="pp-step-tip">
-                  <strong>Astuce</strong> — 3 ou 4 lignes suffisent. Évoquez votre activité, ce qui vous a amené ici, et une question ou une envie. Ça donne tout de suite des points d'accroche aux autres.
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="glass-card pp-step pp-step-4 no-hover animate-in delay-3">
-              <div class="pp-step-num">4</div>
-              <div class="pp-step-body">
-                <span class="pp-step-tag">10 min · les fondations</span>
-                <h3>Je lis la charte</h3>
-                <p>La charte, c'est le sol sur lequel tout le village est bâti. La lire une fois calmement vous évite de devoir y revenir dans la précipitation plus tard, et clarifie d'emblée la place de l'AFES, du COPIL et la nature des communs.</p>
+                <span class="pp-step-tag">10 min - les fondations</span>
+                <h3>Je lis la charte que j'ai signée</h3>
+                <p>En vous inscrivant, vous avez coché « J'ai lu et j'accepte la charte e-Sol ». Prenez maintenant dix minutes pour la lire posément : les principes, les licences ouvertes, la gouvernance. C'est le sol sur lequel tout le village est bâti.</p>
                 <ul class="pp-checklist">
                   <li><i class="fas fa-check-circle"></i> Les 4 principes (transparence, biens communs, évolutivité, robustesse)</li>
                   <li><i class="fas fa-check-circle"></i> Les statuts de membre et la gouvernance par COPIL</li>
-                  <li><i class="fas fa-check-circle"></i> Les licences (CC BY-SA) qui s'appliquent à vos contributions</li>
+                  <li><i class="fas fa-check-circle"></i> La licence ouverte (CC BY-SA) que le réseau recommande pour les communs</li>
                 </ul>
+                <figure class="pp-figure">
+                  <img src="img/tutos/plateforme/esol-charte.png" width="2560" height="3400" loading="lazy" alt="Page Charte d'e-sol.fr : le bandeau Charte du réseau e-Sol est encadré, le repère 1 marque le préambule et ses quatre principes, le repère 2 les sections sur l'adhésion et la gouvernance.">
+                  <figcaption>La page Charte du site : le préambule et ses principes (<strong>1</strong>), puis les sections adhésion et gouvernance (<strong>2</strong>). La licence des communs arrive plus bas, en section 4.2.</figcaption>
+                </figure>
                 <div class="pp-buttons">
                   <a href="charte.html" class="btn btn-outline btn-sm"><i class="fas fa-scroll"></i> Lire la charte (démo)</a>
                   <a href="https://e-sol.fr/?Charte" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Charte officielle <i class="fas fa-arrow-up-right-from-square text-xs"></i></a>
@@ -330,24 +337,80 @@
               </div>
             </div>
 
-            <!-- Step 5 -->
-            <div class="glass-card pp-step pp-step-5 no-hover animate-in delay-4">
+            <!-- Step 3 : communautés -->
+            <div class="glass-card pp-step pp-step-3 no-hover animate-in delay-2" id="etape-3">
+              <div class="pp-step-num">3</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">10 min - les maisons</span>
+                <h3>Je choisis 1 ou 2 communautés</h3>
+                <p>Chaque communauté a sa maison dans le village. Ne cherchez pas à être partout : choisir une ou deux maisons où vous serez régulièrement actif·ve vaut mieux qu'en effleurer dix.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> Je lis la présentation de la communauté qui m'intéresse</li>
+                  <li><i class="fas fa-check-circle"></i> Je repère l'équipe d'animation et les habitué·e·s</li>
+                  <li><i class="fas fa-check-circle"></i> Je me rattache librement (et je choisis mon niveau : ça m'intéresse, ou je veux participer)</li>
+                </ul>
+                <figure class="pp-figure">
+                  <img src="img/tutos/plateforme/esol-communautes.png" width="2560" height="3200" loading="lazy" alt="Page Liste des communautés d'e-sol.fr : le premier volet, Animateurs Fresque du Sol, est déplié et porte le repère 1 ; en bas, la section Rejoindre une communauté porte le repère 3.">
+                  <figcaption>La liste des communautés du site : une présentation dépliée (<strong>1</strong>), et en bas la marche à suivre pour se rattacher (<strong>3</strong>). L'équipe d'animation (repère 2 de la liste) se repère dans la page de chaque communauté.</figcaption>
+                </figure>
+                <div class="pp-buttons">
+                  <a href="communautes.html" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #b04510, var(--primary));"><i class="fas fa-house-chimney"></i> Parcourir les maisons</a>
+                  <a href="village-esol.html" class="btn btn-outline btn-sm">Revoir le village</a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Astuce</strong> - vous ne savez pas par où commencer&nbsp;? La <a href="communaute-detail.html?c=fresque-sol">Fresque du Sol</a> est une excellente porte d'entrée transverse, surtout si vous découvrez le réseau.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 : forum -->
+            <div class="glass-card pp-step pp-step-4 no-hover animate-in delay-3" id="etape-4">
+              <div class="pp-step-num">4</div>
+              <div class="pp-step-body">
+                <span class="pp-step-tag">5 min - le forum</span>
+                <h3>Je dis bonjour sur le forum</h3>
+                <p>Le forum, c'est l'agora du village, la place où tout le monde passe. Y poster un mot de présentation, c'est ouvrir la première conversation et rendre tangible votre arrivée dans le village.</p>
+                <ul class="pp-checklist">
+                  <li><i class="fas fa-check-circle"></i> <span>Je me connecte au forum avec mon compte e-Sol (connexion unifiée, 1 minute : voir la <a href="tutoriels-forum.html#fiche-a">fiche A</a>)</span></li>
+                  <li><i class="fas fa-check-circle"></i> J'ouvre un message « Bonjour, je suis… »</li>
+                  <li><i class="fas fa-check-circle"></i> Je lis quelques fils récents pour sentir la dynamique en cours</li>
+                </ul>
+                <figure class="pp-figure">
+                  <img src="img/tutos/forum/forum-a-accueil.png" width="2560" height="1600" loading="lazy" alt="Page d'accueil du forum e-Sol : le bouton Se connecter, encadré en haut à droite, porte le repère 2 de la fiche A.">
+                  <figcaption>L'accueil du forum : le bouton <strong>Se connecter</strong>, en haut à droite (repère 2 de la fiche A).</figcaption>
+                </figure>
+                <div class="pp-buttons">
+                  <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, var(--primary-light), #d56a26);"><i class="fas fa-comments"></i> Aller au forum</a>
+                  <a href="tutoriels-forum.html" class="btn btn-outline btn-sm">Le forum, pas à pas</a>
+                </div>
+                <div class="pp-step-tip">
+                  <strong>Astuce</strong> - 3 ou 4 lignes suffisent. Évoquez votre activité, ce qui vous a amené ici, et une question ou une envie. Ça donne tout de suite des points d'accroche aux autres.
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 : commun -->
+            <div class="glass-card pp-step pp-step-5 no-hover animate-in delay-4" id="etape-5">
               <div class="pp-step-num">5</div>
               <div class="pp-step-body">
-                <span class="pp-step-tag">10 min · les outils partagés</span>
+                <span class="pp-step-tag">10 min - les outils partagés</span>
                 <h3>Je repère un commun à suivre</h3>
-                <p>Les communs sont la finalité du réseau. Repérer dès maintenant un outil partagé qui vous intéresse — pour le suivre, le tester, ou y contribuer plus tard — pose la première graine de votre engagement.</p>
+                <p>Les communs sont la finalité du réseau. Repérer dès maintenant un outil partagé qui vous intéresse (pour le suivre, le tester, ou y contribuer plus tard) pose la première graine de votre engagement.</p>
                 <ul class="pp-checklist">
                   <li><i class="fas fa-check-circle"></i> Je parcours la liste des communs existants ou en projet</li>
                   <li><i class="fas fa-check-circle"></i> J'en choisis un qui résonne avec mes intérêts</li>
                   <li><i class="fas fa-check-circle"></i> Je note son statut (brouillon / révision / actif) et son·sa porteur·euse</li>
                 </ul>
+                <figure class="pp-figure">
+                  <img src="img/tutos/plateforme/esol-espace-actions.png" width="2560" height="1800" loading="lazy" alt="Page Espace Actions d'e-sol.fr : le bouton Voir la liste des actions porte le repère 1, et le bouton Remplir une fiche action est encadré.">
+                  <figcaption>L'Espace Actions du site : parcourir les actions en cours (<strong>1</strong>) ; le bouton encadré sert à déposer sa propre fiche action, le moment venu.</figcaption>
+                </figure>
                 <div class="pp-buttons">
                   <a href="communs.html" class="btn btn-secondary btn-sm"><i class="fas fa-hand-holding-heart"></i> Voir les communs</a>
                   <a href="https://e-sol.fr/?Idees-de-communs" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Idées en cours <i class="fas fa-arrow-up-right-from-square text-xs"></i></a>
                 </div>
                 <div class="pp-step-tip">
-                  <strong>Et après&nbsp;?</strong> Un guide complet sur le cycle de vie d'un commun (proposer, brouillon, révision, actif) arrive prochainement — phase 4 du plan de production.
+                  <strong>Et après&nbsp;?</strong> Un guide complet sur le cycle de vie d'un commun (proposer, brouillon, révision, actif) arrive prochainement, en phase 4 du plan de production.
                 </div>
               </div>
             </div>
@@ -381,11 +444,11 @@
               <h4><i class="fas fa-clock" style="color: var(--cat-politique);"></i> Combien de temps&nbsp;?</h4>
               <p style="margin-bottom: 8px;">Les 5 étapes prennent environ <strong>40 minutes au total</strong>, sans précipitation. À étaler sur quelques jours si besoin.</p>
               <ul class="pp-checklist" style="font-size: 0.85rem;">
-                <li><i class="fas fa-circle-dot" style="color: var(--primary);"></i> Profil — 5 min</li>
-                <li><i class="fas fa-circle-dot" style="color: #b04510;"></i> Communautés — 10 min</li>
-                <li><i class="fas fa-circle-dot" style="color: var(--primary-light);"></i> Forum — 5 min</li>
-                <li><i class="fas fa-circle-dot" style="color: #6b5c54;"></i> Charte — 10 min</li>
-                <li><i class="fas fa-circle-dot" style="color: var(--secondary);"></i> Commun — 10 min</li>
+                <li><i class="fas fa-circle-dot" style="color: var(--primary);"></i> Profil - 5 min</li>
+                <li><i class="fas fa-circle-dot" style="color: #6b5c54;"></i> Charte - 10 min</li>
+                <li><i class="fas fa-circle-dot" style="color: #b04510;"></i> Communautés - 10 min</li>
+                <li><i class="fas fa-circle-dot" style="color: var(--primary-light);"></i> Forum - 5 min</li>
+                <li><i class="fas fa-circle-dot" style="color: var(--secondary);"></i> Commun - 10 min</li>
               </ul>
             </div>
 
@@ -448,7 +511,7 @@
             <i class="fas fa-chevron-down"></i>
           </button>
           <div class="pp-faq-answer">
-            <p>Vous restez auteur·rice de votre contribution. Conformément à la charte, les contenus partagés sur e-Sol sont publiés sous licence <strong>Creative Commons BY-SA</strong>&nbsp;: ils peuvent être réutilisés et adaptés, à condition de citer l'origine et de partager dans les mêmes conditions.</p>
+            <p>Vous restez auteur·rice de votre contribution. Pour les communs, l'équipe d'animation du réseau recommande la licence <strong>Creative Commons BY-SA</strong>&nbsp;: elle permet la réutilisation la plus large possible, dans l'esprit des communs, tout en garantissant que l'origine est citée. Ce n'est pas une règle stricte&nbsp;: chaque communauté choisit la licence de ses communs.</p>
           </div>
         </div>
 

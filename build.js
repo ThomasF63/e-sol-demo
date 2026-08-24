@@ -16,6 +16,14 @@ function build() {
     console.warn('  ⚠ village generation failed:', e.message);
   }
 
+  // Les diagrammes Mermaid de la page rôles et droits sont générés depuis leur
+  // source .md : une seule source de vérité pour l'affichage et les exports.
+  try {
+    require('./scripts/generate-diagrams.js');
+  } catch (e) {
+    console.warn('  ⚠ diagram generation failed:', e.message);
+  }
+
   // Load components
   const components = {};
   if (fs.existsSync(srcComponents)) {

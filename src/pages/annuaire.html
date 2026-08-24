@@ -12,7 +12,7 @@
 
   <style>
     /* ============================================
-       Annuaire — Map + Grid + List Views
+       Annuaire - Map + Grid + List Views
        ============================================ */
 
     /* View toggle */
@@ -169,6 +169,53 @@
       border-color: var(--primary);
       color: var(--primary);
     }
+
+    /* Bandeau contexte : arrivée filtrée depuis une fiche communauté */
+    .context-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      background: var(--primary-10);
+      border: 1px solid var(--primary-20);
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .context-banner[hidden] { display: none; }
+
+    .context-banner strong { color: var(--primary); }
+
+    .context-banner button {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: var(--font-display);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .context-banner button:hover { opacity: 0.75; }
+
+    /* Message de repli si la librairie carte ne charge pas */
+    .map-fallback-msg {
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .map-fallback-msg[hidden] { display: none; }
 
     /* Results counter */
     .results-bar {
@@ -665,15 +712,15 @@
 
       <div class="annuaire-stats mt-6">
         <div class="annuaire-stat">
-          <div class="num" id="stat-members">—</div>
+          <div class="num" id="stat-members">-</div>
           <div class="label">Membres inscrits</div>
         </div>
         <div class="annuaire-stat">
-          <div class="num" id="stat-regions">—</div>
+          <div class="num" id="stat-regions">-</div>
           <div class="label">Régions</div>
         </div>
         <div class="annuaire-stat">
-          <div class="num" id="stat-orgs">—</div>
+          <div class="num" id="stat-orgs">-</div>
           <div class="label">Organisations</div>
         </div>
       </div>
@@ -682,6 +729,12 @@
 
   <section class="section-sm">
     <div class="container">
+      <!-- Bandeau contexte (rempli quand on arrive avec ?communaute=<id>) -->
+      <div class="context-banner" id="context-banner" role="status" hidden>
+        <i class="fas fa-filter" style="color: var(--primary); font-size: 12px;"></i>
+        <span>Filtré&nbsp;: <strong id="context-banner-name"></strong> - <button type="button" id="context-banner-clear">retirer le filtre</button></span>
+      </div>
+
       <!-- Search & Filters -->
       <div class="search-bar">
         <div class="search-wrapper">
@@ -707,6 +760,12 @@
       <!-- Results count -->
       <div class="results-bar">
         <div class="results-count" id="results-count"></div>
+      </div>
+
+      <!-- Repli si la librairie carte (CDN) est indisponible -->
+      <div class="map-fallback-msg" id="map-fallback" hidden>
+        <i class="fas fa-triangle-exclamation" style="color: var(--primary);"></i>
+        La carte n'a pas pu être chargée (librairie indisponible). Retour à l'affichage en grille.
       </div>
 
       <!-- Grid View -->
@@ -796,6 +855,45 @@
       });
 
       // ============================================
+      // Paramètre d'URL ?communaute=<id>
+      // (liens « Voir tous les membres » des fiches communauté)
+      // ============================================
+      const urlParams = new URLSearchParams(window.location.search);
+      const contextBanner = document.getElementById('context-banner');
+      const contextBannerName = document.getElementById('context-banner-name');
+      let contextCommunityId = null;
+
+      const paramCommunaute = urlParams.get('communaute');
+      if (paramCommunaute && communityNames[paramCommunaute]) {
+        // Communauté valide mais absente de l'échantillon : on ajoute l'option
+        if (!Array.from(communitySelect.options).some(o => o.value === paramCommunaute)) {
+          const opt = document.createElement('option');
+          opt.value = paramCommunaute;
+          opt.textContent = communityNames[paramCommunaute];
+          communitySelect.appendChild(opt);
+        }
+        communitySelect.value = paramCommunaute;
+        contextCommunityId = paramCommunaute;
+        contextBannerName.textContent = communityNames[paramCommunaute];
+        contextBanner.hidden = false;
+      }
+
+      // Masque le bandeau et nettoie l'URL (un rechargement ne réapplique pas le filtre retiré)
+      function hideContextBanner() {
+        if (!contextCommunityId) return;
+        contextCommunityId = null;
+        contextBanner.hidden = true;
+        const cleaned = new URL(window.location.href);
+        cleaned.searchParams.delete('communaute');
+        history.replaceState(null, '', cleaned.pathname + cleaned.search + cleaned.hash);
+      }
+
+      document.getElementById('context-banner-clear').addEventListener('click', () => {
+        communitySelect.value = 'all';
+        filterMembers(); // détecte le changement et masque le bandeau
+      });
+
+      // ============================================
       // View element refs (used by render fns below)
       // ============================================
       const gridView = document.getElementById('grid-view');
@@ -831,7 +929,7 @@
         // Zoom control in top-right
         L.control.zoom({ position: 'topright' }).addTo(map);
 
-        // Premium map tiles (CartoDB Voyager — clean, neutral)
+        // Premium map tiles (CartoDB Voyager - clean, neutral)
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
           subdomains: 'abcd',
@@ -859,6 +957,12 @@
         addMarkers(filteredMembers);
         map.addLayer(markerClusterGroup);
         mapInitialized = true;
+
+        // Arrivée déjà filtrée (ex. ?communaute=…&vue=carte) : cadre sur les marqueurs
+        if (filteredMembers.length < members.length && allMarkers.length > 0) {
+          const group = L.featureGroup(allMarkers);
+          map.fitBounds(group.getBounds().pad(0.15), { maxZoom: 8 });
+        }
 
         // Fade the hint after a few seconds
         setTimeout(() => {
@@ -895,7 +999,7 @@
               <div class="map-popup-role">${m.role}</div>
               <div class="map-popup-meta">
                 <i class="fas fa-location-dot"></i>
-                ${m.city ? m.city + ' — ' : ''}${m.region}
+                ${m.city ? m.city + ' - ' : ''}${m.region}
               </div>
               <div class="map-popup-badges">${commBadges}</div>
               <a href="${m.profileUrl}" class="map-popup-link">
@@ -952,6 +1056,11 @@
         const region = regionSelect.value;
         const community = communitySelect.value;
 
+        // Le bandeau contexte ne vaut que tant que le filtre d'origine est actif
+        if (contextCommunityId && community !== contextCommunityId) {
+          hideContextBanner();
+        }
+
         // Grid visibility
         document.querySelectorAll('.member-card-wrapper').forEach(el => {
           const id = el.dataset.id;
@@ -964,8 +1073,9 @@
           el.classList.toggle('hidden', !filtered.find(m => m.id === id));
         });
 
-        // Map update
-        if (mapInitialized) {
+        // Map update : seulement si la vue carte est affichée
+        // (le passage en vue carte rafraîchit de toute façon les marqueurs)
+        if (mapInitialized && mapView.classList.contains('active')) {
           updateMapMarkers(filtered);
         }
 
@@ -1030,6 +1140,7 @@
         btnGrid.classList.remove('active');
         btnList.classList.remove('active');
         btnMap.classList.remove('active');
+        document.getElementById('map-fallback').hidden = true;
 
         if (view === 'grid') {
           gridView.classList.remove('hidden');
@@ -1038,13 +1149,20 @@
           listView.classList.add('active');
           btnList.classList.add('active');
         } else if (view === 'map') {
+          // Dégradation propre : librairie Leaflet absente (CDN inaccessible)
+          if (typeof L === 'undefined' || typeof L.markerClusterGroup !== 'function') {
+            document.getElementById('map-fallback').hidden = false;
+            gridView.classList.remove('hidden');
+            btnGrid.classList.add('active');
+            return;
+          }
           mapView.classList.add('active');
           btnMap.classList.add('active');
           // Init map on first show (or refresh markers)
           setTimeout(() => {
             const filtered = getFilteredMembers();
             initMap(filtered);
-            map.invalidateSize();
+            if (map) map.invalidateSize();
           }, 100);
         }
       }
@@ -1052,6 +1170,14 @@
       btnGrid.addEventListener('click', () => setView('grid'));
       btnList.addEventListener('click', () => setView('list'));
       btnMap.addEventListener('click', () => setView('map'));
+
+      // Paramètre d'URL ?vue=carte (ou liste) : arrivée directe sur la bonne vue
+      const paramVue = urlParams.get('vue');
+      if (paramVue === 'carte') {
+        setView('map');
+      } else if (paramVue === 'liste') {
+        setView('list');
+      }
 
       // ============================================
       // RENDER FUNCTIONS
@@ -1081,7 +1207,7 @@
               <div class="member-list-avatar">${m.firstName[0]}${m.lastName[0]}</div>
               <div class="member-list-info">
                 <h4>${m.firstName} ${m.lastName}</h4>
-                <p>${m.role} — ${m.organization}</p>
+                <p>${m.role} - ${m.organization}</p>
               </div>
               <div class="member-region" style="margin-bottom: 0;"><i class="fas fa-location-dot"></i> ${m.city ? m.city + ', ' : ''}${m.region}</div>
               <div class="member-communities" style="justify-content: flex-end;">

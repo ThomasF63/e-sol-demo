@@ -230,12 +230,12 @@
 
     <header class="gallery-header">
       <div>
-        <h1>Galerie d'images <span style="color: var(--text-subtle); font-weight: 400; font-size: 0.7em;">— revue de pack</span></h1>
+        <h1>Galerie d'images <span style="color: var(--text-subtle); font-weight: 400; font-size: 0.7em;">- revue de pack</span></h1>
         <p class="subtitle">Vue d'ensemble de toutes les images générées (échantillons, pack complet, communautés). Cliquez pour zoomer. Cette page est locale, jamais déployée.</p>
       </div>
       <div class="meta">
-        <span class="meta-pill" id="meta-total"><strong>—</strong> images</span>
-        <span class="meta-pill" id="meta-generated">généré : —</span>
+        <span class="meta-pill" id="meta-total"><strong>-</strong> images</span>
+        <span class="meta-pill" id="meta-generated">généré : -</span>
         <button class="reload-btn" id="btn-reload"><i class="fas fa-rotate"></i> Recharger</button>
       </div>
     </header>
@@ -258,7 +258,7 @@
       heroes:      { title: 'Héros / bannières',            desc: 'Compositions 16:9 pour le haut des pages principales du site.' },
       sections:    { title: 'Illustrations thématiques',    desc: 'Pour les sections de contenu : éducation, recherche, charte, forum, partenariats…' },
       textures:    { title: 'Textures / fonds',             desc: 'Motifs subtils à utiliser en background derrière les sections de texte.' },
-      hero:        { title: 'Anciens fonds de hero (démo)', desc: 'Backgrounds générés pour le hero de la démo — peuvent ou non être conservés.' },
+      hero:        { title: 'Anciens fonds de hero (démo)', desc: 'Backgrounds générés pour le hero de la démo - peuvent ou non être conservés.' },
       communities: { title: 'Communautés (existantes)',     desc: 'Les 12 illustrations thématiques de communautés générées lors de la démo.' },
     };
 
@@ -279,7 +279,7 @@
         <div class="image-thumb ${thumbClassFor(item.category)}" style="background-image: url('${item.url}?v=${item.mtime}');"></div>
         <div class="image-meta">
           <div class="image-id">${item.id}</div>
-          <div class="image-sub">${item.category} · ${item.sizeKB} KB</div>
+          <div class="image-sub">${item.category} - ${item.sizeKB} KB</div>
         </div>
       `;
       card.addEventListener('click', () => openLightbox(item));
@@ -327,7 +327,7 @@
     function openLightbox(item) {
       const lb = document.getElementById('lightbox');
       document.getElementById('lightbox-img').src = item.url + '?v=' + item.mtime;
-      document.getElementById('lightbox-info').textContent = `${item.id} — ${item.category} — ${item.sizeKB} KB`;
+      document.getElementById('lightbox-info').textContent = `${item.id} - ${item.category} - ${item.sizeKB} KB`;
       lb.classList.add('open');
     }
     function closeLightbox() {

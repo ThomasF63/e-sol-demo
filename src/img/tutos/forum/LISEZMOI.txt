@@ -1,14 +1,42 @@
-Captures d'écran des tutoriels forum (session 4).
+Captures d'écran des tutoriels forum.
 
-Dossier vide pour l'instant : le certificat TLS de forum.e-sol.fr est expiré
-depuis le 19/07/2026, aucune capture n'était possible (voir
-docs/tutoriels-forum-yeswiki.md, section « Captures d'écran : état et procédure »).
+Ce dossier contient les captures FINALES, annotées (cadres, pastilles
+numérotées, flèches, étiquettes), intégrées dans tutoriels-forum.html et
+destinées au portage YesWiki. Les pastilles reprennent les numéros des
+étapes des fiches qu'elles illustrent.
 
-Une fois le certificat réparé :
-- vues publiques : node scripts/capture-tutos-forum.js (7 fichiers, floutage
-  automatique des avatars et noms) ;
-- vues connectées (fiches C à H) : en session guidée, liste des fichiers
-  attendus dans docs/tutoriels-forum-yeswiki.md.
+Le certificat TLS de forum.e-sol.fr, expiré le 19/07/2026, a été renouvelé
+le 16/08/2026 (valide jusqu'au 14/11/2026) : les captures publiques ont été
+produites le 18/08/2026.
 
-Règle : jamais de vrais membres dans les livrables. Flouter, ou utiliser des
-comptes fictifs (Cécile Chanteloup, etc.).
+Pipeline (reproductible, à relancer si le forum évolue) :
+1. node scripts/capture-tutos-forum.js
+   Capture les vues publiques en BRUT dans captures/brut/ (dossier hors
+   git), avec pour chaque vue un sidecar <nom>.zones.json : les rectangles
+   des éléments d'interface, relevés dans la page APRÈS floutage.
+2. node scripts/annoter-captures.js
+   Incruste les annotations décrites dans scripts/annotations/
+   tutos-forum.json (spécification versionnée) et écrit les PNG finaux ici.
+
+Présentes (5 vues publiques) :
+  forum-a-accueil.png     accueil, bouton Se connecter (fiche A)
+  forum-b-categories.png  page Catégories (fiche B)
+  forum-b-sujet.png       un sujet ouvert (fiche B)
+  forum-b-recherche.png   la recherche (fiche B, astuce)
+  forum-c-categorie.png   une page de catégorie, vue publique (fiche C)
+
+Abandonnées (relevé du 18/08/2026) : forum-a-connexion.png et
+forum-a-inscription.png. Les routes /login et /signup redirigent désormais
+vers la connexion unifiée d'e-sol.fr (DiscourseConnect) : ces écrans
+n'existent plus côté forum. La fiche A est à réécrire avec Lucile.
+
+En attente (8 vues connectées, session guidée avec Thomas, de préférence
+avec un compte de démonstration) : forum-c-cloche.png,
+forum-d-nouveau-sujet.png, forum-e-repondre.png, forum-e-citation.png,
+forum-f-message.png, forum-g-preferences-notifications.png,
+forum-g-preferences-emails.png, forum-h-actions-sujet.png. Liste et
+procédure dans docs/tutoriels-forum-yeswiki.md.
+
+Règle : jamais de vrais membres dans les livrables. Le floutage des avatars
+et noms est automatique à la capture ; vérifier chaque image malgré tout
+avant tout téléversement (cadrage, aucun nom réel lisible).

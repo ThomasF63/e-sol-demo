@@ -189,7 +189,7 @@ function house(c, pos) {
   const lignes = couper(c.name, 30);
   const plaqueW = Math.min(310, Math.max(170,
     Math.max(...lignes.map(l => l.length)) * 6.5 + 30,
-    (`${c.category} · ${c.members} membres · ${c.resources} communs`).length * 5.5 + 30));
+    (`${c.category} - ${c.members} membres - ${c.resources} communs`).length * 5.5 + 30));
   const plaqueH = 20 + lignes.length * 15;
   const tirage = -plaqueY - hautTotal;   // du bas de la plaque au faîte du toit
 
@@ -204,7 +204,7 @@ function house(c, pos) {
 
   return `
   <a class="vl-cible vl-maison${dort ? ' vl-dort' : ''}" href="communaute-detail.html?c=${esc(c.id)}" tabindex="0" role="link" aria-label="${esc(aria)}">
-    <title>${esc(c.name)} — ${esc(c.category)}, ${c.members} membres${dort ? ' — en sommeil' : ''}</title>
+    <title>${esc(c.name)} - ${esc(c.category)}, ${c.members} membres${dort ? ' - en sommeil' : ''}</title>
     <g transform="translate(${round(x)},${round(y)})">
       <ellipse cx="0" cy="3" rx="${round(w * s * 0.58)}" ry="${round(7 * s)}" fill="#1a1512" opacity="${dort ? 0.05 : 0.09}"/>
       <g class="vl-lift">
@@ -240,7 +240,7 @@ function house(c, pos) {
           <path d="M${round(-plaqueDX - 6)},4 L${round(-plaqueDX)},10 L${round(-plaqueDX + 6)},4 Z" fill="#fdfbf9" stroke="${toit}" stroke-width="1.4" stroke-linejoin="round"/>
           <rect x="${round(-plaqueW / 2 + 1)}" y="1" width="${round(plaqueW - 2)}" height="4" fill="#fdfbf9"/>
 ${lignes.map((l, i) => `          <text class="vl-plaque-titre" x="0" y="${-plaqueH + 14 + i * 14}" text-anchor="middle">${esc(l)}</text>`).join('\n')}
-          <text class="vl-plaque-sous" x="0" y="-6" text-anchor="middle">${esc(c.category)} · ${c.members} membres · ${c.resources} communs</text>
+          <text class="vl-plaque-sous" x="0" y="-6" text-anchor="middle">${esc(c.category)} - ${c.members} membres - ${c.resources} communs</text>
         </g>
         <rect class="vl-focus" x="${round(-w * s / 2 - 10)}" y="${round(-hautTotal - 12)}" width="${round(w * s + 20)}" height="${round(hautTotal + 38)}" rx="10"/>
       </g>
@@ -334,13 +334,13 @@ function liste(communities) {
           <span class="vl-item-corps">
             <span class="vl-item-titre">${esc(c.name)}${dort ? ' <span class="vl-item-etat">en sommeil</span>' : ''}</span>
             <span class="vl-item-desc">${esc(c.shortDescription)}</span>
-            <span class="vl-item-meta">${esc(c.category)} · ${c.members} membres · ${c.resources} communs</span>
+            <span class="vl-item-meta">${esc(c.category)} - ${c.members} membres - ${c.resources} communs</span>
           </span>
         </a>
       </li>`;
   }).join('\n');
 
-  return `<!-- FICHIER GÉNÉRÉ par scripts/generate-village.js — ne pas éditer à la main -->
+  return `<!-- FICHIER GÉNÉRÉ par scripts/generate-village.js - ne pas éditer à la main -->
 <ul class="vl-liste">
 ${items}
 </ul>`;
@@ -354,7 +354,7 @@ function generate() {
   const communities = JSON.parse(fs.readFileSync(DATA, 'utf8'));
   const placed = layout(communities);
 
-  const svg = `<!-- FICHIER GÉNÉRÉ par scripts/generate-village.js — ne pas éditer à la main -->
+  const svg = `<!-- FICHIER GÉNÉRÉ par scripts/generate-village.js - ne pas éditer à la main -->
 <g id="village-maisons">${placed.map(p => house(p.c, p)).join('')}
 </g>`;
 

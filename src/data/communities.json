@@ -12,6 +12,7 @@
     "description": "Communauté d'animateurs engagés dans la diffusion de la Fresque du Sol, un atelier ludique de 3 heures qui permet de comprendre le fonctionnement des sols, leurs enjeux, et de sensibiliser à leur préservation par un jeu collaboratif autour de 50 cartes.",
     "shortDescription": "Réseau des animateurs formés à la Fresque du Sol. Partage de retours d'expérience et de variantes pédagogiques.",
     "members": 124,
+    "animation": ["villandreau-marceau", "landrevie-salome"],
     "resources": 18,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?FresqueSol"
@@ -29,6 +30,7 @@
     "description": "Espace de collaboration autour des sols forestiers et de l'Inventaire Permanent des Ressources en Sols, pour partager connaissances et méthodes sur la gestion durable des forêts et la biodiversité sylvicole.",
     "shortDescription": "Groupe de travail sur les sols forestiers. Indicateurs, biodiversité et gestion durable des forêts.",
     "members": 45,
+    "animation": ["azeroual-nadia", "almeirado-nuno"],
     "resources": 12,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?SolsForestiers"
@@ -46,6 +48,7 @@
     "description": "Groupe dédié à la promotion et à l'intégration de la pédologie dans l'éducation, pour renforcer la place des sols dans les programmes scolaires et universitaires.",
     "shortDescription": "Intégrer la science du sol dans les programmes éducatifs à tous les niveaux.",
     "members": 38,
+    "animation": ["mazerolle-aurelien"],
     "resources": 9,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?PromoSolsEduc"
@@ -63,6 +66,7 @@
     "description": "Développement d'un dispositif de formation en pédologie de terrain. Réseau pour la facilitation et l'encouragement de stages, de relevés et de descriptions de terrain pour le milieu universitaire.",
     "shortDescription": "Formation pratique en pédologie de terrain pour le milieu universitaire.",
     "members": 12,
+    "animation": ["fontarel-berenice"],
     "resources": 5,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?PromoSolsTerrain"
@@ -80,6 +84,7 @@
     "description": "Réseau rassemblant les personnes travaillant sur le répertoire national des études cartographiques de sol. Mutualisation des données et harmonisation des méthodes.",
     "shortDescription": "Répertoire national des études cartographiques. Données, méthodes et harmonisation.",
     "members": 32,
+    "animation": ["dorvanne-corentin"],
     "resources": 24,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?Refersols"
@@ -97,6 +102,7 @@
     "description": "Rassemblement des professionnels du secteur privé travaillant sur les sols : bureaux d'études, laboratoires, consultants, entreprises innovantes dans le domaine de la préservation et de l'analyse des sols.",
     "shortDescription": "Professionnels du secteur privé : bureaux d'études, laboratoires, consultants.",
     "members": 28,
+    "animation": ["benkacem-samir"],
     "resources": 6,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?SecteurPrive"
@@ -114,6 +120,7 @@
     "description": "Réseau de porteurs de projet en Sciences et Recherches Participatives sur les Sols. Mise en relation des chercheurs professionnels et des citoyens pour améliorer la connaissance des sols.",
     "shortDescription": "Sciences participatives sur les sols. Chercheurs et citoyens ensemble.",
     "members": 56,
+    "animation": ["cabriel-faustine"],
     "resources": 15,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?SRPSols"
@@ -131,6 +138,7 @@
     "description": "Communauté mobilisée autour de la démarche « Zéro Artificialisation Nette », visant à préserver les sols naturels et agricoles face à l'urbanisation. Accompagnement des collectivités et définition des trajectoires.",
     "shortDescription": "Préserver les sols face à l'urbanisation. Trajectoires ZAN pour les collectivités.",
     "members": 89,
+    "animation": ["reynal-pierre"],
     "resources": 20,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?ZAN"
@@ -148,13 +156,14 @@
     "description": "Explorer les liens entre les sols et les pratiques artistiques : photographie, peinture, sculpture, land art. Valoriser la beauté et la diversité des sols à travers l'expression créative.",
     "shortDescription": "Les liens entre sols et pratiques artistiques. Land art, photographie et créativité.",
     "members": 15,
+    "animation": ["santavella-livia"],
     "resources": 4,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?Solsetart"
   },
   {
     "id": "afes-comm",
-    "name": "AFES – GT Communication",
+    "name": "AFES - GT Communication",
     "shortName": "AFES Communication",
     "slug": "AFES-comm",
     "category": "Institutionnel",
@@ -165,13 +174,14 @@
     "description": "Groupe de travail dédié à la communication de l'Association Française pour l'Étude du Sol. Stratégie de diffusion, événementiel, relations presse et communication numérique.",
     "shortDescription": "Communication de l'AFES. Stratégie, événements et relations presse.",
     "members": 18,
+    "animation": ["sablon-ines"],
     "resources": 7,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?AFES-comm"
   },
   {
     "id": "afes-admins",
-    "name": "AFES – Administrateurs",
+    "name": "AFES - Administrateurs",
     "shortName": "AFES Administrateurs",
     "slug": "AFES-admins",
     "category": "Institutionnel",
@@ -182,6 +192,7 @@
     "description": "Espace réservé aux administrateurs de l'Association Française pour l'Étude du Sol. Gouvernance, coordination, planification stratégique.",
     "shortDescription": "Gouvernance et coordination de l'AFES.",
     "members": 12,
+    "animation": ["sorel-octave"],
     "resources": 3,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?AFES-admins"
@@ -199,6 +210,7 @@
     "description": "Communauté dédiée à l'étude et la préservation des sols en zones humides. Échange de connaissances sur l'hydrologie, la biodiversité et les services écosystémiques des milieux humides.",
     "shortDescription": "Sols en zones humides. Hydrologie, biodiversité et services écosystémiques.",
     "members": 22,
+    "animation": ["tarnaud-ambre"],
     "resources": 8,
     "forumUrl": "https://forum.e-sol.fr/",
     "liveUrl": "https://e-sol.fr/?ZH"

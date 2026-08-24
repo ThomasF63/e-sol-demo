@@ -85,7 +85,7 @@ function listen(port, triesLeft) {
 }
 
 if (!fs.existsSync(path.join(distDir, 'index.html'))) {
-  console.error('dist/index.html est introuvable — lancez d’abord : node build.js');
+  console.error('dist/index.html est introuvable - lancez d’abord : node build.js');
   process.exit(1);
 }
 

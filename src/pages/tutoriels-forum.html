@@ -5,96 +5,8 @@
   <title>Le forum, pas à pas - e-Sol</title>
 
   <style>
-    /* ---- Layout fiches + sommaire ---- */
-    .tf-layout { align-items: start; }
-
-    .tf-toc {
-      position: sticky;
-      top: calc(var(--header-height) + 24px);
-      padding: 20px;
-    }
-
-    .tf-toc h4 {
-      font-family: var(--font-display);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--text-subtle);
-      margin-bottom: 12px;
-    }
-
-    .tf-toc ul { list-style: none; margin: 0; padding: 0; }
-
-    .tf-toc li a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: var(--radius-xs);
-      font-size: 13px;
-      color: var(--text-muted);
-      transition: all 0.2s ease;
-      line-height: 1.35;
-    }
-
-    .tf-toc li a .tf-toc-letter {
-      flex-shrink: 0;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--primary-10);
-      color: var(--primary);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 11px;
-    }
-
-    .tf-toc li a:hover { background: var(--primary-10); color: var(--primary); }
-
-    .tf-toc li a.active {
-      background: var(--primary-10);
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .tf-toc .tf-toc-back {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ---- Notice certificat ---- */
-    .tf-notice {
-      background: rgba(156, 63, 0, 0.06);
-      border: 1.5px solid var(--primary-20);
-      border-radius: var(--radius-md);
-      padding: 20px 24px;
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .tf-notice i {
-      color: var(--primary);
-      font-size: 20px;
-      margin-top: 3px;
-      flex-shrink: 0;
-    }
-
-    .tf-notice p {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 100%;
-      margin: 0;
-    }
-
-    .tf-notice strong { color: var(--primary); }
+    /* Le sommaire épinglé est porté par le composant sommaire-flottant,
+       inclus en fin de body. */
 
     /* ---- Fiche ---- */
     .tf-fiche {
@@ -257,6 +169,32 @@
       line-height: 1.5;
     }
 
+    /* ---- Figures : captures annotées ---- */
+    .tf-figure {
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--bg-warm);
+      margin: 16px 0;
+      padding: 10px;
+    }
+
+    .tf-figure img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-xs);
+    }
+
+    .tf-figure figcaption {
+      font-size: 0.85rem;
+      color: var(--text-subtle);
+      line-height: 1.5;
+      padding: 10px 6px 2px;
+    }
+
+    .tf-figure figcaption strong { color: var(--text-muted); }
+
     /* ---- Et après ---- */
     .tf-suite {
       margin-top: 24px;
@@ -279,7 +217,6 @@
     .tf-suite a { font-weight: 600; }
 
     @media (max-width: 900px) {
-      .tf-toc { position: static; margin-bottom: 8px; }
       .tf-fiche { padding: 24px; }
     }
   </style>
@@ -298,36 +235,27 @@
 
   <section class="section-sm">
     <div class="container">
-      <div class="tf-notice">
-        <i class="fas fa-triangle-exclamation"></i>
-        <p><strong>Le forum est temporairement inaccessible</strong> (certificat de sécurité expiré le 19/07/2026, renouvellement en cours). Les fiches se lisent très bien sans le forum ; les liens vers forum.e-sol.fr fonctionneront de nouveau dès la réparation, et les captures d'écran seront ajoutées à ce moment-là.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-sm" style="padding-top: 0;">
-    <div class="container">
-      <div class="bento-grid tf-layout">
+      <div class="bento-grid">
 
         <!-- ===== Sommaire ===== -->
-        <div class="col-span-3">
-          <nav class="glass-card tf-toc no-hover" aria-label="Sommaire de la série">
-            <h4>Les 8 fiches</h4>
-            <ul id="tf-toc-list">
-              <li><a href="#fiche-a"><span class="tf-toc-letter">A</span> Rejoindre le forum</a></li>
-              <li><a href="#fiche-b"><span class="tf-toc-letter">B</span> Comprendre l'organisation</a></li>
-              <li><a href="#fiche-c"><span class="tf-toc-letter">C</span> Suivre une catégorie</a></li>
-              <li><a href="#fiche-d"><span class="tf-toc-letter">D</span> Poster un nouveau sujet</a></li>
-              <li><a href="#fiche-e"><span class="tf-toc-letter">E</span> Répondre, citer, mentionner</a></li>
-              <li><a href="#fiche-f"><span class="tf-toc-letter">F</span> Message direct</a></li>
-              <li><a href="#fiche-g"><span class="tf-toc-letter">G</span> Notifications et résumé</a></li>
-              <li><a href="#fiche-h"><span class="tf-toc-letter">H</span> Animer sa catégorie</a></li>
-            </ul>
-            <div class="tf-toc-back">
-              <a href="tutoriels.html" style="font-size: 13px; font-weight: 600;"><i class="fas fa-arrow-left text-xs"></i> Centre de ressources</a>
-            </div>
-          </nav>
-        </div>
+        <!-- Enfant direct de la grille : l'épinglage du composant
+             sommaire-flottant en dépend. -->
+        <nav class="glass-card toc-flottant no-hover col-span-3" aria-label="Sommaire de la série">
+          <h4>Les 8 fiches</h4>
+          <ul>
+            <li><a href="#fiche-a"><span class="toc-lettre">A</span> Rejoindre le forum</a></li>
+            <li><a href="#fiche-b"><span class="toc-lettre">B</span> Comprendre l'organisation</a></li>
+            <li><a href="#fiche-c"><span class="toc-lettre">C</span> Suivre une catégorie</a></li>
+            <li><a href="#fiche-d"><span class="toc-lettre">D</span> Poster un nouveau sujet</a></li>
+            <li><a href="#fiche-e"><span class="toc-lettre">E</span> Répondre, citer, mentionner</a></li>
+            <li><a href="#fiche-f"><span class="toc-lettre">F</span> Message direct</a></li>
+            <li><a href="#fiche-g"><span class="toc-lettre">G</span> Notifications et résumé</a></li>
+            <li><a href="#fiche-h"><span class="toc-lettre">H</span> Animer sa catégorie</a></li>
+          </ul>
+          <div class="toc-pied">
+            <a href="tutoriels.html" style="font-size: 13px; font-weight: 600;"><i class="fas fa-arrow-left text-xs"></i> Centre de ressources</a>
+          </div>
+        </nav>
 
         <!-- ===== Fiches ===== -->
         <div class="col-span-9">
@@ -339,38 +267,34 @@
               <span class="badge badge-olive">Débutant</span>
             </div>
             <h2>Rejoindre le forum et se connecter</h2>
-            <p class="tf-objectif"><strong>Objectif :</strong> créer votre compte sur le forum et savoir vous reconnecter ensuite.</p>
+            <p class="tf-objectif"><strong>Objectif :</strong> vous connecter au forum avec votre compte e-Sol et savoir vous reconnecter ensuite.</p>
             <div class="tf-meta">
-              <div class="tf-meta-item"><i class="fas fa-clock"></i> 5 minutes</div>
-              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : une adresse e-mail, rien d'autre</div>
+              <div class="tf-meta-item"><i class="fas fa-clock"></i> 2 minutes</div>
+              <div class="tf-meta-item"><i class="fas fa-list-check"></i> Prérequis : un compte e-Sol (créé à l'inscription sur la plateforme)</div>
             </div>
 
             <div class="tf-savoir">
-              <strong>Bon à savoir :</strong> le forum a son propre compte, distinct de votre compte e-sol.fr. Même si vous êtes déjà inscrit·e sur la plateforme, il faut créer un compte forum la première fois. C'est une limite connue, qui pourrait évoluer.
+              <strong>Bon à savoir :</strong> le forum s'ouvre désormais avec votre compte e-Sol (connexion unifiée constatée en août 2026). Plus besoin de créer un second compte : le bouton S'inscrire du forum vous ramène vers la plateforme. Pas encore de compte e-Sol ? Commencez par <a href="inscription.html">l'inscription</a>.
             </div>
 
-            <div class="tf-capture">
-              <i class="fas fa-camera"></i>
-              <span>Capture à venir : la page d'accueil du forum, avec les boutons S'inscrire et Se connecter.</span>
-            </div>
-
-            <h3>Créer votre compte</h3>
+            <h3>Vous connecter la première fois</h3>
             <ol class="tf-steps">
               <li>Ouvrez <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum.e-sol.fr</a> dans votre navigateur.</li>
-              <li>Cliquez sur <strong>S'inscrire</strong>, en haut à droite.</li>
-              <li>Renseignez votre <strong>adresse e-mail</strong>.</li>
-              <li>Choisissez votre <strong>nom d'utilisateur</strong> : court, sans espaces, reconnaissable (par exemple <code>CecileChanteloup</code>). C'est le nom que les autres verront et utiliseront pour s'adresser à vous.</li>
-              <li>Renseignez votre <strong>nom</strong> complet, puis choisissez un <strong>mot de passe</strong>.</li>
-              <li>Cliquez sur le bouton de création du compte.</li>
-              <li>Ouvrez votre boîte mail, puis cliquez sur le <strong>lien de confirmation</strong> reçu (regardez dans les indésirables s'il n'arrive pas).</li>
+              <li>Cliquez sur <strong>Se connecter</strong>, en haut à droite.</li>
+              <li>Vous êtes redirigé·e vers <strong>e-sol.fr</strong> : identifiez-vous avec votre compte plateforme (celui de votre inscription).</li>
+              <li>Vous revenez automatiquement sur le forum, connecté·e. Votre nom d'utilisateur reprend celui de la plateforme.</li>
             </ol>
 
             <h3>Vous reconnecter plus tard</h3>
             <ol class="tf-steps">
               <li>Ouvrez <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener">forum.e-sol.fr</a>.</li>
-              <li>Cliquez sur <strong>Se connecter</strong>, en haut à droite.</li>
-              <li>Saisissez votre nom d'utilisateur (ou votre e-mail) et votre mot de passe.</li>
+              <li>Cliquez sur <strong>Se connecter</strong> : si votre session e-Sol est encore active, la connexion est immédiate ; sinon, identifiez-vous à nouveau sur la plateforme.</li>
             </ol>
+
+            <figure class="tf-figure">
+              <img src="img/tutos/forum/forum-a-accueil.png" width="2560" height="1600" loading="lazy" alt="Page d'accueil du forum e-Sol : le bouton Se connecter, encadré en haut à droite, porte le repère 2.">
+              <figcaption>La page d'accueil du forum : le bouton <strong>Se connecter</strong>, en haut à droite (repère 2).</figcaption>
+            </figure>
 
             <div class="tf-astuce">
               <strong>Astuce :</strong> une fois connecté·e, lisez le sujet épinglé « Bienvenue sur Forum e-Sol ! » et présentez-vous en quelques lignes : qui vous êtes, ce qui vous amène. C'est la meilleure première contribution possible.
@@ -415,10 +339,15 @@
               <li>Cliquez sur le logo e-Sol (en haut à gauche) pour revenir à l'accueil. Réflexe à retenir : le logo ramène toujours au point de départ.</li>
             </ol>
 
-            <div class="tf-capture">
-              <i class="fas fa-camera"></i>
-              <span>Capture à venir : la page Catégories, où chaque ligne est une salle du forum.</span>
-            </div>
+            <figure class="tf-figure">
+              <img src="img/tutos/forum/forum-b-categories.png" width="2560" height="1600" loading="lazy" alt="Page Catégories du forum : l'onglet Catégories porte le repère 2, la liste des catégories le repère 3, et l'entrée Sols Forestiers de la barre latérale le repère 4.">
+              <figcaption>La page Catégories : l'onglet <strong>Catégories</strong> (2), la liste des salles (3). La barre latérale (4) y mène aussi, à tout moment.</figcaption>
+            </figure>
+
+            <figure class="tf-figure">
+              <img src="img/tutos/forum/forum-b-sujet.png" width="2560" height="1600" loading="lazy" alt="Un sujet ouvert : le titre porte le repère 6, sa catégorie est encadrée juste dessous, et le logo e-Sol, qui ramène à l'accueil, porte le repère 7.">
+              <figcaption>Un sujet ouvert : le titre (6), sa catégorie juste dessous, puis les messages. Le logo (7) ramène toujours à l'accueil.</figcaption>
+            </figure>
 
             <div class="tf-astuce">
               <strong>Astuce :</strong> la loupe (en haut à droite) cherche dans tout le forum. Avant d'ouvrir un sujet, cherchez si la question a déjà été posée.
@@ -451,6 +380,11 @@
               <li>C'est tout : le réglage s'applique immédiatement, il n'y a rien à enregistrer.</li>
             </ol>
 
+            <figure class="tf-figure">
+              <img src="img/tutos/forum/forum-c-categorie.png" width="2560" height="1600" loading="lazy" alt="Page de la catégorie Sols Forestiers, vue sans connexion : le nom de la catégorie porte le repère 1, et une flèche montre l'emplacement de la cloche, visible une fois connecté.">
+              <figcaption>Une catégorie ouverte (1). La cloche des niveaux d'attention apparaît à droite du bandeau, une fois connecté·e.</figcaption>
+            </figure>
+
             <h3>Les niveaux d'attention</h3>
             <ul class="tf-liste">
               <li><i class="fas fa-circle"></i> <strong>Surveillé</strong> : vous êtes averti·e de chaque nouveau sujet et de chaque réponse. Pour la ou les catégories qui comptent vraiment pour vous.</li>
@@ -461,7 +395,7 @@
 
             <div class="tf-capture">
               <i class="fas fa-camera"></i>
-              <span>Capture à venir : le menu de la cloche ouvert, avec les niveaux d'attention.</span>
+              <span>Capture à venir (vue connectée au compte) : le menu de la cloche ouvert, avec les niveaux d'attention - ajoutée lors d'une prochaine session de capture guidée.</span>
             </div>
 
             <div class="tf-astuce">
@@ -507,7 +441,7 @@
 
             <div class="tf-capture">
               <i class="fas fa-camera"></i>
-              <span>Capture à venir : la fenêtre de rédaction d'un nouveau sujet.</span>
+              <span>Capture à venir (vue connectée au compte) : la fenêtre de rédaction d'un nouveau sujet - ajoutée lors d'une prochaine session de capture guidée.</span>
             </div>
 
             <div class="tf-astuce">
@@ -556,7 +490,7 @@
 
             <div class="tf-capture">
               <i class="fas fa-camera"></i>
-              <span>Captures à venir : les deux boutons Répondre, et le bouton Citation sur une sélection.</span>
+              <span>Captures à venir (vues connectées au compte) : les deux boutons Répondre, et le bouton Citation sur une sélection - ajoutées lors d'une prochaine session de capture guidée.</span>
             </div>
 
             <div class="tf-astuce">
@@ -596,7 +530,7 @@
 
             <div class="tf-capture">
               <i class="fas fa-camera"></i>
-              <span>Capture à venir : la carte de profil d'un membre, avec le bouton Message.</span>
+              <span>Capture à venir (vue connectée au compte) : la carte de profil d'un membre, avec le bouton Message - ajoutée lors d'une prochaine session de capture guidée.</span>
             </div>
 
             <div class="tf-astuce">
@@ -635,7 +569,7 @@
 
             <div class="tf-capture">
               <i class="fas fa-camera"></i>
-              <span>Captures à venir : les onglets Notifications et E-mails des préférences.</span>
+              <span>Captures à venir (vues connectées au compte) : les onglets Notifications et E-mails des préférences - ajoutées lors d'une prochaine session de capture guidée.</span>
             </div>
 
             <div class="tf-astuce">
@@ -691,7 +625,7 @@
 
             <div class="tf-capture">
               <i class="fas fa-camera"></i>
-              <span>Capture à venir : le menu clef à molette d'un sujet, vu avec des droits de modération.</span>
+              <span>Capture à venir (vue connectée au compte) : le menu clef à molette d'un sujet, vu avec des droits de modération - ajoutée lors d'une prochaine session de capture guidée.</span>
             </div>
 
             <div class="tf-astuce">
@@ -725,41 +659,7 @@
 
   {{> footer }}
 
-  <script>
-    // Positionnement sur l'ancre (#fiche-x) et sommaire actif au fil du défilement.
-    // Défilement calculé plutôt que saut natif : fiable même quand le navigateur
-    // n'applique pas le saut d'ancre au chargement.
-    (function() {
-      const HEADER_OFFSET = 92;
-      const links = document.querySelectorAll('#tf-toc-list a');
-      const fiches = Array.from(document.querySelectorAll('.tf-fiche'));
-      if (!fiches.length) return;
-
-      const byId = {};
-      links.forEach(a => { byId[a.getAttribute('href').slice(1)] = a; });
-
-      function scrollToHash() {
-        const cible = location.hash && document.querySelector(location.hash);
-        if (!cible) return;
-        const top = cible.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
-        window.scrollTo({ top: top, behavior: 'instant' });
-      }
-
-      function updateSpy() {
-        let actif = fiches[0];
-        fiches.forEach(f => {
-          if (f.getBoundingClientRect().top <= HEADER_OFFSET + 120) actif = f;
-        });
-        links.forEach(a => a.classList.remove('active'));
-        if (actif && byId[actif.id]) byId[actif.id].classList.add('active');
-      }
-
-      window.addEventListener('load', function() { scrollToHash(); updateSpy(); });
-      window.addEventListener('hashchange', function() { scrollToHash(); updateSpy(); });
-      window.addEventListener('scroll', updateSpy, { passive: true });
-      updateSpy();
-    })();
-  </script>
+  {{> sommaire-flottant }}
 
 </body>
 </html>

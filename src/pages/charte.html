@@ -4,8 +4,12 @@
   {{> head }}
   <title>La Charte e-Sol - Plateforme Collaborative pour les Sols</title>
   <style>
-    .charte-layout {
-      gap: 48px;
+    /* Gouttière élargie en desktop seulement : en mobile, 11 gouttières de
+       48 px imposeraient 528 px de largeur minimale à la grille (débordement). */
+    @media (min-width: 901px) {
+      .charte-layout {
+        gap: 48px;
+      }
     }
 
     .charte-content {
@@ -66,39 +70,8 @@
       flex-shrink: 0;
     }
 
-    /* Sidebar nav */
-    .sidebar-nav {
-      position: sticky;
-      top: calc(var(--header-height) + 24px);
-    }
-
-    .sidebar-nav-list {
-      list-style: none;
-      border-left: 2px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .sidebar-nav-list a {
-      display: block;
-      padding: 10px 20px;
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 500;
-      border-left: 2px solid transparent;
-      margin-left: -2px;
-      transition: all 0.2s ease;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    }
-
-    .sidebar-nav-list a:hover,
-    .sidebar-nav-list a.active {
-      color: var(--primary);
-      font-weight: 600;
-      border-left-color: var(--primary);
-      background: var(--primary-10);
-    }
+    /* Le sommaire épinglé est porté par le composant sommaire-flottant,
+       inclus en fin de body. */
 
     /* Quote block */
     .charte-quote {
@@ -116,9 +89,6 @@
       margin-bottom: 0;
     }
 
-    @media (max-width: 900px) {
-      .sidebar-nav { display: none; }
-    }
   </style>
 </head>
 <body>
@@ -137,18 +107,19 @@
     <div class="container">
       <div class="bento-grid charte-layout">
         <!-- Sidebar -->
-        <div class="col-span-3">
-          <nav class="sidebar-nav">
-            <ul class="sidebar-nav-list">
-              <li><a href="#vision" class="active">1. Notre Vision</a></li>
-              <li><a href="#engagements">2. Nos Engagements</a></li>
-              <li><a href="#gouvernance">3. Gouvernance Ouverte</a></li>
-              <li><a href="#donnees">4. Partage des Données</a></li>
-              <li><a href="#membres">5. Droits & Devoirs</a></li>
-              <li><a href="#evolution">6. Évolution</a></li>
-            </ul>
-          </nav>
-        </div>
+        <!-- Enfant direct de la grille : l'épinglage du composant
+             sommaire-flottant en dépend. -->
+        <nav class="glass-card toc-flottant no-hover col-span-3" aria-label="Sommaire de la charte">
+          <h4>Sommaire</h4>
+          <ul>
+            <li><a href="#vision"><span class="toc-lettre">1</span> Notre Vision</a></li>
+            <li><a href="#engagements"><span class="toc-lettre">2</span> Nos Engagements</a></li>
+            <li><a href="#gouvernance"><span class="toc-lettre">3</span> Gouvernance Ouverte</a></li>
+            <li><a href="#donnees"><span class="toc-lettre">4</span> Partage des Données</a></li>
+            <li><a href="#membres"><span class="toc-lettre">5</span> Droits & Devoirs</a></li>
+            <li><a href="#evolution"><span class="toc-lettre">6</span> Évolution</a></li>
+          </ul>
+        </nav>
 
         <!-- Content -->
         <div class="col-span-9">
@@ -176,9 +147,9 @@
             <p>Le réseau fonctionne selon des principes d'intelligence collective. Les décisions sont prises de manière transparente, en privilégiant le consensus et la participation de tous les membres actifs. Chaque voix compte dans l'évolution de la plateforme.</p>
             <p>Les communautés thématiques jouissent d'une large autonomie dans leur fonctionnement interne, dans le respect de la présente charte et des valeurs du réseau.</p>
 
-            <h3 id="donnees"><span class="section-num">4</span> Partage des Données — Les Communs</h3>
+            <h3 id="donnees"><span class="section-num">4</span> Partage des Données - Les Communs</h3>
             <p>Nous favorisons la création de communs numériques. Les données transmises, validées et produites collectivement ont vocation à être partagées en open source, toujours dans le respect du consentement et de la vie privée, pour l'intérêt général et le progrès scientifique.</p>
-            <p>Chaque « Commun » est placé sous une licence ouverte (Creative Commons ou équivalent) sauf mention contraire explicite de ses contributeurs.</p>
+            <p>Chaque « Commun » est publié sous la licence choisie par ses contributeurs. Nous recommandons la licence ouverte CC BY-SA (Creative Commons), qui permet la réutilisation la plus large possible tout en maintenant l'attribution.</p>
 
             <h3 id="membres"><span class="section-num">5</span> Droits & Devoirs des Membres</h3>
             <ul class="charte-list">
@@ -198,23 +169,7 @@
 
   {{> footer }}
 
-  <script>
-    // Highlight active sidebar link on scroll
-    const sections = document.querySelectorAll('h3[id]');
-    const navLinks = document.querySelectorAll('.sidebar-nav-list a');
-
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navLinks.forEach(link => link.classList.remove('active'));
-          const activeLink = document.querySelector(`.sidebar-nav-list a[href="#${entry.target.id}"]`);
-          if (activeLink) activeLink.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-
-    sections.forEach(section => observer.observe(section));
-  </script>
+  {{> sommaire-flottant }}
 
 </body>
 </html>

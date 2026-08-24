@@ -1,0 +1,38 @@
+<!-- FICHIER GÉNÉRÉ par scripts/generate-diagrams.js depuis diagram-roles-droits.md - ne pas éditer à la main -->
+<div class="mermaid">
+flowchart LR
+    M(["Membre de la&lt;br/&gt;communauté"])
+    CR(["Membre du&lt;br/&gt;cercle restreint*"])
+    AN(["Animateur·rice"])
+
+    subgraph PARTAGE["ESPACES PARTAGÉS - tous les membres de la communauté"]
+      direction LR
+      E1["Pages et documents&lt;br/&gt;de la communauté"]
+      E2["Discussions -&lt;br/&gt;catégorie de forum"]
+    end
+    subgraph CERCLE["CERCLE RESTREINT - accès sur permission, seulement si la communauté l'active*"]
+      direction LR
+      R1["Pages réservées - documents de travail&lt;br/&gt;se prolonge sur le forum (catégorie restreinte)"]
+    end
+    subgraph ANIM["ANIMATION - réservé aux animateur·rices"]
+      direction LR
+      G1["Accueil - réglages -&lt;br/&gt;modération du périmètre"]
+    end
+
+    M --&gt; PARTAGE
+    CR --&gt; PARTAGE
+    CR --&gt; CERCLE
+    AN --&gt; PARTAGE
+    AN --&gt; CERCLE
+    AN ==&gt; ANIM
+
+    classDef people fill:#eeeef8,stroke:#4e4e88,color:#3d3d5c
+    classDef espace fill:#fdfbf9,stroke:#b09570,color:#1a1512
+
+    class M,CR,AN people
+    class E1,E2,R1,G1 espace
+
+    style PARTAGE fill:#f6faea,stroke:#586330,stroke-width:1.2px,color:#3d4d1f
+    style CERCLE fill:#f5edf2,stroke:#885060,stroke-width:1.2px,stroke-dasharray:6 4,color:#5a3038
+    style ANIM fill:#ffdbcc,stroke:#9c3f00,stroke-width:1.2px,color:#7a3000
+</div>

@@ -13,20 +13,20 @@ concentriques. Ce qu'on gagne à un niveau s'ajoute à tout ce qu'on avait déj�
 ```mermaid
 %%{init: {"flowchart": {"rankSpacing": 26, "nodeSpacing": 30, "padding": 8}}}%%
 flowchart TB
-    subgraph NIV5["5 · ADMINISTRATEUR·RICE DE LA PLATEFORME"]
+    subgraph NIV5["5 - ADMINISTRATEUR·RICE DE LA PLATEFORME"]
       direction TB
       D5["+ comptes, groupes et droits d'accès<br/>+ formulaires et statuts reconnus<br/>+ peut tout éditer ou supprimer (dernier recours)"]
-      subgraph NIV4["4 · ANIMATEUR·RICE DE COMMUNAUTÉ"]
+      subgraph NIV4["4 - ANIMATEUR·RICE DE COMMUNAUTÉ"]
         direction TB
-        D4["+ accueille et valide les adhésions<br/>+ édite les pages de sa communauté<br/>+ active ou non le cercle restreint*<br/>+ modère son périmètre"]
-        subgraph NIV3["3 · MEMBRE D'UNE COMMUNAUTÉ"]
+        D4["+ accueillir les nouveaux membres<br/>+ éditer les pages<br/>+ gérer le cercle restreint*<br/>+ modérer son périmètre"]
+        subgraph NIV3["3 - MEMBRE D'UNE COMMUNAUTÉ"]
           direction TB
-          D3["+ espaces de ses communautés :<br/>documents, discussions, sous-pages<br/>+ cercle restreint si activé*"]
-          subgraph NIV2["2 · MEMBRE INSCRIT·E"]
+          D3["+ participer aux espaces de ses communautés :<br/>documents, discussions, sous-pages<br/>+ accéder au cercle restreint si activé*"]
+          subgraph NIV2["2 - MEMBRE INSCRIT·E"]
             direction TB
-            D2["+ sa fiche annuaire, commentaires<br/>+ fiches action, petites annonces<br/>+ rejoint des communautés"]
-            subgraph NIV1["1 · VISITEUR·EUSE NON INSCRIT·E"]
-              D1["consulte les pages publiques et l'annuaire<br/>lit le forum · peut s'inscrire"]
+            D2["+ tenir sa fiche annuaire, commenter<br/>+ créer fiches action, petites annonces<br/>+ rejoindre des communautés"]
+            subgraph NIV1["1 - VISITEUR·EUSE NON INSCRIT·E"]
+              D1["consulter les pages publiques et l'annuaire<br/>lire le forum - s'inscrire"]
             end
           end
         end
@@ -53,20 +53,23 @@ flowchart TB
 - **L'emboîtement dit tout** : un·e animateur·rice (4) reste membre de ses communautés (3),
   inscrit·e (2) et visiteur·euse (1). Aucun niveau ne retire de droits.
 - **Comment on monte d'un niveau** : 1 vers 2 par le formulaire d'inscription (gratuit,
-  immédiat) ; 2 vers 3 selon le régime de la communauté (« Rejoindre » direct ou demande à
-  l'animateur·rice) ; 3 vers 4 par désignation au sein de la communauté (cadre à préciser*) ;
-  4 vers 5 par ajout au groupe `@admins` (proposition : décision AFES / COPIL*).
+  immédiat) ; 2 vers 3 librement, en se rattachant à la communauté depuis l'inscription,
+  sa page ou sa fiche annuaire (l'équipe d'animation est notifiée à l'arrivée) ; 3 vers 4
+  par désignation au sein de la communauté (cadre à préciser*) ; 4 vers 5 par ajout au
+  groupe `@admins` (proposition : décision AFES / COPIL*).
 - `*` **proposition, à valider** : mention identique dans le référentiel
   (cercle restreint paramétrable, cadre du rôle d'animation, attribution du rôle admin).
-- **Limite technique actuelle** : le rattachement à une communauté est purement déclaratif
-  (cocher une communauté n'alimente aucun groupe d'utilisateurs). Les droits réels par
-  communauté supposent des groupes YesWiki dédiés (référentiel, sections 4.6 et 4.7).
+- **Limite technique actuelle** : le rattachement à une communauté est déclaratif par
+  choix (adhésion libre, décision d'août 2026), mais cocher une communauté n'alimente
+  aujourd'hui aucun groupe d'utilisateurs. Les droits réels par communauté, cercle
+  restreint en tête, supposent des groupes YesWiki dédiés (référentiel, sections 4.6 et 4.7).
 
 ## Vue communauté : la granularité interne
 
 Au sein d'une communauté, trois positions : membre, membre du cercle restreint (si la
-communauté l'active), animateur·rice. Ce schéma est un **support de décision** pour les
-animateur·rices : il permet de dire « nous, on active / on n'active pas le cercle restreint ».
+communauté l'active), animateur·rice. Ce schéma est un **support de décision** pour
+l'équipe d'animation : il permet de dire « nous, on active / on n'active pas le cercle
+restreint ».
 
 ```mermaid
 flowchart LR
@@ -74,18 +77,18 @@ flowchart LR
     CR(["Membre du<br/>cercle restreint*"])
     AN(["Animateur·rice"])
 
-    subgraph PARTAGE["ESPACES PARTAGÉS · tous les membres de la communauté"]
+    subgraph PARTAGE["ESPACES PARTAGÉS - tous les membres de la communauté"]
       direction LR
       E1["Pages et documents<br/>de la communauté"]
-      E2["Discussions ·<br/>catégorie de forum"]
+      E2["Discussions -<br/>catégorie de forum"]
     end
-    subgraph CERCLE["CERCLE RESTREINT · seulement si la communauté l'active*"]
+    subgraph CERCLE["CERCLE RESTREINT - accès sur permission, seulement si la communauté l'active*"]
       direction LR
-      R1["Pages réservées ·<br/>documents de travail"]
+      R1["Pages réservées - documents de travail<br/>se prolonge sur le forum (catégorie restreinte)"]
     end
-    subgraph ANIM["ANIMATION · réservé aux animateur·rices"]
+    subgraph ANIM["ANIMATION - réservé aux animateur·rices"]
       direction LR
-      G1["Adhésions · réglages ·<br/>modération du périmètre"]
+      G1["Accueil - réglages -<br/>modération du périmètre"]
     end
 
     M --> PARTAGE
@@ -112,11 +115,13 @@ flowchart LR
   à gauche sont ses membres. Une flèche = « a accès à ».
 - Le **cadre en pointillés** signale un espace optionnel : le cercle restreint est un outil
   à activer, pas une règle imposée*. Une communauté sans cercle restreint est parfaitement
-  valable (deux positions seulement : membre, animateur·rice).
-- Chaque communauté arbitre **trois curseurs** : régime d'adhésion (ouvert ou sur
-  validation), cercle restreint (activé ou non), écriture des pages (animateur·rices
-  seulement ou tout le groupe). Détail et réglages YesWiki correspondants : référentiel,
-  section 2.
+  valable (deux positions seulement : membre, animateur·rice). On entre dans le cercle sur
+  permission de l'équipe d'animation, sur la plateforme comme sur le forum (catégorie
+  restreinte).
+- L'entrée dans une communauté, elle, est libre partout (décision d'août 2026). Chaque
+  communauté arbitre **deux curseurs** : cercle restreint (activé ou non), écriture des
+  pages (animateur·rices seulement ou tout le groupe). Détail et réglages YesWiki
+  correspondants : référentiel, section 2.
 - Techniquement, ces choix se traduisent en **groupes et ACL natifs** ; leur exécution
   passe aujourd'hui par un·e admin de la plateforme (la gestion des groupes est réservée
   aux admins, référentiel 4.7).
@@ -153,7 +158,7 @@ YesWiki ne rend pas Mermaid nativement. Pour publier ces schémas sur [e-sol.fr]
 1. `node build.js` puis `node scripts/capture-village.js` : la vue communauté est rendue
    localement (mêmes bibliothèque, thème et polices que la démo) et exportée en
    `src/img/portage/roles-vue-communaute.png` (~1200 px de large). L'infographie compagne
-   `src/components/illustration-roles.html` (l'escalier) est exportée par la même commande en
+   `src/components/illustration-roles.html` (le sentier) est exportée par la même commande en
    `src/img/portage/roles-cinq-niveaux.png`. Repli manuel : mermaid.live (procédure au § 2.2
    de `docs/00-portage-README.md`).
 2. Téléverser sur la page wiki cible (proposition : `?RolesEtDroits`, nom à valider).

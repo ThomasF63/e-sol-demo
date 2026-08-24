@@ -69,6 +69,154 @@
     .type-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
     .annonce-wrapper.hidden { display: none; }
+
+    /* ---- Pied de carte : meta + bouton Répondre ---- */
+    .annonce-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Ligne « comment ça marche » ---- */
+    .circuit-ligne {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .circuit-ligne i { color: var(--primary); font-size: 15px; margin-top: 3px; }
+    .circuit-ligne p { max-width: 100%; color: var(--text-muted); }
+    .circuit-ligne strong { color: var(--text-main); }
+
+    /* ---- Modale « Répondre » (démo) ---- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 21, 18, 0.45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+    .modal-backdrop[hidden] { display: none; }
+
+    .modal-card {
+      width: 100%;
+      max-width: 560px;
+      background: var(--bg-surface);
+      padding: 32px;
+      position: relative;
+      animation: fadeInUp 0.35s var(--ease-out);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 1;
+    }
+    .modal-close:hover { color: var(--primary); border-color: var(--primary-20); }
+
+    .modal-card h3 { font-size: 1.25rem; line-height: 1.3; margin: 10px 0 6px; }
+    .modal-contexte { font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px; max-width: 100%; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      color: var(--text-main);
+      background: var(--bg-surface);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-subtle); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    .demo-note {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin: -8px 0 18px;
+      max-width: 100%;
+    }
+    .demo-note i { font-size: 10px; }
+
+    .suite-box {
+      margin-top: 22px;
+      padding: 18px 20px;
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+    .suite-box h4 {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .suite-box h4 i { color: var(--primary); font-size: 13px; }
+    .suite-box ol {
+      margin: 0;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .envoi-confirm {
+      margin-top: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--secondary);
+      background: var(--secondary-10);
+      border: 1px solid rgba(88, 99, 48, 0.25);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      max-width: 100%;
+    }
+    .envoi-confirm .btn { margin-top: 12px; }
+
+    @media (max-width: 768px) {
+      .modal-backdrop { padding: 16px 10px; }
+      .modal-card { padding: 24px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -86,6 +234,11 @@
   <section class="section-sm">
     <div class="container container-narrow">
 
+      <div class="glass-card no-hover circuit-ligne">
+        <i class="fas fa-route"></i>
+        <p><strong>Comment ça marche&nbsp;:</strong> déposer une annonce demande un compte e-Sol. Chaque annonce reçoit ses réponses par mail, directement chez son auteur·rice, sans que son adresse soit affichée. Quand c'est réglé, l'auteur·rice retire son annonce.</p>
+      </div>
+
       <div class="type-filter">
         <button class="type-filter-btn active" data-type="all">Toutes</button>
         <button class="type-filter-btn" data-type="offre">Offres</button>
@@ -101,12 +254,15 @@
           <div class="annonce-type-icon type-offre"><i class="fas fa-chalkboard-user"></i></div>
           <div class="annonce-body">
             <span class="badge badge-olive mb-2" style="font-size: 10px;">Offre</span>
-            <h3 class="annonce-title">Formation Fresque du Sol — Session Février 2026</h3>
+            <h3 class="annonce-title">Formation Fresque du Sol - Session Février 2026</h3>
             <p class="annonce-desc">Formation d'une journée pour devenir animateur de la Fresque du Sol. Prochaine session à Lyon les 15 et 16 février. Places limitées.</p>
-            <div class="annonce-meta">
-              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Lyon</div>
-              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> 15-16 Fév. 2026</div>
-              <div class="annonce-meta-item"><i class="fas fa-user"></i> M. Villandreau</div>
+            <div class="annonce-footer">
+              <div class="annonce-meta">
+                <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Lyon</div>
+                <div class="annonce-meta-item"><i class="fas fa-calendar"></i> 15-16 Fév. 2026</div>
+                <div class="annonce-meta-item"><i class="fas fa-user"></i> M. Villandreau</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm js-repondre" data-titre="Formation Fresque du Sol - Session Février 2026" data-auteur="M. Villandreau"><i class="fas fa-reply"></i> Répondre</button>
             </div>
           </div>
         </div>
@@ -117,10 +273,13 @@
             <span class="badge badge-terra mb-2" style="font-size: 10px;">Demande</span>
             <h3 class="annonce-title">Recherche tarière à vis pour échantillonnage</h3>
             <p class="annonce-desc">Laboratoire basé à Rennes cherche à emprunter une tarière à vis (Ø8cm) pour une campagne de prélèvement de 2 semaines en mars. Frais de transport pris en charge.</p>
-            <div class="annonce-meta">
-              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Rennes</div>
-              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Mars 2026</div>
-              <div class="annonce-meta-item"><i class="fas fa-user"></i> M. Quernec</div>
+            <div class="annonce-footer">
+              <div class="annonce-meta">
+                <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Rennes</div>
+                <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Mars 2026</div>
+                <div class="annonce-meta-item"><i class="fas fa-user"></i> M. Quernec</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm js-repondre" data-titre="Recherche tarière à vis pour échantillonnage" data-auteur="M. Quernec"><i class="fas fa-reply"></i> Répondre</button>
             </div>
           </div>
         </div>
@@ -129,12 +288,15 @@
           <div class="annonce-type-icon type-offre"><i class="fas fa-graduation-cap"></i></div>
           <div class="annonce-body">
             <span class="badge badge-olive mb-2" style="font-size: 10px;">Offre</span>
-            <h3 class="annonce-title">Stage M2 — Indicateurs biologiques des sols en vignoble</h3>
+            <h3 class="annonce-title">Stage M2 - Indicateurs biologiques des sols en vignoble</h3>
             <p class="annonce-desc">Un laboratoire public d'agronomie de Dijon propose un stage de 6 mois (indemnisé) portant sur l'évaluation de la macrofaune du sol comme indicateur de santé dans les vignobles bourguignons.</p>
-            <div class="annonce-meta">
-              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Dijon</div>
-              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Fév.–Juil. 2026</div>
-              <div class="annonce-meta-item"><i class="fas fa-user"></i> B. Crémancey</div>
+            <div class="annonce-footer">
+              <div class="annonce-meta">
+                <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Dijon</div>
+                <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Fév.-Juil. 2026</div>
+                <div class="annonce-meta-item"><i class="fas fa-user"></i> B. Crémancey</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm js-repondre" data-titre="Stage M2 - Indicateurs biologiques des sols en vignoble" data-auteur="B. Crémancey"><i class="fas fa-reply"></i> Répondre</button>
             </div>
           </div>
         </div>
@@ -143,12 +305,15 @@
           <div class="annonce-type-icon type-info"><i class="fas fa-calendar-days"></i></div>
           <div class="annonce-body">
             <span class="badge" style="font-size: 10px; background: var(--cat-politique-bg); color: var(--cat-politique); border: 1px solid rgba(78,78,136,0.15);">Info</span>
-            <h3 class="annonce-title" style="margin-top: 8px;">Journée Mondiale des Sols — 5 Décembre</h3>
+            <h3 class="annonce-title" style="margin-top: 8px;">Journée Mondiale des Sols - 5 Décembre</h3>
             <p class="annonce-desc">L'AFES organise une journée nationale d'événements autour du thème « Sols et eau » pour l'édition 2026. Appel à contribution ouvert jusqu'au 15 octobre.</p>
-            <div class="annonce-meta">
-              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> France entière</div>
-              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> 5 Déc. 2026</div>
-              <div class="annonce-meta-item"><i class="fas fa-user"></i> AFES</div>
+            <div class="annonce-footer">
+              <div class="annonce-meta">
+                <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> France entière</div>
+                <div class="annonce-meta-item"><i class="fas fa-calendar"></i> 5 Déc. 2026</div>
+                <div class="annonce-meta-item"><i class="fas fa-user"></i> AFES</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm js-repondre" data-titre="Journée Mondiale des Sols - 5 Décembre" data-auteur="l'équipe AFES"><i class="fas fa-reply"></i> Répondre</button>
             </div>
           </div>
         </div>
@@ -159,10 +324,13 @@
             <span class="badge badge-terra mb-2" style="font-size: 10px;">Demande</span>
             <h3 class="annonce-title">Co-encadrement thèse sur la séquestration carbone</h3>
             <p class="annonce-desc">Une équipe de recherche montpelliéraine cherche un co-directeur de thèse en pédologie pour un projet sur la modélisation de la séquestration carbone dans les sols tropicaux.</p>
-            <div class="annonce-meta">
-              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Montpellier</div>
-              <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Rentrée 2026</div>
-              <div class="annonce-meta-item"><i class="fas fa-user"></i> N. Azeroual</div>
+            <div class="annonce-footer">
+              <div class="annonce-meta">
+                <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Montpellier</div>
+                <div class="annonce-meta-item"><i class="fas fa-calendar"></i> Rentrée 2026</div>
+                <div class="annonce-meta-item"><i class="fas fa-user"></i> N. Azeroual</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm js-repondre" data-titre="Co-encadrement thèse sur la séquestration carbone" data-auteur="N. Azeroual"><i class="fas fa-reply"></i> Répondre</button>
             </div>
           </div>
         </div>
@@ -173,9 +341,12 @@
             <span class="badge badge-olive mb-2" style="font-size: 10px;">Offre</span>
             <h3 class="annonce-title">Don de collection de guides AFES (vieux numéros EGS)</h3>
             <p class="annonce-desc">Pédologue en retraite propose une collection complète des numéros 1 à 25 de la revue Étude et Gestion des Sols. Retrait sur place uniquement.</p>
-            <div class="annonce-meta">
-              <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Tours</div>
-              <div class="annonce-meta-item"><i class="fas fa-user"></i> O. Sorel</div>
+            <div class="annonce-footer">
+              <div class="annonce-meta">
+                <div class="annonce-meta-item"><i class="fas fa-location-dot"></i> Tours</div>
+                <div class="annonce-meta-item"><i class="fas fa-user"></i> O. Sorel</div>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm js-repondre" data-titre="Don de collection de guides AFES (vieux numéros EGS)" data-auteur="O. Sorel"><i class="fas fa-reply"></i> Répondre</button>
             </div>
           </div>
         </div>
@@ -194,6 +365,51 @@
     </div>
   </section>
 
+  <!-- ===== MODALE « RÉPONDRE » (démo) ===== -->
+  <div class="modal-backdrop" id="repondre-backdrop" hidden>
+    <div class="modal-card glass-card no-hover" role="dialog" aria-modal="true" aria-labelledby="repondre-titre" id="repondre-modal">
+      <button type="button" class="modal-close" id="repondre-fermer" aria-label="Fermer la fenêtre"><i class="fas fa-xmark"></i></button>
+
+      <span class="badge badge-terra" style="font-size: 10px;">Répondre</span>
+      <h3 id="repondre-titre">Répondre à l'annonce</h3>
+      <p class="modal-contexte" id="repondre-contexte"></p>
+
+      <form id="repondre-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="repondre-nom">Nom</label>
+            <input type="text" class="form-input" id="repondre-nom" value="Solène Reverdy">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="repondre-email">Email</label>
+            <input type="email" class="form-input" id="repondre-email" value="solene.reverdy@example.org">
+          </div>
+        </div>
+        <p class="demo-note"><i class="fas fa-circle-info"></i> Champs pré-remplis avec un profil fictif (mode démo). Sur la vraie plateforme, votre compte e-Sol les remplit pour vous.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="repondre-message">Votre message</label>
+          <textarea class="form-textarea" id="repondre-message" placeholder="Ce que vous proposez ou demandez, et comment vous joindre…"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="justify-content: center;">
+          <i class="fas fa-paper-plane"></i> Envoyer ma réponse
+        </button>
+      </form>
+
+      <div class="envoi-confirm" id="repondre-confirm" role="status" hidden></div>
+
+      <div class="suite-box">
+        <h4><i class="fas fa-route"></i> Ce qui se passe ensuite</h4>
+        <ol>
+          <li>Votre réponse part par mail à l'auteur·rice de l'annonce, sans que son adresse soit affichée.</li>
+          <li>Il ou elle vous répond directement&nbsp;: vous êtes en contact, la suite se passe entre vous.</li>
+          <li>Quand c'est réglé, l'auteur·rice retire son annonce.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
   {{> footer }}
 
   <script>
@@ -209,6 +425,70 @@
           a.classList.toggle('hidden', type !== 'all' && a.dataset.type !== type);
         });
       });
+    });
+
+    // ---- Modale « Répondre » (démo, accessible : focus, Échap) ----
+    const backdrop = document.getElementById('repondre-backdrop');
+    const modal = document.getElementById('repondre-modal');
+    const modalForm = document.getElementById('repondre-form');
+    const modalConfirm = document.getElementById('repondre-confirm');
+    let lastFocus = null;
+    let currentAuteur = '';
+
+    function openRepondre(titre, auteur) {
+      currentAuteur = auteur;
+      lastFocus = document.activeElement;
+      document.getElementById('repondre-titre').textContent = 'Répondre à : ' + titre;
+      document.getElementById('repondre-contexte').textContent =
+        'Votre réponse partira par mail à ' + auteur + '.';
+      modalForm.hidden = false;
+      modalConfirm.hidden = true;
+      modalConfirm.innerHTML = '';
+      document.getElementById('repondre-message').value = '';
+      backdrop.hidden = false;
+      document.body.style.overflow = 'hidden';
+      document.getElementById('repondre-nom').focus();
+    }
+
+    function closeRepondre() {
+      backdrop.hidden = true;
+      document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus();
+    }
+
+    document.querySelectorAll('.js-repondre').forEach(btn => {
+      btn.addEventListener('click', () => openRepondre(btn.dataset.titre, btn.dataset.auteur));
+    });
+    document.getElementById('repondre-fermer').addEventListener('click', closeRepondre);
+    backdrop.addEventListener('mousedown', e => { if (e.target === backdrop) closeRepondre(); });
+
+    document.addEventListener('keydown', e => {
+      if (backdrop.hidden) return;
+      if (e.key === 'Escape') { closeRepondre(); return; }
+      if (e.key === 'Tab') {
+        // Le focus reste dans la fenêtre tant qu'elle est ouverte
+        const focusables = Array.from(modal.querySelectorAll('button, [href], input, select, textarea'))
+          .filter(el => el.offsetParent !== null);
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+        else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+      }
+    });
+
+    modalForm.addEventListener('submit', e => {
+      e.preventDefault();
+      modalForm.hidden = true;
+      modalConfirm.innerHTML =
+        '<strong>Réponse envoyée (démo).</strong> Rien n\'est réellement parti d\'ici. ' +
+        'Sur la vraie plateforme, votre message serait envoyé par mail à ' + currentAuteur +
+        ', qui vous répondrait directement à votre adresse.<br>' +
+        '<button type="button" class="btn btn-outline btn-sm" id="repondre-confirm-fermer">Fermer</button>';
+      modalConfirm.hidden = false;
+      modalConfirm.setAttribute('tabindex', '-1');
+      modalConfirm.focus();
+      document.getElementById('repondre-confirm-fermer').addEventListener('click', closeRepondre);
     });
   </script>
 

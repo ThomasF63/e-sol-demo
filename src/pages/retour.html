@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   {{> head }}
-  <title>Formulaire de Retour - e-Sol</title>
+  <title>Donner votre avis - e-Sol</title>
   <style>
     .retour-form { padding: 48px; max-width: 700px; margin: 0 auto; }
 
@@ -42,6 +42,9 @@
     .form-textarea { resize: vertical; min-height: 160px; }
     .form-input::placeholder, .form-textarea::placeholder { color: var(--text-subtle); }
 
+    .form-section-title { font-size: 1.1rem; margin-bottom: 4px; }
+    .form-section-sub { font-size: 0.85rem; color: var(--text-subtle); margin-bottom: 16px; }
+
     /* Emoji rating */
     .emoji-rating {
       display: flex;
@@ -75,6 +78,120 @@
       box-shadow: 0 4px 16px rgba(156,63,0,0.2);
     }
 
+    /* Retours espace par espace */
+    .space-block { padding: 14px 0; }
+    .space-block + .space-block { border-top: 1px solid var(--border); }
+
+    .space-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .space-icon {
+      width: 34px; height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-10);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .space-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .rating-pills { display: flex; gap: 6px; margin-left: auto; }
+
+    .rating-pill { position: relative; cursor: pointer; }
+
+    .rating-pill input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .rating-pill span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px; height: 34px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      transition: all 0.2s ease;
+    }
+
+    .rating-pill:hover span { border-color: var(--primary); color: var(--primary); }
+
+    .rating-pill input:checked + span {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .rating-pill input:focus-visible + span {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-10);
+    }
+
+    .space-details { margin-top: 8px; margin-left: 46px; }
+
+    .space-details summary {
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      width: fit-content;
+    }
+
+    .space-details summary:hover { color: var(--primary); }
+    .space-details[open] summary { margin-bottom: 8px; }
+    .space-details .form-textarea { min-height: 80px; }
+
+    @media (max-width: 600px) {
+      .retour-form { padding: 32px 24px; }
+      .space-details { margin-left: 0; }
+    }
+
+    /* Cases à cocher */
+    .utile-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .utile-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .utile-item input[type="checkbox"] {
+      width: 17px; height: 17px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .utile-item .form-input {
+      padding: 8px 12px;
+      font-size: 14px;
+      flex: 1;
+      max-width: 280px;
+    }
+
     .form-hint {
       font-size: 12px;
       color: var(--text-subtle);
@@ -88,9 +205,9 @@
 
   <div class="page-hero">
     <div class="container">
-      <span class="badge badge-olive mb-4">Amélioration Continue</span>
-      <h1>Laisser un retour</h1>
-      <p>Aidez-nous à améliorer e-Sol. Bugs, idées, suggestions — chaque retour compte pour faire évoluer la plateforme.</p>
+      <span class="badge badge-olive mb-4">Amélioration continue</span>
+      <h1>Donner votre avis</h1>
+      <p>Notez les espaces que vous utilisez, ignorez les autres : chaque retour aide à améliorer la plateforme.</p>
     </div>
   </div>
 
@@ -107,6 +224,134 @@
             <button class="emoji-btn" data-val="4" title="Satisfait">🙂</button>
             <button class="emoji-btn" data-val="5" title="Très satisfait">🤩</button>
           </div>
+        </div>
+
+        <hr style="border: none; height: 1px; background: var(--border); margin: 32px 0;">
+
+        <h3 class="form-section-title">Vos retours, espace par espace</h3>
+        <p class="form-section-sub">Une note de 1 (à revoir) à 5 (très satisfaisant). Tout est optionnel : notez ce que vous voulez.</p>
+
+        <div class="space-block">
+          <div class="space-head">
+            <span class="space-icon"><i class="fas fa-house"></i></span>
+            <span class="space-name">Accueil</span>
+            <div class="rating-pills" role="radiogroup" aria-label="Note pour l'espace Accueil">
+              <label class="rating-pill"><input type="radio" name="note-accueil" value="1"><span>1</span></label>
+              <label class="rating-pill"><input type="radio" name="note-accueil" value="2"><span>2</span></label>
+              <label class="rating-pill"><input type="radio" name="note-accueil" value="3"><span>3</span></label>
+              <label class="rating-pill"><input type="radio" name="note-accueil" value="4"><span>4</span></label>
+              <label class="rating-pill"><input type="radio" name="note-accueil" value="5"><span>5</span></label>
+            </div>
+          </div>
+          <details class="space-details">
+            <summary>Ajouter un commentaire sur cet espace</summary>
+            <textarea class="form-textarea" placeholder="Ce qui fonctionne, ce qui manque, ce qui bloque…"></textarea>
+          </details>
+        </div>
+
+        <div class="space-block">
+          <div class="space-head">
+            <span class="space-icon"><i class="fas fa-address-book"></i></span>
+            <span class="space-name">Annuaire et réseau</span>
+            <div class="rating-pills" role="radiogroup" aria-label="Note pour l'espace Annuaire et réseau">
+              <label class="rating-pill"><input type="radio" name="note-annuaire" value="1"><span>1</span></label>
+              <label class="rating-pill"><input type="radio" name="note-annuaire" value="2"><span>2</span></label>
+              <label class="rating-pill"><input type="radio" name="note-annuaire" value="3"><span>3</span></label>
+              <label class="rating-pill"><input type="radio" name="note-annuaire" value="4"><span>4</span></label>
+              <label class="rating-pill"><input type="radio" name="note-annuaire" value="5"><span>5</span></label>
+            </div>
+          </div>
+          <details class="space-details">
+            <summary>Ajouter un commentaire sur cet espace</summary>
+            <textarea class="form-textarea" placeholder="Ce qui fonctionne, ce qui manque, ce qui bloque…"></textarea>
+          </details>
+        </div>
+
+        <div class="space-block">
+          <div class="space-head">
+            <span class="space-icon"><i class="fas fa-users"></i></span>
+            <span class="space-name">Communautés</span>
+            <div class="rating-pills" role="radiogroup" aria-label="Note pour l'espace Communautés">
+              <label class="rating-pill"><input type="radio" name="note-communautes" value="1"><span>1</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communautes" value="2"><span>2</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communautes" value="3"><span>3</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communautes" value="4"><span>4</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communautes" value="5"><span>5</span></label>
+            </div>
+          </div>
+          <details class="space-details">
+            <summary>Ajouter un commentaire sur cet espace</summary>
+            <textarea class="form-textarea" placeholder="Ce qui fonctionne, ce qui manque, ce qui bloque…"></textarea>
+          </details>
+        </div>
+
+        <div class="space-block">
+          <div class="space-head">
+            <span class="space-icon"><i class="fas fa-comments"></i></span>
+            <span class="space-name">Forum</span>
+            <div class="rating-pills" role="radiogroup" aria-label="Note pour l'espace Forum">
+              <label class="rating-pill"><input type="radio" name="note-forum" value="1"><span>1</span></label>
+              <label class="rating-pill"><input type="radio" name="note-forum" value="2"><span>2</span></label>
+              <label class="rating-pill"><input type="radio" name="note-forum" value="3"><span>3</span></label>
+              <label class="rating-pill"><input type="radio" name="note-forum" value="4"><span>4</span></label>
+              <label class="rating-pill"><input type="radio" name="note-forum" value="5"><span>5</span></label>
+            </div>
+          </div>
+          <details class="space-details">
+            <summary>Ajouter un commentaire sur cet espace</summary>
+            <textarea class="form-textarea" placeholder="Ce qui fonctionne, ce qui manque, ce qui bloque…"></textarea>
+          </details>
+        </div>
+
+        <div class="space-block">
+          <div class="space-head">
+            <span class="space-icon"><i class="fas fa-hand-holding-heart"></i></span>
+            <span class="space-name">Communs et ressources</span>
+            <div class="rating-pills" role="radiogroup" aria-label="Note pour l'espace Communs et ressources">
+              <label class="rating-pill"><input type="radio" name="note-communs" value="1"><span>1</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communs" value="2"><span>2</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communs" value="3"><span>3</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communs" value="4"><span>4</span></label>
+              <label class="rating-pill"><input type="radio" name="note-communs" value="5"><span>5</span></label>
+            </div>
+          </div>
+          <details class="space-details">
+            <summary>Ajouter un commentaire sur cet espace</summary>
+            <textarea class="form-textarea" placeholder="Ce qui fonctionne, ce qui manque, ce qui bloque…"></textarea>
+          </details>
+        </div>
+
+        <div class="space-block">
+          <div class="space-head">
+            <span class="space-icon"><i class="fas fa-ellipsis"></i></span>
+            <span class="space-name">Autre</span>
+            <div class="rating-pills" role="radiogroup" aria-label="Note pour un autre espace">
+              <label class="rating-pill"><input type="radio" name="note-autre" value="1"><span>1</span></label>
+              <label class="rating-pill"><input type="radio" name="note-autre" value="2"><span>2</span></label>
+              <label class="rating-pill"><input type="radio" name="note-autre" value="3"><span>3</span></label>
+              <label class="rating-pill"><input type="radio" name="note-autre" value="4"><span>4</span></label>
+              <label class="rating-pill"><input type="radio" name="note-autre" value="5"><span>5</span></label>
+            </div>
+          </div>
+          <details class="space-details">
+            <summary>Ajouter un commentaire sur cet espace</summary>
+            <textarea class="form-textarea" placeholder="Précisez de quel espace il s'agit et ce que vous en pensez…"></textarea>
+          </details>
+        </div>
+
+        <hr style="border: none; height: 1px; background: var(--border); margin: 32px 0;">
+
+        <h3 class="form-section-title">Qu'est-ce qui vous serait le plus utile ensuite ?</h3>
+        <p class="form-section-sub">Plusieurs réponses possibles.</p>
+
+        <div class="utile-list form-group">
+          <label class="utile-item"><input type="checkbox" name="utile" value="messagerie"> Une messagerie entre membres</label>
+          <label class="utile-item"><input type="checkbox" name="utile" value="notifications"> Des notifications par mail</label>
+          <label class="utile-item"><input type="checkbox" name="utile" value="compte-unique"> Un compte unique plateforme + forum</label>
+          <label class="utile-item"><input type="checkbox" name="utile" value="agenda"> Un agenda partagé</label>
+          <label class="utile-item"><input type="checkbox" name="utile" value="autre"> Autre :
+            <input type="text" class="form-input" name="utile-autre" placeholder="Précisez…" aria-label="Autre besoin, précisez">
+          </label>
         </div>
 
         <hr style="border: none; height: 1px; background: var(--border); margin: 32px 0;">
@@ -137,6 +382,8 @@
         <button class="btn btn-primary btn-lg w-full" style="justify-content: center;" onclick="alert('Ceci est une démonstration. Le formulaire réel est sur e-sol.fr')">
           <i class="fas fa-paper-plane"></i> Envoyer mon retour
         </button>
+
+        <p class="form-hint text-center mt-3">Ce formulaire préfigure le formulaire de retour de la vraie plateforme.</p>
 
       </div>
     </div>

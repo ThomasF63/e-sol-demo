@@ -1,0 +1,55 @@
+Captures d'écran des pages publiques du site e-sol.fr.
+
+Ce dossier contient les captures FINALES, annotées (cadres, pastilles
+numérotées, étiquettes), intégrées dans premiers-pas.html et destinées au
+portage YesWiki (docs/premiers-pas-yeswiki.md). Elles documentent le site
+RÉEL tel qu'il est : la maquette préfigure le futur site, les captures
+montrent l'outil d'aujourd'hui. Les pastilles reprennent les numéros des
+listes à cocher des étapes qu'elles illustrent.
+
+Captures produites le 19/08/2026 (pages publiques, sans connexion).
+
+Pipeline (reproductible, à relancer si le site évolue) :
+1. node scripts/capture-esol-public.js
+   Capture les pages publiques en BRUT dans captures/brut/ (dossier hors
+   git), avec pour chaque vue un sidecar <nom>.zones.json : les rectangles
+   des éléments d'interface, relevés dans la page APRÈS floutage.
+2. node scripts/annoter-captures.js esol-public
+   Incruste les annotations décrites dans scripts/annotations/
+   esol-public.json (spécification versionnée) et écrit les PNG finaux ici.
+   Nota : les annotations à rectangle littéral (gare d'aiguillage, sections
+   de la charte, textareas et case charte du formulaire) sont calées sur les
+   sidecars du 19/08/2026 ; après une recapture, vérifier ces rectangles.
+
+Présentes (6 vues publiques) :
+  esol-accueil.png         accueil, bouton S'inscrire + gare d'aiguillage
+                           (en réserve, non intégrée à premiers-pas)
+  esol-inscription.png     formulaire d'inscription VIDE, pleine page
+                           (étape 1 ; repères 1-4 = liste de l'étape ;
+                           case charte encadrée en bas)
+  esol-charte.png          page Charte : bandeau, vidéo, préambule (étape 2)
+  esol-communautes.png     liste des communautés, 1er volet déplié (étape 3)
+  esol-espace-actions.png  Espace Actions, page d'orientation (étape 5)
+  esol-annuaire.png        annuaire, liste des fiches FLOUTÉE
+                           (en réserve, non intégrée à premiers-pas)
+L'étape 4 (forum) réutilise img/tutos/forum/forum-a-accueil.png.
+
+Écartées d'office : ?ListeDesActions et ?Trombinoscope-des-inscrits, dont
+tout le contenu utile est nominatif (référent·e·s, photos) : floutées, il
+ne resterait rien à montrer.
+
+Constat utile (19/08/2026) : le vrai formulaire d'inscription comporte bien
+une case charte, NON obligatoire, libellée « J'ai lu la charte e-Sol et je
+comprends qu'en m'inscrivant sur la plateforme, je m'engage à la
+respecter. » (bf_charte_esol), distincte de la case RGPD obligatoire, et
+suivie d'un champ conditionnel « Date de la signature de la charte ».
+
+Poids : esol-inscription.png (~3,0 Mo, carte Leaflet), esol-charte.png
+(~0,9 Mo), esol-annuaire.png (~0,6 Mo) et esol-accueil.png (~0,5 Mo)
+dépassent l'objectif des 400 Ko : compresser (pngquant, Squoosh...) avant
+téléversement YesWiki.
+
+Règle : jamais de vrais membres dans les livrables. Le floutage (fiches
+bazar, attributs data-bf_nom/prenom, avatars) est automatique à la capture ;
+vérifier chaque image malgré tout avant tout téléversement (cadrage, aucun
+nom réel lisible : l'annuaire surtout).

@@ -126,6 +126,37 @@
       line-height: 1.5;
     }
 
+    /* Rattachement aux communautés : mini-option « disponible pour participer ».
+       Sans JS, la mini-option reste visible mais grisée et désactivée. */
+    .commu-choice { display: flex; flex-direction: column; gap: 6px; }
+
+    .commu-sub {
+      margin-left: 32px;
+      opacity: 0.45;
+      transition: opacity 0.25s ease;
+    }
+
+    .commu-sub span { font-size: 13px; }
+
+    .commu-choice.checked .commu-sub { opacity: 1; }
+
+    /* Encadré charte : l'acte de signature */
+    .charte-box {
+      padding: 24px 28px;
+      border: 1.5px solid var(--primary-20);
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #fffcf7, var(--bg-warm));
+      margin-bottom: 24px;
+    }
+
+    .charte-box p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      max-width: 100%;
+    }
+
     /* Sidebar benefits */
     .benefit-item {
       display: flex;
@@ -224,14 +255,12 @@
 
             <div class="form-group">
               <label class="form-label">Quelles communautés vous intéressent ?</label>
-              <p class="form-hint mb-3" style="margin-top: 0;">Vous pourrez en rejoindre d'autres plus tard.</p>
-              <div class="flex flex-col gap-3">
-                <label class="form-checkbox"><input type="checkbox"> <span>Animateurs Fresque du Sol</span></label>
-                <label class="form-checkbox"><input type="checkbox"> <span>Sols Forestiers (IPRSol)</span></label>
-                <label class="form-checkbox"><input type="checkbox"> <span>Zéro Artificialisation Nette (ZAN)</span></label>
-                <label class="form-checkbox"><input type="checkbox"> <span>Sciences et Recherches Participatives (SRP Sols)</span></label>
-                <label class="form-checkbox"><input type="checkbox"> <span>Pédologie de Terrain</span></label>
-                <label class="form-checkbox"><input type="checkbox"> <span>Refersols</span></label>
+              <p class="form-hint mb-3" style="margin-top: 0;">Cocher une communauté vous y rattache librement&nbsp;: vous recevez ses informations. Vous pourrez en rejoindre d'autres à tout moment.</p>
+              <div class="flex flex-col gap-3" id="communities-checklist">
+                <!-- Liste générée depuis data/communities.json ; message de repli sinon -->
+                <p class="form-hint" style="margin: 0;">La liste des communautés n'a pas pu être chargée. Retrouvez-la sur la page <a href="communautes.html" style="font-weight: 600;">communautés</a> et indiquez vos choix dans le champ de présentation ci-dessous.</p>
+              </div>
+              <div class="flex flex-col gap-3 mt-3">
                 <label class="form-checkbox"><input type="checkbox"> <span>Autre / Je ne sais pas encore</span></label>
               </div>
             </div>
@@ -243,10 +272,20 @@
 
             <hr class="form-divider">
 
+            <div class="charte-box" id="bloc-charte">
+              <div class="form-section-title" style="margin-bottom: 10px;"><i class="fas fa-scroll"></i> La charte e-Sol</div>
+              <p>Le sol commun du réseau&nbsp;: principes, licences ouvertes, gouvernance. L'accepter est votre acte d'entrée dans e-Sol.</p>
+              <a href="charte.html" class="btn btn-outline btn-sm"><i class="fas fa-book-open"></i> Lire la charte</a>
+              <label class="form-checkbox" style="margin-top: 16px;">
+                <input type="checkbox" required>
+                <span>J'ai lu et j'accepte la charte e-Sol. <span class="required">*</span></span>
+              </label>
+            </div>
+
             <div class="form-group">
               <label class="form-checkbox">
-                <input type="checkbox">
-                <span>J'ai lu et j'accepte la <a href="charte.html" style="font-weight: 600;">Charte e-Sol</a> et la politique de confidentialité. <span class="required">*</span></span>
+                <input type="checkbox" required>
+                <span>J'accepte la politique de confidentialité. <span class="required">*</span></span>
               </label>
             </div>
 
@@ -317,6 +356,37 @@
   </section>
 
   {{> footer }}
+
+  <script>
+    // Communautés actives depuis les données partagées de la démo (tri alphabétique).
+    // En cas d'échec, le message de repli reste affiché et « Autre » reste cochable.
+    fetch('data/communities.json')
+      .then(r => r.json())
+      .then(communities => {
+        const actives = communities
+          .filter(c => c.statut === 'active')
+          .sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+        if (actives.length === 0) return;
+
+        const box = document.getElementById('communities-checklist');
+        box.innerHTML = actives.map(c => `
+          <div class="commu-choice">
+            <label class="form-checkbox"><input type="checkbox" class="commu-main" data-id="${c.id}"> <span>${c.name}</span></label>
+            <label class="form-checkbox commu-sub"><input type="checkbox" disabled> <span>… et je suis disponible pour participer (l'équipe d'animation pourra me solliciter)</span></label>
+          </div>`).join('');
+
+        // La mini-option ne devient active que si la communauté est cochée
+        box.addEventListener('change', e => {
+          if (!e.target.classList.contains('commu-main')) return;
+          const choice = e.target.closest('.commu-choice');
+          const sub = choice.querySelector('.commu-sub input');
+          sub.disabled = !e.target.checked;
+          if (!e.target.checked) sub.checked = false;
+          choice.classList.toggle('checked', e.target.checked);
+        });
+      })
+      .catch(() => { /* message de repli conservé */ });
+  </script>
 
 </body>
 </html>
