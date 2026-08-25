@@ -52,7 +52,7 @@ CAT = {
     "Formation":      ("9C3F00", "FFDBCC"),
     "Recherche":      ("586330", "DBE9A9"),
     "Éducation":      ("705740", "FEDCBE"),
-    "Professionnel":  ("586330", "D8E6A6"),
+    "Professionnel":  ("264E54", "C9E2E4"),
     "Politique":      ("4E4E88", "EEEEF8"),
     "Culture":        ("885060", "F5EDF2"),
     "Institutionnel": ("8C7166", "F3EFEC"),

@@ -43,8 +43,8 @@
     --cat-recherche-bg: #dbe9a9;
     --cat-education: #705740;
     --cat-education-bg: #fedcbe;
-    --cat-professionnel: #586330;
-    --cat-professionnel-bg: #d8e6a6;
+    --cat-professionnel: #264e54;
+    --cat-professionnel-bg: #c9e2e4;
     --cat-politique: #4e4e88;
     --cat-politique-bg: #eeeef8;
     --cat-culture: #885060;
@@ -130,6 +130,21 @@
   h4 { font-size: 1.15rem; }
 
   p { max-width: 72ch; }
+
+  /* Un paragraphe centré doit l'être dans son conteneur : sans marges
+     automatiques, la limite de 72ch ci-dessus cale sa boîte à gauche et le
+     texte paraît décalé sur les pages larges. */
+  p.text-center,
+  .text-center > p,
+  .section-header p,
+  .footnote,
+  .gov-note,
+  .illustration-note,
+  .cycle-note,
+  .pp-note-captures {
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   a {
     color: var(--primary);

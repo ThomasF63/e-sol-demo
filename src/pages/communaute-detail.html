@@ -521,7 +521,20 @@
 
         // Update page content
         document.title = c.name + ' - e-Sol';
-        document.getElementById('detail-title').textContent = c.name;
+        const titre = document.getElementById('detail-title');
+        titre.textContent = c.name;
+        // Acronyme entre parenthèses dans le titre (« … (IPRSol) ») : on le
+        // lève sur place, avec le résumé de la fiche. Voir le composant
+        // infobulle.
+        if (/\(.+\)/.test(c.name) && c.shortDescription) {
+          const aide = document.createElement('button');
+          aide.type = 'button';
+          aide.className = 'infobulle';
+          aide.textContent = 'i';
+          aide.setAttribute('data-sujet', c.name);
+          aide.setAttribute('data-infobulle', c.shortDescription);
+          titre.appendChild(aide);
+        }
         document.getElementById('detail-description').textContent = c.description;
         document.getElementById('detail-category').textContent = c.category;
         document.getElementById('detail-members').textContent = c.members;
@@ -610,6 +623,8 @@
         </a>`).join('') + (reste > 0 ? `<div class="member-pill" style="background: var(--primary-10); color: var(--primary); border-color: var(--primary-20);">et ${reste} autres</div>` : '');
     }
   </script>
+
+  {{> infobulle }}
 
 </body>
 </html>

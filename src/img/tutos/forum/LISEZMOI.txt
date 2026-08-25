@@ -1,13 +1,29 @@
 Captures d'écran des tutoriels forum.
 
-Ce dossier contient les captures FINALES, annotées (cadres, pastilles
-numérotées, flèches, étiquettes), intégrées dans tutoriels-forum.html et
-destinées au portage YesWiki. Les pastilles reprennent les numéros des
-étapes des fiches qu'elles illustrent.
+Ce dossier contient les captures FINALES, annotées (voile projecteur,
+cadres, pastilles numérotées, flèches, étiquettes), intégrées dans
+tutoriels-forum.html et destinées au portage YesWiki. Les pastilles
+reprennent les numéros des étapes des fiches qu'elles illustrent.
 
 Le certificat TLS de forum.e-sol.fr, expiré le 19/07/2026, a été renouvelé
 le 16/08/2026 (valide jusqu'au 14/11/2026) : les captures publiques ont été
 produites le 18/08/2026.
+
+STYLE D'ANNOTATION, révisé le 25/08/2026
+Les repères se voyaient mal sur des interfaces chargées. Quatre renforts,
+tous dans scripts/annoter-captures.js, charte inchangée (terra #9c3f00,
+halo #fdfbf9, Outfit) :
+  - voile projecteur : toute l'image est assombrie d'un voile translucide
+    (opacité 0,26) SAUF l'intérieur des cadres, dont les trous épousent
+    exactement le tracé, bord légèrement adouci. Le reste de la capture
+    reste parfaitement lisible, mais l'œil va d'abord aux zones utiles ;
+  - cadres : trait porté de 4 à 6, halo de 10 à 16, coins arrondis à 14 ;
+  - pastilles : rayon de 30 à 40, anneau clair de 8 et ombre portée, si
+    bien qu'elles ne se confondent plus avec le fond ;
+  - flèches et étiquettes : trait et pointe épaissis, ombre portée, liseré
+    terra sur le bord gauche des étiquettes.
+Réglage possible image par image dans la spécification, par une entrée
+{ "type": "reglages", "projecteur": false } ou { ..., "opacite": 0.2 }.
 
 Pipeline (reproductible, à relancer si le forum évolue) :
 1. node scripts/capture-tutos-forum.js
@@ -17,13 +33,22 @@ Pipeline (reproductible, à relancer si le forum évolue) :
 2. node scripts/annoter-captures.js
    Incruste les annotations décrites dans scripts/annotations/
    tutos-forum.json (spécification versionnée) et écrit les PNG finaux ici.
+   Toute image dépassant 400 Ko est repassée par Pillow (quantification à
+   256 couleurs) : le voile ajoute des teintes intermédiaires et alourdit
+   le PNG.
 
-Présentes (5 vues publiques) :
-  forum-a-accueil.png     accueil, bouton Se connecter (fiche A)
-  forum-b-categories.png  page Catégories (fiche B)
-  forum-b-sujet.png       un sujet ouvert (fiche B)
-  forum-b-recherche.png   la recherche (fiche B, astuce)
-  forum-c-categorie.png   une page de catégorie, vue publique (fiche C)
+Présentes (5 vues publiques, 2560 x 1600 px, poids du 25/08/2026) :
+  forum-a-accueil.png     accueil, bouton Se connecter (fiche A)     347 Ko
+  forum-b-categories.png  page Catégories (fiche B)                  161 Ko
+  forum-b-sujet.png       un sujet ouvert (fiche B)                  160 Ko
+  forum-b-recherche.png   la recherche (fiche B, astuce)             244 Ko
+  forum-c-categorie.png   page de catégorie, vue publique (fiche C)  192 Ko
+Toutes sous l'objectif des 400 Ko.
+
+Affichage dans la maquette : les figures .tf-figure sont cliquables et
+s'ouvrent en grand (composant src/components/lightbox-captures.html, inclus
+en fin de tutoriels-forum.html). Sans JavaScript, elles restent de simples
+images.
 
 Abandonnées (relevé du 18/08/2026) : forum-a-connexion.png et
 forum-a-inscription.png. Les routes /login et /signup redirigent désormais

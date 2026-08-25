@@ -1,13 +1,30 @@
 Captures d'écran des pages publiques du site e-sol.fr.
 
-Ce dossier contient les captures FINALES, annotées (cadres, pastilles
-numérotées, étiquettes), intégrées dans premiers-pas.html et destinées au
-portage YesWiki (docs/premiers-pas-yeswiki.md). Elles documentent le site
-RÉEL tel qu'il est : la maquette préfigure le futur site, les captures
-montrent l'outil d'aujourd'hui. Les pastilles reprennent les numéros des
-listes à cocher des étapes qu'elles illustrent.
+Ce dossier contient les captures FINALES, annotées (voile projecteur,
+cadres, pastilles numérotées, étiquettes), intégrées dans premiers-pas.html
+et destinées au portage YesWiki (docs/premiers-pas-yeswiki.md). Elles
+documentent le site RÉEL tel qu'il est : la maquette préfigure le futur
+site, les captures montrent l'outil d'aujourd'hui. Les pastilles reprennent
+les numéros des listes à cocher des étapes qu'elles illustrent.
 
 Captures produites le 19/08/2026 (pages publiques, sans connexion).
+
+STYLE D'ANNOTATION, révisé le 25/08/2026
+Les repères se voyaient mal, surtout sur les pages claires et denses.
+Quatre renforts, tous dans scripts/annoter-captures.js, charte inchangée
+(terra #9c3f00, halo #fdfbf9, Outfit) :
+  - voile projecteur : toute l'image est assombrie d'un voile translucide
+    (opacité 0,26) SAUF l'intérieur des cadres, dont les trous épousent
+    exactement le tracé, bord légèrement adouci. Le reste de la page reste
+    parfaitement lisible, mais l'œil va d'abord aux zones utiles ;
+  - cadres : trait porté de 4 à 6, halo de 10 à 16, coins arrondis à 14 ;
+  - pastilles : rayon de 30 à 40, anneau clair de 8 et ombre portée ;
+  - flèches et étiquettes : trait et pointe épaissis, ombre portée, liseré
+    terra sur le bord gauche des étiquettes.
+Réglage possible image par image dans la spécification, par une entrée
+{ "type": "reglages", "projecteur": false } ou { ..., "opacite": 0.2 }.
+Effet secondaire utile sur l'annuaire : le voile assombrit encore les
+fiches déjà floutées.
 
 Pipeline (reproductible, à relancer si le site évolue) :
 1. node scripts/capture-esol-public.js
@@ -20,19 +37,34 @@ Pipeline (reproductible, à relancer si le site évolue) :
    Nota : les annotations à rectangle littéral (gare d'aiguillage, sections
    de la charte, textareas et case charte du formulaire) sont calées sur les
    sidecars du 19/08/2026 ; après une recapture, vérifier ces rectangles.
+   Toute image dépassant 400 Ko est repassée par Pillow (quantification à
+   256 couleurs) ; au-delà de 8 Mpx, elle est en outre ramenée à la demi-
+   résolution, celle que déclare déjà la page.
 
-Présentes (6 vues publiques) :
+Présentes (6 vues publiques, poids du 25/08/2026) :
   esol-accueil.png         accueil, bouton S'inscrire + gare d'aiguillage
                            (en réserve, non intégrée à premiers-pas)
+                           2560 x 4200, 207 Ko
   esol-inscription.png     formulaire d'inscription VIDE, pleine page
                            (étape 1 ; repères 1-4 = liste de l'étape ;
                            case charte encadrée en bas)
+                           1280 x 4047, 527 Ko
   esol-charte.png          page Charte : bandeau, vidéo, préambule (étape 2)
+                           2560 x 3400, 320 Ko
   esol-communautes.png     liste des communautés, 1er volet déplié (étape 3)
+                           2560 x 3200, 164 Ko
   esol-espace-actions.png  Espace Actions, page d'orientation (étape 5)
+                           2560 x 1800, 190 Ko
   esol-annuaire.png        annuaire, liste des fiches FLOUTÉE
                            (en réserve, non intégrée à premiers-pas)
+                           2560 x 2800, 288 Ko
 L'étape 4 (forum) réutilise img/tutos/forum/forum-a-accueil.png.
+
+Affichage dans la maquette : les figures .pp-figure sont cliquables et
+s'ouvrent en grand (composant src/components/lightbox-captures.html, inclus
+en fin de premiers-pas.html). Sans JavaScript, elles restent de simples
+images. Le formulaire d'inscription, capture en colonne, s'y lit en
+défilant sur toute la largeur de l'écran.
 
 Écartées d'office : ?ListeDesActions et ?Trombinoscope-des-inscrits, dont
 tout le contenu utile est nominatif (référent·e·s, photos) : floutées, il
@@ -44,10 +76,12 @@ comprends qu'en m'inscrivant sur la plateforme, je m'engage à la
 respecter. » (bf_charte_esol), distincte de la case RGPD obligatoire, et
 suivie d'un champ conditionnel « Date de la signature de la charte ».
 
-Poids : esol-inscription.png (~3,0 Mo, carte Leaflet), esol-charte.png
-(~0,9 Mo), esol-annuaire.png (~0,6 Mo) et esol-accueil.png (~0,5 Mo)
-dépassent l'objectif des 400 Ko : compresser (pngquant, Squoosh...) avant
-téléversement YesWiki.
+Poids (relevé du 25/08/2026) : l'allègement automatique du script ramène
+cinq des six vues sous l'objectif des 400 Ko. Seule esol-inscription.png
+reste au-dessus, à 527 Ko, à cause de sa carte Leaflet, qui se comprime mal
+et qu'on ne peut pas retirer du formulaire ; la demi-résolution l'a déjà
+fait passer de 1,2 Mo à 527 Ko. La compresser davantage (pngquant,
+Squoosh...) avant téléversement YesWiki.
 
 Règle : jamais de vrais membres dans les livrables. Le floutage (fiches
 bazar, attributs data-bf_nom/prenom, avatars) est automatique à la capture ;

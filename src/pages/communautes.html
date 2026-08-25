@@ -86,6 +86,26 @@
       line-height: 1.3;
     }
 
+    /* La carte reste cliquable en entier sans être enveloppée dans un <a> :
+       le lien du titre est étendu en incrustation par-dessus la carte. Il
+       fallait sortir de l'enveloppe, car un <button> (l'infobulle) placé
+       dans un <a> est du HTML invalide. */
+    .community-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .community-link::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .community-title .infobulle {
+      z-index: 2; /* au-dessus de l'incrustation, sinon le clic ouvre la fiche */
+    }
+
     .community-desc {
       color: var(--text-muted);
       font-size: 0.9rem;
@@ -193,6 +213,29 @@
   {{> footer }}
 
   <script>
+    // Infobulle sur les noms de communauté qui portent un acronyme entre
+    // parenthèses (« … (IPRSol) »). Le texte vient de la fiche, pas d'une
+    // rédaction parallèle : c'est la description longue, celle qui déplie
+    // l'acronyme, tandis que la carte affiche déjà le résumé court.
+    // Voir le composant infobulle.
+    const escAttr = s => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    const court = t => {
+      t = String(t == null ? '' : t).trim();
+      if (t.length <= 220) return t;
+      const bout = t.slice(0, 220);
+      const coupe = bout.lastIndexOf(' ');
+      return (coupe > 0 ? bout.slice(0, coupe) : bout) + '…';
+    };
+
+    const infobulleCommunaute = c => {
+      const texte = c.description || c.shortDescription;
+      return (/\(.+\)/.test(c.name) && texte)
+        ? `<button type="button" class="infobulle" data-sujet="${escAttr(c.name)}" data-infobulle="${escAttr(court(texte))}">i</button>`
+        : '';
+    };
+
     fetch('data/communities.json')
       .then(r => r.json())
       .then(communities => {
@@ -210,34 +253,32 @@
         const grid = document.getElementById('communities-grid');
         grid.innerHTML = communities.map(c => `
           <div class="col-span-4 community-card-wrapper" data-category="${c.category}">
-            <a href="communaute-detail.html?c=${c.id}" style="color: inherit; text-decoration: none;">
-              <div class="glass-card community-card">
-                <div class="community-header" style="background-image: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 100%), url('img/communities/${c.id}.webp'); background-size: cover, cover; background-position: center, center; background-repeat: no-repeat, no-repeat; height: 160px;">
-                  <div class="community-avatar" style="color: ${c.categoryColor};">
-                    <i class="fas ${c.icon}"></i>
-                  </div>
-                  <span class="badge" style="position: absolute; top: 14px; right: 14px; background: white; color: ${c.categoryColor}; border: 1px solid ${c.categoryColor}30; font-size: 10px;">
-                    ${c.category}
-                  </span>
+            <div class="glass-card community-card">
+              <div class="community-header" style="background-image: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 100%), url('img/communities/${c.id}.webp'); background-size: cover, cover; background-position: center, center; background-repeat: no-repeat, no-repeat; height: 160px;">
+                <div class="community-avatar" style="color: ${c.categoryColor};">
+                  <i class="fas ${c.icon}"></i>
                 </div>
-                <div class="community-body">
-                  <h3 class="community-title">${c.name}</h3>
-                  <p class="community-desc">${c.shortDescription}</p>
-                  <div class="community-footer">
-                    <div class="community-meta">
-                      <div class="community-meta-item">
-                        <i class="fas fa-users" style="color: ${c.categoryColor};"></i>
-                        ${c.members} membres
-                      </div>
-                      <div class="community-meta-item">
-                        <i class="fas fa-folder-open" style="color: ${c.categoryColor};"></i>
-                        ${c.resources} ressources
-                      </div>
+                <span class="badge" style="position: absolute; top: 14px; right: 14px; background: white; color: ${c.categoryColor}; border: 1px solid ${c.categoryColor}30; font-size: 10px;">
+                  ${c.category}
+                </span>
+              </div>
+              <div class="community-body">
+                <h3 class="community-title"><a class="community-link" href="communaute-detail.html?c=${c.id}">${c.name}</a>${infobulleCommunaute(c)}</h3>
+                <p class="community-desc">${c.shortDescription}</p>
+                <div class="community-footer">
+                  <div class="community-meta">
+                    <div class="community-meta-item">
+                      <i class="fas fa-users" style="color: ${c.categoryColor};"></i>
+                      ${c.members} membres
+                    </div>
+                    <div class="community-meta-item">
+                      <i class="fas fa-folder-open" style="color: ${c.categoryColor};"></i>
+                      ${c.resources} ressources
                     </div>
                   </div>
                 </div>
               </div>
-            </a>
+            </div>
           </div>
         `).join('');
 
@@ -270,6 +311,8 @@
         }
       });
   </script>
+
+  {{> infobulle }}
 
 </body>
 </html>

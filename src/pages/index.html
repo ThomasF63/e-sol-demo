@@ -224,6 +224,16 @@
       align-items: flex-start;
     }
 
+    /* Un lien et son infobulle sur la même ligne : le bouton « i » ne peut
+       pas vivre DANS le lien (un <button> dans un <a> est invalide). */
+    .need-link-row {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2px 4px;
+      max-width: 100%;
+    }
+
     .need-link {
       display: inline-flex;
       align-items: center;
@@ -586,7 +596,10 @@
               </div>
               <p class="need-question">Je veux échanger avec le réseau</p>
               <div class="need-links">
-                <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-politique);">Aller sur le forum <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">forum.e-sol.fr</span></a>
+                <span class="need-link-row">
+                  <a href="https://forum.e-sol.fr/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-politique);">Aller sur le forum <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">forum.e-sol.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="le forum e-Sol" data-infobulle="Espace de discussion du réseau, séparé du site et hébergé sur forum.e-sol.fr. On y fait les présentations, on y pose les questions transverses, on y coordonne les communautés.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -618,8 +631,14 @@
               </div>
               <p class="need-question">Je cherche une personne&nbsp;: expertise, contact</p>
               <div class="need-links">
-                <a href="annuaire.html" class="need-link" style="color: var(--cat-institutionnel);">Consulter l'annuaire <i class="fas fa-arrow-right"></i></a>
-                <a href="https://www.gissol.fr/outils/repedo-338" target="_blank" rel="noopener" class="need-link need-link-sec">L'annuaire RéPéDo <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+                <span class="need-link-row">
+                  <a href="annuaire.html" class="need-link" style="color: var(--cat-institutionnel);">Consulter l'annuaire <i class="fas fa-arrow-right"></i></a>
+                  <button type="button" class="infobulle" data-sujet="l'annuaire e-Sol" data-infobulle="Répertoire des membres inscrits sur e-Sol, avec leur spécialité, leur structure et leur région. Sert à trouver un contact ou une expertise dans le réseau.">i</button>
+                </span>
+                <span class="need-link-row">
+                  <a href="https://www.gissol.fr/outils/repedo-338" target="_blank" rel="noopener" class="need-link need-link-sec">L'annuaire RéPéDo <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="RéPéDo" data-infobulle="Répertoire des pédologues de France, tenu par le GIS Sol. Plus large que l'annuaire e-Sol, qui ne recense que les membres du réseau.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -635,7 +654,10 @@
               </div>
               <p class="need-question">Je cherche des outils et méthodes prêts à l'emploi</p>
               <div class="need-links">
-                <a href="communs.html" class="need-link" style="color: var(--primary);">Explorer les communs <i class="fas fa-arrow-right"></i></a>
+                <span class="need-link-row">
+                  <a href="communs.html" class="need-link" style="color: var(--primary);">Explorer les communs <i class="fas fa-arrow-right"></i></a>
+                  <button type="button" class="infobulle" data-sujet="les communs" data-infobulle="Ressources produites et maintenues par les communautés pour tout le monde : jeux de données, guides, kits pédagogiques, outils. Le plus souvent sous licence ouverte.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -651,8 +673,14 @@
               </div>
               <p class="need-question">Je cherche des données et des cartes de sols</p>
               <div class="need-links">
-                <a href="https://webapps.gissol.fr/georefersols/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-politique);">Ouvrir Géorefersols <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
-                <a href="https://www.gissol.fr/donnees" target="_blank" rel="noopener" class="need-link need-link-sec">Les données du GIS Sol <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+                <span class="need-link-row">
+                  <a href="https://webapps.gissol.fr/georefersols/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-politique);">Ouvrir Géorefersols <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="Géorefersols" data-infobulle="Carte en ligne du GIS Sol qui donne accès aux études de sol recensées dans Refersols, le répertoire national des études cartographiques de sol.">i</button>
+                </span>
+                <span class="need-link-row">
+                  <a href="https://www.gissol.fr/donnees" target="_blank" rel="noopener" class="need-link need-link-sec">Les données du GIS Sol <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">gissol.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="le GIS Sol" data-infobulle="Groupement d'Intérêt Scientifique Sol : structure nationale qui coordonne l'inventaire, la surveillance et les données sur les sols français. Membre du comité de pilotage d'e-Sol.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -668,7 +696,10 @@
               </div>
               <p class="need-question">Je veux me former</p>
               <div class="need-links">
-                <a href="https://www.afes.fr/formations/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-education);">La carte des formations <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+                <span class="need-link-row">
+                  <a href="https://www.afes.fr/formations/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-education);">La carte des formations <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="la carte des formations" data-infobulle="Recensement cartographié des formations à la science du sol en France, publié par l'AFES, l'Association Française pour l'Étude du Sol.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -684,8 +715,14 @@
               </div>
               <p class="need-question">J'enseigne, je sensibilise</p>
               <div class="need-links">
-                <a href="https://www.afes.fr/nos-missions/reconnaitre-et-federer/promosolseduc/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-culture);">Les ressources PromoSolsEduc <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
-                <a href="communaute-detail.html?c=fresque-sol" class="need-link need-link-sec">La Fresque du Sol <i class="fas fa-arrow-right"></i></a>
+                <span class="need-link-row">
+                  <a href="https://www.afes.fr/nos-missions/reconnaitre-et-federer/promosolseduc/" target="_blank" rel="noopener" class="need-link" style="color: var(--cat-culture);">Les ressources PromoSolsEduc <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="PromoSolsEduc" data-infobulle="Action de l'AFES pour la promotion des sols dans l'éducation : ressources et outils pour enseigner la science du sol à tous les niveaux.">i</button>
+                </span>
+                <span class="need-link-row">
+                  <a href="communaute-detail.html?c=fresque-sol" class="need-link need-link-sec">La Fresque du Sol <i class="fas fa-arrow-right"></i></a>
+                  <button type="button" class="infobulle" data-sujet="la Fresque du Sol" data-infobulle="Atelier collaboratif qui fait comprendre les enjeux du sol par cartes et discussions, sur le modèle des Fresques du Climat. C'est aussi une communauté e-Sol.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -701,7 +738,10 @@
               </div>
               <p class="need-question">Je cherche de la documentation scientifique</p>
               <div class="need-links">
-                <a href="https://www.afes.fr/nos-missions/valoriser/centre-de-ressources/" target="_blank" rel="noopener" class="need-link" style="color: var(--secondary);">Le centre de ressources AFES <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+                <span class="need-link-row">
+                  <a href="https://www.afes.fr/nos-missions/valoriser/centre-de-ressources/" target="_blank" rel="noopener" class="need-link" style="color: var(--secondary);">Le centre de ressources AFES <i class="fas fa-arrow-up-right-from-square"></i> <span class="need-domain">afes.fr</span></a>
+                  <button type="button" class="infobulle" data-sujet="le centre de ressources AFES" data-infobulle="Bibliothèque documentaire de l'AFES : publications et documents de référence sur la science du sol. À distinguer des communs d'e-Sol, produits par les communautés.">i</button>
+                </span>
               </div>
             </div>
           </div>
@@ -848,6 +888,29 @@
   {{> footer }}
 
   <script>
+    // Infobulle sur les noms de communauté qui portent un acronyme entre
+    // parenthèses (« … (IPRSol) »). Le texte vient de la fiche, pas d'une
+    // rédaction parallèle : c'est la description longue, celle qui déplie
+    // l'acronyme, tandis que la carte affiche déjà le résumé court.
+    // Voir le composant infobulle.
+    const escAttr = s => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    const court = t => {
+      t = String(t == null ? '' : t).trim();
+      if (t.length <= 220) return t;
+      const bout = t.slice(0, 220);
+      const coupe = bout.lastIndexOf(' ');
+      return (coupe > 0 ? bout.slice(0, coupe) : bout) + '…';
+    };
+
+    const infobulleCommunaute = c => {
+      const texte = c.description || c.shortDescription;
+      return (/\(.+\)/.test(c.name) && texte)
+        ? `<button type="button" class="infobulle" data-sujet="${escAttr(c.name)}" data-infobulle="${escAttr(court(texte))}">i</button>`
+        : '';
+    };
+
     // Load and render community preview cards (first 6)
     fetch('data/communities.json')
       .then(r => r.json())
@@ -866,7 +929,7 @@
                 </span>
               </div>
               <div class="community-preview-body">
-                <h4>${c.name}</h4>
+                <h4>${c.name}${infobulleCommunaute(c)}</h4>
                 <p>${c.shortDescription}</p>
                 <div class="community-preview-footer">
                   <div class="community-preview-meta">
@@ -887,6 +950,8 @@
         document.getElementById('communities-preview').innerHTML = '<div class="col-span-12 text-center text-muted py-8">Chargement des communautés…</div>';
       });
   </script>
+
+  {{> infobulle }}
 
 </body>
 </html>

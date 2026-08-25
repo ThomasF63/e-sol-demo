@@ -1,0 +1,369 @@
+<!-- ============================================================
+     Infobulle « i » réutilisable
+     ============================================================
+     À inclure en FIN de body (directive d'inclusion infobulle ; ne pas
+     écrire le motif littéral ici : build.js le re-substituerait
+     récursivement). S'active sur tout bouton .infobulle de la page, y
+     compris ceux insérés plus tard par un script (les écouteurs sont
+     posés une seule fois sur le document, pas sur chaque bouton).
+
+     Écrire une infobulle dans une page, à la main :
+
+       Refersols
+       <button type="button" class="infobulle"
+               data-sujet="Refersols"
+               data-infobulle="Répertoire national des études cartographiques de sol.">i</button>
+
+     - data-infobulle : le texte affiché, une ou deux phrases ;
+     - data-sujet     : facultatif, complète l'étiquette lue par les
+                        lecteurs d'écran (« En savoir plus sur Refersols ») ;
+     - variante : écrire le texte dans title="…" plutôt que dans
+       data-infobulle. Le script le reprend à l'identique, et le
+       navigateur affiche sa bulle native si le script n'a pas tourné.
+
+     Le déclencheur est un <button> : il ne doit donc JAMAIS être placé
+     dans un <a> (HTML invalide). Sur une carte entièrement cliquable, on
+     sort le lien du gabarit et on l'étend en incrustation par-dessus la
+     carte (voir communautes.html).
+
+     Une seule bulle est créée pour toute la page, en position fixed sur
+     <body> : aucun overflow: hidden d'un parent ne peut la rogner. Elle
+     se place sous le déclencheur, bascule au-dessus quand la place
+     manque, et reste bornée à l'écran (marge de 8 px). Sa position est
+     recalculée tant qu'elle est ouverte, ce qui la garde accrochée même
+     quand la carte se soulève au survol ou que la page défile.
+
+     Ouverture : survol (souris uniquement), focus clavier, clic ou appui
+     tactile. Le clic épingle la bulle, qui survit alors à la sortie du
+     curseur. Fermeture : Échap, clic ailleurs, perte du focus, ou survol
+     d'une autre infobulle.
+
+     Sans JavaScript : la bulle n'existe pas, le bouton reste inerte et
+     discret (il n'occupe qu'un caractère et ne déplace rien). Le texte
+     reste lisible via l'attribut title quand il a été écrit en dur.
+     ============================================================ -->
+<style>
+  .infobulle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    vertical-align: middle;
+    margin-left: 5px;
+    padding: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* Suit la taille du texte voisin, mais reste bornée : le bouton doit
+       rester discret dans un titre en clamp() comme dans un lien de 14 px. */
+    font-size: clamp(9.5px, 0.72em, 12.5px);
+    line-height: 1;
+    width: 1.4em;
+    height: 1.4em;
+    min-width: 15px;
+    min-height: 15px;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    cursor: help;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .infobulle:hover,
+  .infobulle:focus,
+  .infobulle[aria-expanded="true"] {
+    background: var(--primary-10);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .infobulle:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Doigt : cible tactile élargie sans toucher à la mise en page. */
+  @media (pointer: coarse) {
+    .infobulle::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+    }
+  }
+
+  .infobulle-bulle {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1200;
+    min-width: 160px;
+    max-width: min(300px, calc(100vw - 24px));
+    padding: 11px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg), 0 2px 10px rgba(0, 0, 0, 0.06);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    /* La bulle ne capte pas la souris : pas de scintillement au passage
+       du curseur, et le clic « ailleurs » ferme toujours. */
+    pointer-events: none;
+  }
+
+  .infobulle-bulle.ouverte {
+    display: block;
+    animation: infobulleApparait 0.14s var(--ease-out);
+  }
+
+  @keyframes infobulleApparait {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .infobulle-fleche {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin-left: -4.5px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-strong);
+    transform: rotate(45deg);
+  }
+
+  .infobulle-bulle.bulle-dessous .infobulle-fleche {
+    top: -4.5px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .infobulle-bulle.bulle-dessus .infobulle-fleche {
+    bottom: -4.5px;
+    border-left: 0;
+    border-top: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .infobulle-bulle.ouverte { animation: none; }
+  }
+
+  @media print {
+    .infobulle,
+    .infobulle-bulle { display: none !important; }
+  }
+</style>
+<script>
+(function () {
+  var racine = document.documentElement;
+  var hote = document.body || racine;
+
+  /* ---- Bulle unique, partagée par tous les déclencheurs ---- */
+  var bulle = document.createElement('div');
+  bulle.id = 'infobulle-bulle';
+  bulle.className = 'infobulle-bulle';
+  bulle.setAttribute('role', 'tooltip');
+
+  var fleche = document.createElement('span');
+  fleche.className = 'infobulle-fleche';
+  fleche.setAttribute('aria-hidden', 'true');
+
+  var texteEl = document.createElement('span');
+  texteEl.className = 'infobulle-texte';
+
+  bulle.appendChild(fleche);
+  bulle.appendChild(texteEl);
+  hote.appendChild(bulle);
+  racine.classList.add('infobulle-js');
+
+  var actif = null;      // bouton dont la bulle est ouverte
+  var epingle = false;   // ouverte au clic : elle survit à la sortie du curseur
+  var boucle = null;     // suivi de position tant que la bulle est ouverte
+  var dernierRect = '';
+
+  /* ---- Câblage d'un bouton, à la première rencontre ---- */
+  function preparer(btn) {
+    if (btn.getAttribute('data-infobulle-prete')) return;
+    btn.setAttribute('data-infobulle-prete', '1');
+
+    var texte = btn.getAttribute('data-infobulle') || btn.getAttribute('title') || '';
+    btn.setAttribute('data-infobulle', texte);
+    // Repli : title porte le même texte quand la bulle n'est pas ouverte.
+    if (!btn.getAttribute('title')) btn.setAttribute('title', texte);
+
+    if (!btn.getAttribute('aria-label')) {
+      var sujet = btn.getAttribute('data-sujet');
+      btn.setAttribute('aria-label', sujet ? 'En savoir plus sur ' + sujet : 'En savoir plus');
+    }
+    btn.setAttribute('aria-controls', bulle.id);
+    btn.setAttribute('aria-expanded', 'false');
+    if (btn.tagName === 'BUTTON' && btn.type !== 'button') btn.type = 'button';
+  }
+
+  /* ---- Placement : sous le déclencheur, sinon au-dessus, jamais hors écran ---- */
+  function placer() {
+    if (!actif) return;
+    var marge = 8;
+    var ecart = 9;
+
+    bulle.style.left = '0px';
+    bulle.style.top = '0px';
+
+    var r = actif.getBoundingClientRect();
+    var vw = racine.clientWidth;
+    var vh = racine.clientHeight;
+    var l = bulle.offsetWidth;
+    var h = bulle.offsetHeight;
+
+    var placeDessous = vh - r.bottom - ecart - marge;
+    var placeDessus = r.top - ecart - marge;
+    var dessous = placeDessous >= h || placeDessous >= placeDessus;
+
+    var viseY = dessous ? r.bottom + ecart : r.top - ecart - h;
+    var y = Math.max(marge, Math.min(viseY, vh - h - marge));
+
+    var centre = r.left + r.width / 2;
+    var x = Math.max(marge, Math.min(centre - l / 2, vw - l - marge));
+
+    bulle.classList.toggle('bulle-dessous', dessous);
+    bulle.classList.toggle('bulle-dessus', !dessous);
+    bulle.style.left = Math.round(x) + 'px';
+    bulle.style.top = Math.round(y) + 'px';
+
+    // Flèche alignée sur le centre du déclencheur, rentrée dans les coins.
+    // Si la bulle a dû être recalée verticalement, elle ne touche plus le
+    // déclencheur : on masque la flèche plutôt que de la laisser mentir.
+    var decrochee = Math.abs(y - viseY) > 1 || centre < x || centre > x + l;
+    fleche.style.display = decrochee ? 'none' : '';
+    if (!decrochee) {
+      fleche.style.left = Math.round(Math.max(20, Math.min(centre - x, l - 20))) + 'px';
+    }
+  }
+
+  /* ---- Suivi : la carte se soulève au survol, la page défile… ---- */
+  function suivre() {
+    if (!actif) return;
+    var r = actif.getBoundingClientRect();
+    var signature = Math.round(r.left) + ':' + Math.round(r.top) + ':' + Math.round(r.width);
+    if (signature !== dernierRect) {
+      dernierRect = signature;
+      placer();
+    }
+    boucle = requestAnimationFrame(suivre);
+  }
+
+  function ouvrir(btn, verrou) {
+    preparer(btn);
+    var texte = btn.getAttribute('data-infobulle');
+    if (!texte) return;
+
+    if (actif && actif !== btn) relacher(actif);
+    actif = btn;
+    epingle = !!verrou;
+
+    texteEl.textContent = texte;
+    // Le title natif doublonnerait avec la bulle : on le retire le temps
+    // de l'affichage, et on le remet à la fermeture.
+    btn.removeAttribute('title');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-describedby', bulle.id);
+    bulle.classList.add('ouverte');
+
+    placer();
+    dernierRect = '';
+    if (boucle === null) boucle = requestAnimationFrame(suivre);
+  }
+
+  function relacher(btn) {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.removeAttribute('aria-describedby');
+    if (!btn.getAttribute('title')) {
+      btn.setAttribute('title', btn.getAttribute('data-infobulle') || '');
+    }
+  }
+
+  function fermer() {
+    if (!actif) return;
+    relacher(actif);
+    actif = null;
+    epingle = false;
+    bulle.classList.remove('ouverte');
+    if (boucle !== null) { cancelAnimationFrame(boucle); boucle = null; }
+  }
+
+  function declencheur(cible) {
+    return cible && cible.closest ? cible.closest('.infobulle') : null;
+  }
+
+  /* ---- Survol : souris uniquement. Au doigt, c'est l'appui qui ouvre. ---- */
+  document.addEventListener('pointerover', function (e) {
+    if (e.pointerType === 'touch') return;
+    var btn = declencheur(e.target);
+    if (!btn) return;
+    if (btn === actif) return;
+    ouvrir(btn, false);
+  });
+
+  document.addEventListener('pointerout', function (e) {
+    if (e.pointerType === 'touch') return;
+    var btn = declencheur(e.target);
+    if (!btn || btn !== actif || epingle) return;
+    if (btn.contains(e.relatedTarget)) return;
+    if (document.activeElement === btn) return;
+    fermer();
+  });
+
+  /* ---- Clavier : Tab ouvre, la sortie de focus ferme ---- */
+  document.addEventListener('focusin', function (e) {
+    var btn = declencheur(e.target);
+    if (btn) { if (btn !== actif) ouvrir(btn, false); return; }
+    if (actif && !epingle) fermer();
+  });
+
+  document.addEventListener('focusout', function (e) {
+    var btn = declencheur(e.target);
+    if (btn && btn === actif && !epingle) fermer();
+  });
+
+  /* ---- Clic ou appui : épingle, puis referme ---- */
+  document.addEventListener('click', function (e) {
+    var btn = declencheur(e.target);
+    if (!btn) { fermer(); return; }
+    e.preventDefault();
+    if (btn === actif && epingle) fermer();
+    else ouvrir(btn, true);
+  });
+
+  // Échap ferme sans déplacer le focus : le rendre au bouton rouvrirait
+  // aussitôt la bulle (focusin).
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && actif) fermer();
+  });
+
+  /* ---- Câblage : les boutons déjà là, puis ceux que les pages insèrent
+          après coup (cartes de communautés construites depuis le JSON).
+          Le câblage n'attend pas le survol : un lecteur d'écran qui
+          parcourt la page doit trouver l'étiquette tout de suite. ---- */
+  function preparerTout() {
+    document.querySelectorAll('.infobulle').forEach(preparer);
+  }
+  preparerTout();
+  window.addEventListener('load', preparerTout);
+
+  if (window.MutationObserver) {
+    var planifie = false;
+    // childList seulement : preparer() ne touche que des attributs, la
+    // boucle de rappel ne peut donc pas s'auto-entretenir.
+    new MutationObserver(function () {
+      if (planifie) return;
+      planifie = true;
+      requestAnimationFrame(function () { planifie = false; preparerTout(); });
+    }).observe(hote, { childList: true, subtree: true });
+  }
+})();
+</script>
