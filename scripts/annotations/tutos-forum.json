@@ -16,7 +16,7 @@
     { "type": "pastille", "zone": "titre-sujet", "n": 6 },
     { "type": "cadre", "zone": "categorie-sujet", "decalage": { "dx": 0, "dy": 8 } },
     { "type": "cadre", "zone": "logo" },
-    { "type": "pastille", "zone": "logo", "n": 7 }
+    { "type": "pastille", "zone": "logo", "n": 7, "decalage": { "dx": -24, "dy": -18 } }
   ],
   "forum-b-recherche.png": [
     { "type": "cadre", "zone": "barre-recherche" },

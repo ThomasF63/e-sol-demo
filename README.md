@@ -46,6 +46,7 @@ npx http-server dist/ -p 3000 --cors -c-1
 ```
 src/
   components/   ← head.html, header.html, footer.html (design system)
+                  infobulle.html ← petit « i » explicatif au survol, à inclure en fin de body
   pages/        ← 24 pages HTML
   data/         ← JSON fixtures (communities, communs, members, actions, ressources)
 dist/           ← sortie compilée (gitignored)

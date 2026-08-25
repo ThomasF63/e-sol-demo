@@ -1,0 +1,463 @@
+<!-- ============================================================
+     Agrandissement des captures (lightbox)
+     ============================================================
+     À inclure en FIN de body (directive d'inclusion lightbox-captures ;
+     ne pas écrire le motif littéral ici : build.js le re-substituerait
+     récursivement). S'active sur les images des figures de captures,
+     .tf-figure et .pp-figure, dans l'ordre où elles apparaissent.
+
+     Ce que fait le composant :
+     - il enveloppe chaque image dans un bouton (donc focalisable, et
+       activable au clic comme à la touche Entrée ou Espace), annoncé
+       « Agrandir la capture » suivi du texte alternatif de l'image, et
+       marque le coin de la figure d'une pastille loupe ;
+     - à l'activation, il ouvre un panneau plein écran sur fond assombri :
+       l'image y est affichée aussi grande que possible sans dépasser sa
+       taille naturelle, la légende de la figure est reprise dessous ;
+     - les captures en colonne (plus hautes que larges) occupent toute la
+       largeur disponible et se lisent en défilant, plutôt que d'être
+       réduites à une vignette illisible par un ajustement à la hauteur ;
+     - un bouton bascule l'image à 100 % (taille naturelle) avec défilement,
+       quand elle est affichée réduite ; le clic sur l'image fait de même et
+       recentre sur le point cliqué ;
+     - les flèches gauche et droite passent d'une capture à l'autre ;
+     - la fermeture se fait par Échap, par le bouton de fermeture ou par un
+       clic sur le fond ; le focus reste piégé dans le panneau tant qu'il est
+       ouvert, et revient au déclencheur à la fermeture ;
+     - le défilement de la page est verrouillé pendant l'ouverture (largeur
+       de la barre de défilement compensée, pour éviter le sursaut).
+
+     Sans JavaScript : rien n'est créé, les figures restent des figures et
+     les captures s'affichent normalement. Les styles des déclencheurs sont
+     conditionnés à la classe html.lb-js, posée par le script.
+     ============================================================ -->
+<style>
+  /* ---- Déclencheur : l'image, devenue bouton ---- */
+  html.lb-js .lb-declencheur {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    border-radius: var(--radius-xs, 6px);
+    line-height: 0;
+  }
+
+  html.lb-js .lb-declencheur:focus-visible {
+    outline: 3px solid var(--primary, #9c3f00);
+    outline-offset: 3px;
+  }
+
+  /* La pastille loupe est posée sur la FIGURE, pas sur le bouton : le
+     formulaire d'inscription est présenté dans un cadre défilant, où une
+     pastille solidaire de l'image serait à des milliers de pixels sous la
+     zone visible. */
+  html.lb-js .lb-figure-agrandissable { position: relative; }
+
+  html.lb-js .lb-loupe {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border-radius: var(--radius-full, 9999px);
+    background: rgba(26, 21, 18, 0.72);
+    color: #fff;
+    font-family: var(--font-display, sans-serif);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    opacity: 0.72;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    pointer-events: none;
+  }
+
+  html.lb-js .lb-figure-agrandissable:hover .lb-loupe,
+  html.lb-js .lb-figure-agrandissable:focus-within .lb-loupe {
+    opacity: 1;
+    background: var(--primary, #9c3f00);
+  }
+
+  /* Texte réservé aux technologies d'assistance */
+  .lb-hors-ecran {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---- Panneau d'agrandissement ---- */
+  /* Le retrait du haut réserve la bande du bouton de fermeture : une capture
+     pleine largeur ne passe jamais dessous, et son coin haut-droit, souvent
+     annoté, reste entièrement visible. */
+  .lb-fond {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 68px 20px 16px;
+    background: rgba(20, 15, 12, 0.93);
+  }
+
+  .lb-fond[hidden] { display: none; }
+
+  .lb-scene {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    border-radius: var(--radius-sm, 8px);
+  }
+
+  /* Trois états de mise en page, posés par le script :
+     ajuste  = la capture tient entièrement, elle est centrée ;
+     colonne = capture haute, calée en haut, lue en défilant ;
+     zoom    = taille naturelle, plus large que la scène, défilement libre. */
+  .lb-scene.lb-ajuste { display: flex; align-items: center; justify-content: center; }
+  .lb-scene.lb-colonne { display: flex; align-items: flex-start; justify-content: center; }
+  .lb-scene.lb-zoom { display: block; }
+
+  .lb-image {
+    display: block;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: var(--radius-xs, 6px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Le thème borne toutes les images à max-width: 100 % ; à la taille réelle,
+     c'est précisément ce qu'il faut lever pour que la scène défile. */
+  .lb-scene.lb-zoom .lb-image { max-width: none; max-height: none; cursor: zoom-out; }
+  .lb-scene.lb-agrandissable .lb-image { cursor: zoom-in; }
+
+  .lb-legende {
+    flex: 0 0 auto;
+    max-width: 900px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .lb-legende strong { color: #ffffff; }
+  .lb-legende a { color: #f2c9ab; }
+
+  .lb-barre {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .lb-bouton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: var(--radius-full, 9999px);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-family: var(--font-display, sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .lb-bouton:hover { background: rgba(255, 255, 255, 0.18); }
+  .lb-bouton:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
+  .lb-bouton[hidden] { display: none; }
+
+  .lb-compteur {
+    color: rgba(255, 255, 255, 0.75);
+    font-family: var(--font-display, sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 62px;
+    text-align: center;
+  }
+
+  .lb-fermer {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  @media (max-width: 700px) {
+    .lb-fond { padding: 56px 10px 12px; gap: 8px; }
+    .lb-fermer { top: 8px; right: 8px; }
+    .lb-legende { font-size: 0.8rem; text-align: left; }
+    .lb-barre { gap: 6px; }
+    .lb-bouton { padding: 8px 12px; font-size: 12px; }
+    .lb-bouton .lb-texte-bouton { display: none; }
+    .lb-fermer { width: 40px; }
+    html.lb-js .lb-loupe { font-size: 11px; padding: 6px 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.lb-js .lb-loupe { transition: none; }
+  }
+</style>
+<script>
+(function () {
+  var racine = document.documentElement;
+  var figures = Array.prototype.slice.call(
+    document.querySelectorAll('figure.tf-figure, figure.pp-figure'));
+
+  // Une figure n'entre dans le carrousel que si elle porte bien une image.
+  var vues = [];
+  figures.forEach(function (figure) {
+    var img = figure.querySelector('img');
+    if (img) vues.push({ figure: figure, img: img });
+  });
+  if (!vues.length) return;
+  racine.classList.add('lb-js');
+
+  /* ---- Déclencheurs : chaque image devient le contenu d'un bouton ---- */
+  vues.forEach(function (vue, i) {
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'lb-declencheur';
+    bouton.setAttribute('aria-haspopup', 'dialog');
+
+    var annonce = document.createElement('span');
+    annonce.className = 'lb-hors-ecran';
+    annonce.textContent = 'Agrandir la capture. ';
+
+    var loupe = document.createElement('span');
+    loupe.className = 'lb-loupe';
+    loupe.innerHTML = '<i class="fas fa-magnifying-glass-plus" aria-hidden="true"></i> Agrandir';
+
+    vue.img.parentNode.insertBefore(bouton, vue.img);
+    bouton.appendChild(annonce);
+    bouton.appendChild(vue.img);
+    bouton.addEventListener('click', function () { ouvrir(i); });
+    vue.figure.classList.add('lb-figure-agrandissable');
+    vue.figure.appendChild(loupe);
+    vue.bouton = bouton;
+  });
+
+  /* ---- Panneau, construit une seule fois ---- */
+  var fond = document.createElement('div');
+  fond.className = 'lb-fond';
+  fond.id = 'lightbox-captures';
+  fond.setAttribute('role', 'dialog');
+  fond.setAttribute('aria-modal', 'true');
+  fond.setAttribute('aria-label', 'Capture agrandie');
+  fond.hidden = true;
+  fond.innerHTML =
+    '<button type="button" class="lb-bouton lb-fermer" data-lb="fermer" aria-label="Fermer l\'agrandissement">' +
+      '<i class="fas fa-xmark" aria-hidden="true"></i></button>' +
+    '<div class="lb-scene"><img class="lb-image" alt=""></div>' +
+    '<p class="lb-legende"></p>' +
+    '<div class="lb-barre">' +
+      '<button type="button" class="lb-bouton" data-lb="prec">' +
+        '<i class="fas fa-chevron-left" aria-hidden="true"></i>' +
+        '<span class="lb-texte-bouton">Précédente</span></button>' +
+      '<span class="lb-compteur" data-lb-role="compteur"></span>' +
+      '<button type="button" class="lb-bouton" data-lb="suiv">' +
+        '<span class="lb-texte-bouton">Suivante</span>' +
+        '<i class="fas fa-chevron-right" aria-hidden="true"></i></button>' +
+      '<button type="button" class="lb-bouton" data-lb="zoom">' +
+        '<i class="fas fa-magnifying-glass-plus" aria-hidden="true"></i>' +
+        '<span class="lb-texte-bouton" data-lb-role="zoom-texte">Taille réelle</span></button>' +
+    '</div>';
+  document.body.appendChild(fond);
+
+  var scene = fond.querySelector('.lb-scene');
+  var image = fond.querySelector('.lb-image');
+  var legende = fond.querySelector('.lb-legende');
+  var barre = fond.querySelector('.lb-barre');
+  var compteur = fond.querySelector('[data-lb-role="compteur"]');
+  var btPrec = fond.querySelector('[data-lb="prec"]');
+  var btSuiv = fond.querySelector('[data-lb="suiv"]');
+  var btZoom = fond.querySelector('[data-lb="zoom"]');
+  var btZoomTexte = fond.querySelector('[data-lb-role="zoom-texte"]');
+  var btFermer = fond.querySelector('[data-lb="fermer"]');
+
+  var courant = -1, declencheur = null, zoome = false, agrandissable = false;
+  var scrollBloque = { overflow: '', padding: '' };
+
+  /* ---- Mise en page de la scène : ajuste, colonne ou zoom ---- */
+  function appliquerTaille() {
+    var nl = image.naturalWidth, nh = image.naturalHeight;
+    if (!nl || !nh) return;
+    if (zoome) {
+      scene.className = 'lb-scene lb-zoom';
+      image.style.width = nl + 'px';
+      image.style.height = 'auto';
+      return;
+    }
+    var dispoL = scene.clientWidth, dispoH = scene.clientHeight;
+    var largeur = Math.min(nl, dispoL);
+    var hauteur = largeur * nh / nl;
+    // Au-delà de 15 % de débordement, la capture est traitée comme une
+    // colonne : pleine largeur et lecture en défilant. En deçà, on l'ajuste
+    // pour qu'elle tienne entièrement à l'écran.
+    if (hauteur > dispoH * 1.15) {
+      scene.className = 'lb-scene lb-colonne';
+    } else {
+      scene.className = 'lb-scene lb-ajuste';
+      if (hauteur > dispoH) largeur = dispoH * nl / nh;
+    }
+    image.style.width = Math.round(largeur) + 'px';
+    image.style.height = 'auto';
+    agrandissable = nl > largeur + 4;
+    if (agrandissable) scene.classList.add('lb-agrandissable');
+    btZoom.hidden = !agrandissable;
+    btZoomTexte.textContent = 'Taille réelle';
+    btZoom.setAttribute('aria-pressed', 'false');
+  }
+
+  function basculerZoom(evt) {
+    if (!zoome && !agrandissable) return;
+    if (zoome) {
+      zoome = false;
+      appliquerTaille();
+      scene.scrollTop = 0;
+      scene.scrollLeft = 0;
+      return;
+    }
+    // Point visé, pour que le zoom s'ouvre là où l'on a cliqué.
+    var fx = 0.5, fy = 0.5;
+    if (evt && typeof evt.clientX === 'number') {
+      var r = image.getBoundingClientRect();
+      if (r.width && r.height) {
+        fx = Math.min(1, Math.max(0, (evt.clientX - r.left) / r.width));
+        fy = Math.min(1, Math.max(0, (evt.clientY - r.top) / r.height));
+      }
+    }
+    zoome = true;
+    appliquerTaille();
+    btZoomTexte.textContent = 'Ajuster';
+    btZoom.setAttribute('aria-pressed', 'true');
+    scene.scrollLeft = fx * image.offsetWidth - scene.clientWidth / 2;
+    scene.scrollTop = fy * image.offsetHeight - scene.clientHeight / 2;
+  }
+
+  /* ---- Affichage d'une vue ---- */
+  function afficher(i) {
+    courant = (i + vues.length) % vues.length;
+    var vue = vues[courant];
+    zoome = false;
+    agrandissable = false;
+    image.style.width = '';
+    image.style.height = '';
+    scene.className = 'lb-scene';
+    scene.scrollTop = 0;
+    scene.scrollLeft = 0;
+
+    image.alt = vue.img.getAttribute('alt') || '';
+    var cap = vue.figure.querySelector('figcaption');
+    legende.innerHTML = cap ? cap.innerHTML : '';
+    legende.hidden = !cap;
+    compteur.textContent = (courant + 1) + ' / ' + vues.length;
+    barre.hidden = false;
+    btPrec.hidden = vues.length < 2;
+    btSuiv.hidden = vues.length < 2;
+    compteur.hidden = vues.length < 2;
+
+    image.src = vue.img.currentSrc || vue.img.src;
+    if (image.complete && image.naturalWidth) appliquerTaille();
+  }
+
+  image.addEventListener('load', appliquerTaille);
+  image.addEventListener('click', basculerZoom);
+
+  /* ---- Verrouillage du défilement de la page ---- */
+  function bloquerPage() {
+    var largeurBarre = window.innerWidth - racine.clientWidth;
+    scrollBloque.overflow = document.body.style.overflow;
+    scrollBloque.padding = document.body.style.paddingRight;
+    document.body.style.overflow = 'hidden';
+    if (largeurBarre > 0) document.body.style.paddingRight = largeurBarre + 'px';
+  }
+  function libererPage() {
+    document.body.style.overflow = scrollBloque.overflow;
+    document.body.style.paddingRight = scrollBloque.padding;
+  }
+
+  /* ---- Ouverture, fermeture, piège à focus ---- */
+  function ouvrir(i) {
+    declencheur = vues[i].bouton;
+    fond.hidden = false;
+    bloquerPage();
+    afficher(i);
+    btFermer.focus({ preventScroll: true });
+  }
+
+  function fermer() {
+    if (fond.hidden) return;
+    fond.hidden = true;
+    image.removeAttribute('src');
+    libererPage();
+    if (declencheur) declencheur.focus({ preventScroll: true });
+    declencheur = null;
+  }
+
+  function focalisables() {
+    return Array.prototype.filter.call(
+      fond.querySelectorAll('button:not([hidden]), a[href], [tabindex="0"]'),
+      function (el) { return el.offsetParent !== null || el === document.activeElement; });
+  }
+
+  fond.addEventListener('click', function (e) {
+    var action = e.target.closest ? e.target.closest('[data-lb]') : null;
+    if (action) {
+      var quoi = action.getAttribute('data-lb');
+      if (quoi === 'fermer') fermer();
+      else if (quoi === 'prec') afficher(courant - 1);
+      else if (quoi === 'suiv') afficher(courant + 1);
+      else if (quoi === 'zoom') basculerZoom(null);
+      return;
+    }
+    // Clic sur le fond (hors image, hors légende, hors barre) : fermeture.
+    if (e.target === fond || e.target === scene) fermer();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (fond.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); fermer(); return; }
+    if (e.key === 'ArrowLeft' && vues.length > 1 && !zoome) { e.preventDefault(); afficher(courant - 1); return; }
+    if (e.key === 'ArrowRight' && vues.length > 1 && !zoome) { e.preventDefault(); afficher(courant + 1); return; }
+    if (e.key !== 'Tab') return;
+    var liste = focalisables();
+    if (!liste.length) return;
+    var premier = liste[0], dernier = liste[liste.length - 1];
+    if (e.shiftKey && document.activeElement === premier) {
+      e.preventDefault(); dernier.focus();
+    } else if (!e.shiftKey && document.activeElement === dernier) {
+      e.preventDefault(); premier.focus();
+    } else if (!fond.contains(document.activeElement)) {
+      e.preventDefault(); premier.focus();
+    }
+  });
+
+  window.addEventListener('resize', function () {
+    if (!fond.hidden) appliquerTaille();
+  }, { passive: true });
+})();
+</script>
